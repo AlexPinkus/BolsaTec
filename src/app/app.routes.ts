@@ -1,12 +1,15 @@
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 
-// import { ExampleComponent } from './components/examples/example.component';
+import { IndexComponent } from './components/index/index.component';
+import { StudentComponent } from './components/student/student.component';
+import { StudentsComponent } from './components/students/students.component';
 
 const routes: Routes = [
-    // { path: 'heroes', component: HeroesComponent },
-    // { path: 'heroe/:id', component: HeroeComponent },
-    // { path: '**', pathMatch: 'full', redirectTo: 'heroes' },
+     { path: 'index', component: IndexComponent },
+     { path: 'students', component: StudentsComponent },
+     { path: 'student/:id', component: StudentComponent },
+     { path: '**', pathMatch: 'full', redirectTo: 'index' },
 
     // { path: 'path/:routeParam', component: MyComponent },
     // { path: 'staticPath', component: ... },
