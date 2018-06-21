@@ -1,0 +1,75 @@
+import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Student } from '../../interfaces/student.interface';
+import { StudentService } from '../../services/student.service';
+import { Router, ActivatedRoute } from '@angular/router';
+
+@Component({
+  selector: 'app-student',
+  templateUrl: './student.component.html',
+  styleUrls: ['./student.component.scss']
+})
+export class StudentComponent implements OnInit {
+
+  student: Student = {
+    firstName: 'Eduardo',
+    lastName: 'Pérez',
+    email:    'eduardo.perez@correo.mx',
+    phone:    9991131415,
+    address: {
+      mainStreet: 'Calle 21',
+      crossings:  '17 y 29',
+      postalCode: 98765,
+      state:      'Yucatán'
+    }
+  };
+
+  nuevo = false;
+  id: string;
+  successMessage: string;
+  successMessagebool = false;
+
+  constructor(private _studentService: StudentService,
+    private router: Router,
+    private route: ActivatedRoute) {
+      this.route.params.subscribe(parametros => {
+        console.log(parametros);
+        this.id = parametros['id'];
+        if ( this.id !== 'nuevo') {
+          this._studentService.getStudent(this.id).subscribe(student => {
+            this.student = student;
+          });
+        }
+      });
+    }
+
+  ngOnInit() {
+  }
+
+  guardar() {
+    console.log( this.student );
+    if (this.id === 'nuevo') {
+      // insertando
+      this._studentService.createStudent(this.student).subscribe(data => {
+        this.successMessage = 'Estudiante Registrado Exitosamente';
+        this.successMessagebool = true;
+        this.router.navigate(['/student', data.name]);
+      }, error => {
+        console.error(error);
+      });
+    } else {
+      // actualizando
+      this._studentService.updateStudent(this.student, this.id).subscribe(data => {
+        console.log(data);
+      }, error => {
+        console.error(error);
+      });
+    }
+  }
+
+  agregarNuevo( forma: NgForm ) {
+    this.router.navigate(['/student', 'nuevo']);
+    // forma.reset({casa: 'Marvel'});
+  }
+
+}
