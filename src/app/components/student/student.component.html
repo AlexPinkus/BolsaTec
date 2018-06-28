@@ -8,15 +8,54 @@
 <div class ="row animated fadeIn fast">
   <div class ="col-md-12 text-left">
     <form (ngSubmit)="guardar()" #forma="ngForm">
+      <h4>Datos de Inicio</h4> <hr>
       <div class="form-group">
-        <label>Nombres</label>
-        <input [(ngModel)]="student.firstName"
-               type="text"
-               name="firstName"
-               class="form-control"
-               placeholder="Nombre del estudiante"
-               required
-        >
+          <label>Correo electronico</label>
+          <input class="form-control"
+                 [(ngModel)]="student.email"
+                 type="email"
+                 name="email"
+                 placeholder="alexpinkus@hotmail.com"
+                 required
+                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                 #email="ngModel">
+          <div *ngIf="email?.errors?.required">
+              Este campo es requerido
+            </div>
+            <div *ngIf="email?.errors?.pattern">
+              El campo no tiene formato de correo.
+            </div>
+      </div>
+      <div class="form-group">
+          <label>Contraseña</label>
+          <input class="form-control"
+                 [(ngModel)]="password"
+                 type="password"
+                 name="password"
+                 placeholder="password"
+                 required
+          >
+      </div>
+      <div class="form-group">
+          <label>Repetir Contraseña</label>
+          <input class="form-control"
+                 [(ngModel)]="password"
+                 type="password"
+                 name="password"
+                 placeholder="password"
+                 required
+          >
+      </div>
+      <h4>Datos de Registro</h4> <hr>
+      <div class="form-group">
+          <label>Nombres</label>
+          <input [(ngModel)]="student.firstName"
+                 type="text"
+                 name="firstName"
+                 class="form-control"
+                 placeholder="Nombre del estudiante"
+                 required
+          >
       </div>
       <div class="form-group">
         <label>Apellidos</label>
@@ -28,17 +67,8 @@
                required
         >
       </div>
-      <div class="form-group">
-        <label>Correo electronico</label>
-        <input [(ngModel)]="student.email"
-               type="text"
-               name="email"
-               class="form-control"
-               placeholder="correo@tec.mx"
-               required
-        >
-      </div>
       <div>
+        <h4>Dirección</h4> <hr>
         <div class="form-group">
           <label>Calle</label>
           <input [(ngModel)]="student.address.mainStreet"
