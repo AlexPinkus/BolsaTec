@@ -4,11 +4,13 @@ import { NgModule } from '@angular/core';
 import { IndexComponent } from './components/index/index.component';
 import { StudentComponent } from './components/student/student.component';
 import { StudentsComponent } from './components/students/students.component';
+import { LoginComponent } from './components/login/login.component';
 
 const routes: Routes = [
      { path: 'index', component: IndexComponent },
      { path: 'students', component: StudentsComponent },
      { path: 'student/:id', component: StudentComponent },
+     { path: 'login', component: LoginComponent },
      { path: '**', pathMatch: 'full', redirectTo: 'index' },
 
     // { path: 'path/:routeParam', component: MyComponent },
