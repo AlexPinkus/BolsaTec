@@ -12,10 +12,10 @@
           <span class="navbar-toggler-icon"></span>
       </button>
   </div>
-  <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+  <div *ngIf="!_as.isAuth" class="navbar-collapse collapse w-100 order-3 dual-collapse2">
       <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-              <a class="nav-link" href="#">Iniciar Sesión</a>
+              <a class="nav-link" [routerLink]="['login']">Iniciar Sesión</a>
           </li>
           <li class="nav-item">
               <a class="nav-link" [routerLink]="['/student', 'nuevo']">Registro de Usuario</a>
@@ -24,5 +24,18 @@
             <a class="nav-link"  [routerLink]="['/student', 'nuevo']">Registro de Empresa</a>
         </li>
       </ul>
+  </div>
+  <div *ngIf="_as.isAuth" class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+
+            <a class="nav-link" [routerLink]="['login']" (click)="_as.logout()">Cerrar Sesión
+              <!-- <button (click)="_as.logout()" type="button" class="btn btn-outline-danger" >Cerrar Sesión</button> -->
+           </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/student', 'nuevo']">Perfil de Usuario</a>
+        </li>
+    </ul>
   </div>
 </nav>
