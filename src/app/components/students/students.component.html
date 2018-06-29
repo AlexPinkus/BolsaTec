@@ -2,7 +2,7 @@
 <hr>
 <div class ="row animated fadeIn fast">
     <div class ="col-md-12 text-right">
-      <button [routerLink]="['/student', 'nuevo']" class="btn btn-outline-primary" type="button" name="button">
+      <button [routerLink]="['/register/student']" class="btn btn-outline-primary" type="button" name="button">
         Nuevo estudiante
       </button>
     </div>
@@ -25,7 +25,7 @@
               <td>{{ students[k].firstName }}</td>
               <td>{{ students[k].lastName }}</td>
               <td class="text-right w120">
-                <button [routerLink]="['/student', k]" type="button" class="btn btn-outline-success">Editar
+                <button [routerLink]="['/profile/student', k]" type="button" class="btn btn-outline-success">Editar
                 </button>
                 <div class="divider"></div>
                 <button (click)="borrarStudent(k)" type="button" class="btn btn-outline-danger">Eliminar

@@ -12,20 +12,20 @@
           <span class="navbar-toggler-icon"></span>
       </button>
   </div>
-  <div *ngIf="!_as.isAuth" class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+  <div *ngIf="!_as.user.uid" class="navbar-collapse collapse w-100 order-3 dual-collapse2">
       <ul class="navbar-nav ml-auto">
           <li class="nav-item">
               <a class="nav-link" [routerLink]="['login']">Iniciar Sesión</a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" [routerLink]="['/student', 'nuevo']">Registro de Usuario</a>
+              <a class="nav-link" [routerLink]="['/register/student']">Registro de Usuario</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link"  [routerLink]="['/student', 'nuevo']">Registro de Empresa</a>
+            <a class="nav-link"  [routerLink]="['/register/student']">Registro de Empresa</a>
         </li>
       </ul>
   </div>
-  <div *ngIf="_as.isAuth" class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+  <div *ngIf="_as.user.uid" class="navbar-collapse collapse w-100 order-3 dual-collapse2">
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
 
@@ -34,7 +34,7 @@
            </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/student', 'nuevo']">Perfil de Usuario</a>
+            <a class="nav-link" [routerLink]="['/profile/student', _as.user.uid]">Perfil de Usuario</a>
         </li>
     </ul>
   </div>
