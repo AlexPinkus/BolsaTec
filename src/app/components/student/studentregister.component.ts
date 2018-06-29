@@ -6,11 +6,11 @@ import { AuthService } from '../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-student',
-  templateUrl: './student.component.html',
-  styleUrls: ['./student.component.scss']
+  selector: 'app-studentregister',
+  templateUrl: './studentregister.component.html',
+  styleUrls: ['./studentregister.component.scss']
 })
-export class StudentComponent implements OnInit {
+export class StudentRegisterComponent implements OnInit {
 
   password: string;
   student: Student = {
@@ -53,17 +53,7 @@ export class StudentComponent implements OnInit {
   constructor(private _studentService: StudentService,
     private _auths: AuthService,
     private router: Router,
-    private route: ActivatedRoute) {
-      this.route.params.subscribe(parametros => {
-        console.log(parametros);
-        this.id = parametros['id'];
-        if ( this.id !== 'nuevo') {
-          this._studentService.getStudent(this.id).subscribe(student => {
-            this.student = student;
-          });
-        }
-      });
-    }
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
   }
@@ -72,24 +62,19 @@ export class StudentComponent implements OnInit {
     // Aquí hay que verificar que los datos del usuario sean los correctos antes de registrarlo.
 
     console.log( this.student );
-    if (this.id === 'nuevo') {
-      // insertando
-      this._studentService.createStudent(this.student).subscribe(data => {
-        this.successMessage = 'Estudiante Registrado Exitosamente';
-        this.successMessagebool = true;
-        this.router.navigate(['/student', data.name]);
-        this._auths.signup(this.student.email, 'password');
-      }, error => {
-        console.error(error);
-      });
-    } else {
-      // actualizando
-      this._studentService.updateStudent(this.student, this.id).subscribe(data => {
-        console.log(data);
-      }, error => {
-        console.error(error);
-      });
-    }
+    // insertando
+    this._auths.signup(this.student.email, 'password').then(credential => {
+        console.log('Usuario registrado :', credential.user.uid);
+        alert('Usuario registrado :' + credential);
+        this.student.id = credential.user['uid'];
+        this._studentService.createStudent(this.student).subscribe(data => {
+          this.successMessage = 'Estudiante Registrado Exitosamente';
+          this.successMessagebool = true;
+          this.router.navigate(['/profile/student', data.name]);
+        }, error => {
+          console.error(error);
+        });
+    });
   }
 
   agregarNuevo( forma: NgForm ) {
