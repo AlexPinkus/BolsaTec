@@ -3,7 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { AppRoutingModule } from './app.routes';
+// Routing
+import { AppRoutingModule } from './app-routing.module';
 
 // Firebase Modules
 import { AngularFireModule } from 'angularfire2';
@@ -15,27 +16,31 @@ import { environment } from '../environments/environment';
 
 // Services
 import { StudentService } from './services/student.service';
-
-// Components
-import { AppComponent } from './app.component';
-import { StudentComponent } from './components/student/student.component';
-import { StudentsComponent } from './components/students/students.component';
+import { AuthGuard } from './services/auth.guard';
+import { AuthService } from './services/auth.service';
 
 // Pipes
 import { KeysPipe } from './pipes/keys.pipe';
+
+// Components
+import { AppComponent } from './app.component';
+import { StudentRegisterComponent } from './components/student/studentregister.component';
+import { StudentsComponent } from './components/students/students.component';
 import { IndexComponent } from './components/index/index.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoginComponent } from './components/login/login.component';
+import { StudentProfileComponent } from './components/student/studentprofile.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    StudentComponent,
-    StudentsComponent,
     KeysPipe,
+    AppComponent,
+    StudentRegisterComponent,
+    StudentsComponent,
     IndexComponent,
     HeaderComponent,
-    LoginComponent
+    LoginComponent,
+    StudentProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -49,6 +54,8 @@ import { LoginComponent } from './components/login/login.component';
     AngularFireStorageModule, // imports firebase/storage only needed for storage features
   ],
   providers: [
+    AuthService,
+    AuthGuard,
     StudentService
   ],
   bootstrap: [AppComponent]
