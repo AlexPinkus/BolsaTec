@@ -12,12 +12,14 @@ export class AuthService {
 
   // private itemsCollection: AngularFirestoreCollection<Mensaje>;
   public user: any = {};
-  public isAuth = false;
+  public isAuth: boolean;
+  public isLoad: boolean;
 
   constructor(private afs: AngularFirestore,
     public afAuth: AngularFireAuth) {
       this.afAuth.authState.subscribe( user => {
         console.log('Estado del user', user);
+
         if (!user) {  this.isAuth = false; return; }
         this.user.nombre = user.displayName;
         this.user.uid    = user.uid;
@@ -33,40 +35,42 @@ export class AuthService {
   }
 
   signup(email: string, password: string) {
-    this.afAuth.auth.createUserWithEmailAndPassword(email, password).then(user => {
-      console.log('Usuario registrado :', user);
-      alert('Usuario registrado :' + user);
-    })
-    .catch(function(error) {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // Estos son los diferentes tipos de errores que se pueden dar.
-      // Manejar código de error adecuado para el usuario.
-      switch (errorCode) {
-        case 'auth/email-already-in-use':
-          // Thrown if there already exists an account with the given email address.
-          break;
-        case 'auth/invalid-email':
-          // Thrown if the email address is not valid.
-          break;
-        case 'auth/operation-not-allowed':
-          // Thrown if email/password accounts are not enabled. Enable email/password accounts in the Firebase Console, under the Auth tab.
-          break;
-        case 'auth/weak-password':
-          // Thrown if the password is not strong enough.
-        default:
-          // Error no documentado.
-          break;
-      }
-      // Cambiar la alerta por un manejo más amigable de error para el usuario.
-      alert(errorMessage);
+    return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
 
-      // Para debuggear...
-      console.log('errorCode :', errorCode);
-      console.log('errorMessage :', errorMessage);
-      // ...
-    });
+    // .then(user => {
+    //   console.log('Usuario registrado :', user);
+    //   alert('Usuario registrado :' + user);
+    // })
+    // .catch(function(error) {
+    //   // Handle Errors here.
+    //   const errorCode = error.code;
+    //   const errorMessage = error.message;
+    //   // Estos son los diferentes tipos de errores que se pueden dar.
+    //   // Manejar código de error adecuado para el usuario.
+    //   switch (errorCode) {
+    //     case 'auth/email-already-in-use':
+    //       // Thrown if there already exists an account with the given email address.
+    //       break;
+    //     case 'auth/invalid-email':
+    //       // Thrown if the email address is not valid.
+    //       break;
+    //     case 'auth/operation-not-allowed':
+    //       // Thrown if email/password accounts are not enabled. Enable email/password accounts in the Firebase Console, under the Auth tab.
+    //       break;
+    //     case 'auth/weak-password':
+    //       // Thrown if the password is not strong enough.
+    //     default:
+    //       // Error no documentado.
+    //       break;
+    //   }
+    //   // Cambiar la alerta por un manejo más amigable de error para el usuario.
+    //   alert(errorMessage);
+
+    //   // Para debuggear...
+    //   console.log('errorCode :', errorCode);
+    //   console.log('errorMessage :', errorMessage);
+    //   // ...
+    // });
   }
 
   login(email: string, password: string) {

@@ -25,10 +25,26 @@ export class StudentService {
   }
 
   getStudent( key$: string) {
-    const url = `${this.studentURL}/${ key$ }.json`;
-    return this.http.get(url).map(res => {
-              // console.log(res.json());
-              return res.json();
+    // const url = `${this.studentURL}/${ key$ }.json`;
+    // return this.http.get(url).map(res => {
+    //           // console.log(res.json());
+    //           return res.json();
+    // });
+    console.log("entramos por acá");
+    return this.http.get(this.fireURL).map(res => {
+      // console.log(res.json());
+      console.log('res :', res.json());
+      let aux = res.json();
+      for (const key in aux) {
+        if (aux.hasOwnProperty(key)) {
+          if (aux[key].id == key$) {
+            console.log('aux[key] :', aux[key]);
+            return aux[key];
+          }
+          //const element = object[key];
+        }
+      }
+     // return res.json();
     });
   }
 
