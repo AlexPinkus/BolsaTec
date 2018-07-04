@@ -5,6 +5,9 @@ import { StudentService } from '../../services/student.service';
 import { AuthService } from '../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 @Component({
   selector: 'app-studentprofile',
   templateUrl: './studentprofile.component.html',
@@ -13,6 +16,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class StudentProfileComponent implements OnInit {
 
   password: string;
+  studentO: Observable<Student[]>;
   student: Student = {
     firstName: 'Eduardo',
     lastName: 'Pérez',
@@ -58,10 +62,12 @@ export class StudentProfileComponent implements OnInit {
         console.log(parametros);
         this.id = parametros['id'];
         if ( this.id !== 'nuevo') {
-          this._studentService.getStudent(this.id).subscribe(student => {
-            console.log('student :', student);
-            this.student = student;
-          });
+          // this._studentService.studentDocument
+          // this._studentService.getStudent(this.id)
+          // this._studentService.getStudent(this.id).subscribe(student => {
+          //   console.log('student :', student);
+          //   this.student = student;
+          // });
         }
       });
     }
@@ -73,25 +79,39 @@ export class StudentProfileComponent implements OnInit {
     // Aquí hay que verificar que los datos del usuario sean los correctos antes de registrarlo.
 
     console.log( this.student );
-    if (this.id === 'nuevo') {
-      // insertando
-      this._studentService.createStudent(this.student).subscribe(data => {
-        this.successMessage = 'Estudiante Registrado Exitosamente';
-        this.successMessagebool = true;
-        this.router.navigate(['/student', data.name]);
-        this._auths.signup(this.student.email, 'password');
-      }, error => {
-        console.error(error);
-      });
-    } else {
+
       // actualizando
-      this._studentService.updateStudent(this.student, this.id).subscribe(data => {
-        console.log(data);
-      }, error => {
-        console.error(error);
-      });
-    }
+    //   this._studentService.updateStudent(this.student, this.id).subscribe(data => {
+    //     console.log(data);
+    //   }, error => {
+    //     console.error(error);
+    //   });
+    // }
   }
+
+  // guardar() {
+  //   // Aquí hay que verificar que los datos del usuario sean los correctos antes de registrarlo.
+
+  //   console.log( this.student );
+  //   if (this.id === 'nuevo') {
+  //     // insertando
+  //     this._studentService.createStudent(this.student).subscribe(data => {
+  //       this.successMessage = 'Estudiante Registrado Exitosamente';
+  //       this.successMessagebool = true;
+  //       this.router.navigate(['/student', data.name]);
+  //       this._auths.signup(this.student.email, 'password');
+  //     }, error => {
+  //       console.error(error);
+  //     });
+  //   } else {
+  //     // actualizando
+  //     this._studentService.updateStudent(this.student, this.id).subscribe(data => {
+  //       console.log(data);
+  //     }, error => {
+  //       console.error(error);
+  //     });
+  //   }
+  // }
 
   agregarNuevo( forma: NgForm ) {
     this.router.navigate(['/student', 'nuevo']);
