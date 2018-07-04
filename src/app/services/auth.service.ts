@@ -55,7 +55,8 @@ export class AuthService {
     //       // Thrown if the email address is not valid.
     //       break;
     //     case 'auth/operation-not-allowed':
-    //       // Thrown if email/password accounts are not enabled. Enable email/password accounts in the Firebase Console, under the Auth tab.
+    //       // Thrown if email/password accounts are not enabled. Enable email/password accounts in the Firebase 
+    //Console, under the Auth tab.
     //       break;
     //     case 'auth/weak-password':
     //       // Thrown if the password is not strong enough.
