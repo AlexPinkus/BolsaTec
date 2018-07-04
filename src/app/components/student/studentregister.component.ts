@@ -50,7 +50,7 @@ export class StudentRegisterComponent implements OnInit {
     }
   };
 
-  constructor(private _studentService: StudentService,
+  constructor(private studentService: StudentService,
     private _auths: AuthService,
     private router: Router,
     private route: ActivatedRoute) { }
@@ -58,24 +58,42 @@ export class StudentRegisterComponent implements OnInit {
   ngOnInit() {
   }
 
-  guardar() {
+  guardar( ) {
     // Aquí hay que verificar que los datos del usuario sean los correctos antes de registrarlo.
 
     console.log( this.student );
     // insertando
     this._auths.signup(this.student.email, 'password').then(credential => {
-        console.log('Usuario registrado :', credential.user.uid);
-        alert('Usuario registrado :' + credential);
-        this.student.id = credential.user['uid'];
-        this._studentService.createStudent(this.student).subscribe(data => {
-          this.successMessage = 'Estudiante Registrado Exitosamente';
-          this.successMessagebool = true;
-          this.router.navigate(['/profile/student', data.name]);
-        }, error => {
-          console.error(error);
+        console.log('Usuario registrado :');
+        alert('Usuario registrado :');
+        this.student.uid = credential.user.uid;
+        // const newStudent :
+        this.studentService.createStudent(this.student).then(smt => {
+          console.log('smt :', smt);
+          console.log('Registrado');
         });
     });
+    // forma.reset({});
   }
+
+  // guardar() {
+  //   // Aquí hay que verificar que los datos del usuario sean los correctos antes de registrarlo.
+
+  //   console.log( this.student );
+  //   // insertando
+  //   this._auths.signup(this.student.email, 'password').then(credential => {
+  //       console.log('Usuario registrado :');
+  //       alert('Usuario registrado :');
+  //       // this.student.id = credential.user['uid'];
+  //       this._studentService.createStudent(this.student).subscribe(data => {
+  //         this.successMessage = 'Estudiante Registrado Exitosamente';
+  //         this.successMessagebool = true;
+  //         // this.router.navigate(['/profile/student', data.name]);
+  //       }, error => {
+  //         console.error(error);
+  //       });
+  //   });
+  // }
 
   agregarNuevo( forma: NgForm ) {
     this.router.navigate(['/student', 'nuevo']);

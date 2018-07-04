@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AuthService } from '../../services/auth.service';
+import { User } from 'firebase';
 
 
 @Component({
@@ -19,15 +20,15 @@ export class LoginComponent implements OnInit {
 
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private _auths: AuthService) { }
+    private authService: AuthService) { }
 
   ngOnInit() {
   }
 
   logIn() {
-    console.log( this.user );
-    this._auths.login(this.user.email, this.user.password);
-    console.log('Usuario Loggeado:', this._auths.user);
+    console.log( 'Usuario a logear:', this.user );
+    this.authService.login(this.user.email, this.user.password);
+    console.log('Usuario Loggeado:', this.authService.userDoc);
   }
 
 }

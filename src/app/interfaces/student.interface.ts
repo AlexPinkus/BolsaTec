@@ -1,9 +1,9 @@
 export interface Student {
-  id?:       any;
+  uid?:      any;
   firstName: string;
-  lastName: string;
-  email:    string;
-  phone:    number;
+  lastName:  string;
+  email:     string;
+  phone:     number;
   address: {
     mainStreet: string;
     crossings:  string;
