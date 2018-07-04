@@ -1,9 +1,18 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { auth } from 'firebase/app';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap, startWith, tap, filter } from 'rxjs/operators';
+import { CompileNgModuleMetadata } from '@angular/compiler';
+import { Student } from '../interfaces/student.interface';
+
+interface User {
+  uid: string;
+  email?: string | null;
+  photoURL?: string;
+  displayName?: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -11,37 +20,59 @@ import { map } from 'rxjs/operators';
 export class AuthService {
 
   // private itemsCollection: AngularFirestoreCollection<Mensaje>;
-  public user: any = {};
+  public user: Observable<User | null>;
+  // public user: any = {};
+  public userItem: AngularFirestoreDocument<User>;
+  public userDoc: any;
   public isAuth: boolean;
   public isLoad: boolean;
+  public hello: any;
 
-  constructor(private afs: AngularFirestore,
-    public afAuth: AngularFireAuth) {
-      this.afAuth.authState.subscribe( user => {
-        console.log('Estado del user', user);
+  constructor(
+    private afs: AngularFirestore,
+    public afAuth: AngularFireAuth
+  ) {
+      // this.afAuth.authState.subscribe( user => {
+      //   console.log('Estado del user', user);
 
-        if (!user) {  this.isAuth = false; return; }
-        this.user.nombre = user.displayName;
-        this.user.uid    = user.uid;
-        this.isAuth = true;
-        if (user.emailVerified) {
-          console.log('Email is verified');
-        } else {
-          console.log('Email is not verified');
-        }
-      });
+      //   if (!user) {  this.isAuth = false; return; }
+      //   this.user.nombre = user.displayName;
+      //   this.user.uid    = user.uid;
+      //   this.isAuth = true;
+      //   if (user.emailVerified) {
+      //     console.log('Email is verified');
+      //   } else {
+      //     console.log('Email is not verified');
+      //   }
+      // });
+      this.user = this.afAuth.authState.pipe(
+        switchMap(user => {
+          if (user) {
+            return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
+          } else {
+            return of(null);
+          }
+        }),
+        // Aquí obtenemos el user si sólo queremos el item...
+        tap(user => {
+          this.userDoc = user;
+          console.log('this.userDoc :', this.userDoc);
+        }),
+        // startWith(JSON.parse(localStorage.getItem('user')))
+      );
     // this.itemsCollection = afs.collection<Mensaje>('items');
     // this.items = this.itemsCollection.valueChanges();
   }
 
   signup(email: string, password: string) {
-    return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
-
-    // .then(user => {
-    //   console.log('Usuario registrado :', user);
-    //   alert('Usuario registrado :' + user);
+    return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
+    // .then(credential => {
+    //   // this.notify.update('Welcome new user!', 'success');
+    //   alert('Bienvenido nuevo usuario');
+    //   console.log('Bienvenido nuevo usuario', credential.user);
+    //   return this.updateUserData(credential.user); // if using firestore
     // })
-    // .catch(function(error) {
+    // .catch(error => {
     //   // Handle Errors here.
     //   const errorCode = error.code;
     //   const errorMessage = error.message;
@@ -55,7 +86,8 @@ export class AuthService {
     //       // Thrown if the email address is not valid.
     //       break;
     //     case 'auth/operation-not-allowed':
-    //       // Thrown if email/password accounts are not enabled. Enable email/password accounts in the Firebase Console, under the Auth tab.
+    //       // Thrown if email/password accounts are not enabled.
+    //       // Enable email/password accounts in the Firebase Console, under the Auth tab.
     //       break;
     //     case 'auth/weak-password':
     //       // Thrown if the password is not strong enough.
@@ -75,8 +107,9 @@ export class AuthService {
 
   login(email: string, password: string) {
     // this.afAuth.auth.signInWithEmailAndPassword
-    this.afAuth.auth.signInWithEmailAndPassword(email, password).then(credential => {
-      alert('Bienvenido' + credential);
+    return this.afAuth.auth.signInWithEmailAndPassword(email, password).then(credential => {
+      alert('Bienvenido' + credential.user.displayName);
+      return this.updateUserData(credential.user);
     })
     .catch(function(error) {
       // Handle Errors here.
@@ -111,7 +144,7 @@ export class AuthService {
   }
 
   logout() {
-    this.user = {};
+    // this.fsuser = {};
     this.afAuth.auth.signOut().then(function() {
       // Sign-out successful.
       alert('Adios');
@@ -122,6 +155,24 @@ export class AuthService {
       console.log('errorCode :', errorCode);
       console.log('errorMessage :', errorMessage);
     });
+  }
+
+    // Sets user data to firestore after succesful login
+  private updateUserData(user: User) {
+    console.log('Actualizando usuario...');
+    console.log('user :', user);
+    console.log('this.user :', this.user);
+    const userRef: AngularFirestoreDocument<User> = this.afs.doc(
+      `users/${user.uid}`
+    );
+
+    const data: User = {
+      uid: user.uid,
+      email: user.email || null,
+      displayName: user.displayName || 'nameless user',
+      photoURL: user.photoURL || 'https://goo.gl/Fz9nrQ'
+    };
+    return userRef.set(data);
   }
 
 //   isLoggedIn() {
