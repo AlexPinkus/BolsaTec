@@ -3,7 +3,7 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from
 import { Observable } from 'rxjs';
 
 import { AuthService} from './auth.service';
-import { tap, map, take } from 'rxjs/operators';
+import { map, take, tap } from 'rxjs/operators';
 
 
 @Injectable({
@@ -15,13 +15,17 @@ export class AuthGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-      console.log('next :', next);
-      if (this.auth.isAuth) {
-        console.log('Pasó el guard');
-        return true;
-      } else {
-        console.log('Bloqueado por el guard');
-        return false;
-      }
+      // Esto sólo verifica que el usuario esté logeado...
+      return this.auth.user.pipe(
+        take(1),
+        map(user => !!user),
+        tap(loggedIn => {
+          if (!loggedIn) {
+            console.log('access denied');
+            // this.notify.update('You must be logged in!', 'error');
+            this.router.navigate(['/login']);
+          }
+        })
+      );
   }
 }
