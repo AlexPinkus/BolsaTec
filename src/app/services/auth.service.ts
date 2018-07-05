@@ -4,7 +4,6 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { auth } from 'firebase/app';
 import { Observable, of } from 'rxjs';
 import { map, switchMap, startWith, tap, filter } from 'rxjs/operators';
-import { CompileNgModuleMetadata } from '@angular/compiler';
 import { Student } from '../interfaces/student.interface';
 
 interface User {
@@ -18,33 +17,14 @@ interface User {
   providedIn: 'root'
 })
 export class AuthService {
-
-  // private itemsCollection: AngularFirestoreCollection<Mensaje>;
   public user: Observable<User | null>;
-  // public user: any = {};
-  public userItem: AngularFirestoreDocument<User>;
   public userDoc: any;
-  public isAuth: boolean;
-  public isLoad: boolean;
-  public hello: any;
 
   constructor(
     private afs: AngularFirestore,
     public afAuth: AngularFireAuth
   ) {
-      // this.afAuth.authState.subscribe( user => {
-      //   console.log('Estado del user', user);
-
-      //   if (!user) {  this.isAuth = false; return; }
-      //   this.user.nombre = user.displayName;
-      //   this.user.uid    = user.uid;
-      //   this.isAuth = true;
-      //   if (user.emailVerified) {
-      //     console.log('Email is verified');
-      //   } else {
-      //     console.log('Email is not verified');
-      //   }
-      // });
+      // Esto sucede cada vez que el usuario cambia su estado...
       this.user = this.afAuth.authState.pipe(
         switchMap(user => {
           if (user) {
@@ -60,56 +40,81 @@ export class AuthService {
         }),
         // startWith(JSON.parse(localStorage.getItem('user')))
       );
-    // this.itemsCollection = afs.collection<Mensaje>('items');
-    // this.items = this.itemsCollection.valueChanges();
   }
 
   signup(email: string, password: string) {
-    return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
-    // .then(credential => {
-    //   // this.notify.update('Welcome new user!', 'success');
-    //   alert('Bienvenido nuevo usuario');
-    //   console.log('Bienvenido nuevo usuario', credential.user);
-    //   return this.updateUserData(credential.user); // if using firestore
-    // })
-    // .catch(error => {
-    //   // Handle Errors here.
-    //   const errorCode = error.code;
-    //   const errorMessage = error.message;
-    //   // Estos son los diferentes tipos de errores que se pueden dar.
-    //   // Manejar código de error adecuado para el usuario.
-    //   switch (errorCode) {
-    //     case 'auth/email-already-in-use':
-    //       // Thrown if there already exists an account with the given email address.
-    //       break;
-    //     case 'auth/invalid-email':
-    //       // Thrown if the email address is not valid.
-    //       break;
-    //     case 'auth/operation-not-allowed':
-    //       // Thrown if email/password accounts are not enabled.
-    //       // Enable email/password accounts in the Firebase Console, under the Auth tab.
-    //       break;
-    //     case 'auth/weak-password':
-    //       // Thrown if the password is not strong enough.
-    //     default:
-    //       // Error no documentado.
-    //       break;
-    //   }
-    //   // Cambiar la alerta por un manejo más amigable de error para el usuario.
-    //   alert(errorMessage);
+    // Esta promesa regresa la credencial de usuario, esto se necesita al momento
+    // de guardar el usuario en la base de datos
+    return new Promise <auth.UserCredential> ((resolve, reject) => {
 
-    //   // Para debuggear...
-    //   console.log('errorCode :', errorCode);
-    //   console.log('errorMessage :', errorMessage);
-    //   // ...
-    // });
+      // Se crea un usuario a partir de un email y contraseña
+      this.afAuth.auth.createUserWithEmailAndPassword(email, password).then(credential => {
+        // Notificamos de la creación del usuario en google Firebase
+        alert('Nuevo usuario creado');
+
+        // Se envía el correo de verificación antes de continuar
+        credential.user.sendEmailVerification().then(() => {
+          // El correo de verificación se envió correctamente
+          console.log('correo enviado');
+          this.logout().then(() => {
+            // Sacamos al usuario (el create lo logea automáticamente)
+            resolve (credential);
+          }).catch((error) => {
+            // Hubo error al sacar al usuario
+            reject(error);
+          });
+        }).catch(error => {
+          // Hubo error al enviar el correo de verificación
+          reject(error);
+        });
+      }).catch(error => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // Estos son los diferentes tipos de errores que se pueden dar.
+        // Manejar código de error adecuado para el usuario.
+        switch (errorCode) {
+          case 'auth/email-already-in-use':
+            // Thrown if there already exists an account with the given email address.
+            break;
+          case 'auth/invalid-email':
+            // Thrown if the email address is not valid.
+            break;
+          case 'auth/operation-not-allowed':
+            // Thrown if email/password accounts are not enabled.
+            // Enable email/password accounts in the Firebase Console, under the Auth tab.
+            break;
+          case 'auth/weak-password':
+            // Thrown if the password is not strong enough.
+          default:
+            // Error no documentado.
+            break;
+        }
+        // Cambiar la alerta por un manejo más amigable de error para el usuario.
+        alert(errorMessage);
+
+        // Para debuggear...
+        console.log('errorCode :', errorCode);
+        console.log('errorMessage :', errorMessage);
+        // ...
+      });
+    });
+    // return this.updateUserData(credential.user); // if using firestore
   }
 
   login(email: string, password: string) {
-    // this.afAuth.auth.signInWithEmailAndPassword
+    // Hacemos el login con correo y contraseña
     return this.afAuth.auth.signInWithEmailAndPassword(email, password).then(credential => {
-      alert('Bienvenido' + credential.user.displayName);
-      return this.updateUserData(credential.user);
+      if (!credential.user.emailVerified) {
+        // Aqui necesitamos un modal que le pregunte al usuario si quiere que le enviemos el correo
+        alert('Por favor verifique su correo antes de logearse...');
+        this.logout().then(() => {
+          credential.user.sendEmailVerification();
+        });
+      } else {
+        alert('Bienvenido' + credential.user.displayName);
+      }
+      // return this.updateUserData(credential.user);
     })
     .catch(function(error) {
       // Handle Errors here.
@@ -145,7 +150,7 @@ export class AuthService {
 
   logout() {
     // this.fsuser = {};
-    this.afAuth.auth.signOut().then(function() {
+    return this.afAuth.auth.signOut().then(function() {
       // Sign-out successful.
       alert('Adios');
     }).catch(function(error) {
@@ -154,6 +159,47 @@ export class AuthService {
       const errorMessage = error.message;
       console.log('errorCode :', errorCode);
       console.log('errorMessage :', errorMessage);
+    });
+  }
+
+  recoverPassword(email: string) {
+    // Se recupera la contraseña de google.
+    this.afAuth.auth.sendPasswordResetEmail(email).then(() => {
+      // La contraseña se envió correctamente...
+      console.log('Se envió el correo...');
+    }).catch((error) => {
+            // Handle Errors here.
+            console.log('error :', error);
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            switch (errorCode) {
+              case 'auth/invalid-email':
+              // Thrown if the email address is not valid.
+                break;
+
+              case 'auth/missing-continue-uri':
+              // A continue URL must be provided in the request.
+                break;
+
+              case 'auth/invalid-continue-uri':
+              // The continue URL provided in the request is invalid.
+                break;
+
+              case 'auth/unauthorized-continue-uri':
+              // The domain of the continue URL is not whitelisted. Whitelist the domain in the Firebase console.
+                break;
+
+              case 'auth/user-not-found':
+              // Thrown if there is no user corresponding to the email address.
+                break;
+            }
+            // Cambiar la alerta por un manejo más amigable de error para el usuario.
+            alert(errorMessage);
+            // Para debuggear...
+            console.log('errorCode :', errorCode);
+            console.log('errorMessage :', errorMessage);
+            // ...
+
     });
   }
 
@@ -175,16 +221,4 @@ export class AuthService {
     return userRef.set(data);
   }
 
-//   isLoggedIn() {
-//     return this.afAuth.authState.pipe(first()).toPromise();
-//  }
-
-//  async doSomething() {
-//     const user = await isLoggedIn()
-//     if (user) {
-//       // do something
-//     } else {
-//       // do something else
-//    }
-//  }
 }
