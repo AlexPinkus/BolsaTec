@@ -35,6 +35,10 @@
         </button>
       </div>
     </form>
+    <div>
+        <label>¿Olvidó su contraseña?</label>
+        <button [disabled]="!forma.valid" class="btn btn-outline-info" (click)="resetPassword()" name="reset" >Recuperar contraseña</button>
+    </div>
   </div>
 </div>
 

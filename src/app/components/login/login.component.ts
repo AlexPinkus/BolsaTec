@@ -31,4 +31,9 @@ export class LoginComponent implements OnInit {
     console.log('Usuario Loggeado:', this.authService.userDoc);
   }
 
+  resetPassword() {
+    console.log('recuperar contraseña...');
+    this.authService.recoverPassword(this.user.email);
+  }
+
 }
