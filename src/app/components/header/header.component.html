@@ -35,9 +35,10 @@
 
                 <a class="nav-link" [routerLink]="['login']" (click)="_as.logout()">Cerrar Sesión
               <!-- <button (click)="_as.logout()" type="button" class="btn btn-outline-danger" >Cerrar Sesión</button> -->
-           </a>
+              </a>
             </li>
-            <li class="nav-item">
+            <!-- Si el usuario es un estudiante -->
+            <li class="nav-item" *ngIf="user.role == 'student'">
                 <a class="nav-link" [routerLink]="['/profile/student', user.uid]">Perfil de Usuario</a>
             </li>
         </ul>
