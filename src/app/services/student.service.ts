@@ -19,7 +19,7 @@ export class StudentService {
 
   constructor(private http: Http, private afs: AngularFirestore) {
     // Obten la colección con todos los estudiantes:
-    this.studentsCollection = this.afs.collection('students');
+    this.studentsCollection = this.afs.collection('users');
     // , (ref) => ref.orderBy('time', 'desc')
   }
 
@@ -37,7 +37,7 @@ export class StudentService {
   }
 
   getStudent(id: string) {
-    return this.afs.doc<any>(`students/${id}`);
+    return this.afs.doc<Student>(`users/${id}`);
   }
 
   createStudent(student: Student) {
@@ -46,6 +46,7 @@ export class StudentService {
     //   hearts: 0,
     //   time: new Date().getTime(),
     // };
+    student.role = 'student';
     return this.studentsCollection.doc(student.uid).set(student);
   }
 
