@@ -5,15 +5,15 @@
 
 <div class ="row animated fadeIn fast">
   <div class ="col-md-12 text-left">
-    <form (ngSubmit)="guardar()" #forma="ngForm">
+    <form (ngSubmit)="guardar()" #forma="ngForm" *ngIf="studentO | async as user">
       <h4>Datos de Inicio</h4> <hr>
-      <div class="form-group">
+      <div class="form-group" >
           <label>Correo electronico</label>
           <input class="form-control"
                  [(ngModel)]="student.email"
                  type="email"
                  name="email"
-                 placeholder="alexpinkus@hotmail.com"
+                 placeholder="Correo del estudiante"
                  required
                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
                  #email="ngModel">
@@ -73,7 +73,7 @@
                 type="text"
                 name="mainStreet"
                 class="form-control"
-                placeholder="Avenida Kukulkán"
+                placeholder="Calle Principal"
                 required
           >
         </div>
@@ -83,7 +83,7 @@
                 type="text"
                 name="crossings"
                 class="form-control"
-                placeholder="13 y 15"
+                placeholder="Cruzamientos"
                 required
           >
         </div>
@@ -93,7 +93,7 @@
                 type="number"
                 name="postalCode"
                 class="form-control"
-                placeholder="97071"
+                placeholder="00000"
                 required
           >
         </div>
@@ -103,7 +103,7 @@
                 type="text"
                 name="mainStreet"
                 class="form-control"
-                placeholder="Yucatán"
+                placeholder="Estado"
                 required
           >
         </div>

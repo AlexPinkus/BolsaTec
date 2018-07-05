@@ -6,7 +6,8 @@ import { AuthService } from '../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take, tap } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-studentprofile',
@@ -16,17 +17,18 @@ import { map } from 'rxjs/operators';
 export class StudentProfileComponent implements OnInit {
 
   password: string;
-  studentO: Observable<Student[]>;
+  studentO: Observable<Student>;
   student: Student = {
-    firstName: 'Eduardo',
-    lastName: 'Pérez',
-    email:    'eduardo.perez@correo.mx',
-    phone:    9991131415,
+    firstName: '',
+    lastName: '',
+    email:    '',
+    phone:    0,
+    role: 'student',
     address: {
-      mainStreet: 'Calle 21',
-      crossings:  '17 y 29',
-      postalCode: 98765,
-      state:      'Yucatán'
+      mainStreet: '',
+      crossings:  '',
+      postalCode: 0,
+      state:      ''
     }
   };
 
@@ -54,14 +56,28 @@ export class StudentProfileComponent implements OnInit {
     }
   };
 
-  constructor(private _studentService: StudentService,
+  constructor(private studentService: StudentService,
     private _auths: AuthService,
     private router: Router,
     private route: ActivatedRoute) {
+      // Obtenemos los parámetros de las rutas...
       this.route.params.subscribe(parametros => {
         console.log(parametros);
         this.id = parametros['id'];
         if ( this.id !== 'nuevo') {
+          this.studentO = this.studentService.getStudent(this.id).valueChanges().pipe(
+            take(1),
+            map(user => {
+            console.log('123123user :', user);
+            return user;
+            }),
+            tap(smt => {
+              console.log('object :', smt);
+              this.student = smt;
+              console.log('this.student :', this.student);
+            })
+          );
+          console.log('studentO :', this.studentO);
           // this._studentService.studentDocument
           // this._studentService.getStudent(this.id)
           // this._studentService.getStudent(this.id).subscribe(student => {
@@ -73,6 +89,32 @@ export class StudentProfileComponent implements OnInit {
     }
 
   ngOnInit() {
+    console.log('this.student :', this.student);
+    this.route.params.subscribe(parametros => {
+      console.log(parametros);
+      this.id = parametros['id'];
+      if ( this.id !== 'nuevo') {
+        this.studentO = this.studentService.getStudent(this.id).valueChanges().pipe(
+          take(1),
+          map(user => {
+          console.log('123123user :', user);
+          return user;
+          }),
+          tap(smt => {
+            console.log('object :', smt);
+            this.student = smt;
+            console.log('this.student :', this.student);
+          })
+        );
+        console.log('studentO :', this.studentO);
+        // this._studentService.studentDocument
+        // this._studentService.getStudent(this.id)
+        // this._studentService.getStudent(this.id).subscribe(student => {
+        //   console.log('student :', student);
+        //   this.student = student;
+        // });
+      }
+    });
   }
 
   guardar() {
