@@ -11,6 +11,7 @@ export interface Student {
     state:      string;
 
   };
+  role: string;
   // languages: {
   //   english: {
   //     written:  string;

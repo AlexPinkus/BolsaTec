@@ -18,6 +18,7 @@ export class StudentRegisterComponent implements OnInit {
     lastName: 'Pérez',
     email:    'eduardo.perez@correo.mx',
     phone:    9991131415,
+    role: 'student',
     address: {
       mainStreet: 'Calle 21',
       crossings:  '17 y 29',
@@ -64,7 +65,6 @@ export class StudentRegisterComponent implements OnInit {
     console.log( this.student );
     // insertando
     this._auths.signup(this.student.email, 'password').then(credential => {
-        console.log('Usuario registrado :');
         alert('Usuario registrado :');
         this.student.uid = credential.user.uid;
         // const newStudent :
