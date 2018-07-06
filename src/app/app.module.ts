@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 
-//Bootstrap
+// Bootstrap
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 
@@ -35,6 +35,8 @@ import { IndexComponent } from './components/index/index.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoginComponent } from './components/login/login.component';
 import { StudentProfileComponent } from './components/student/studentprofile.component';
+import { DropZoneDirective } from './drop-zone.directive';
+import { FileSizePipe } from './pipes/file-size.pipe';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { StudentProfileComponent } from './components/student/studentprofile.com
     IndexComponent,
     HeaderComponent,
     LoginComponent,
-    StudentProfileComponent
+    StudentProfileComponent,
+    DropZoneDirective,
+    FileSizePipe
   ],
   imports: [
     BrowserModule,
