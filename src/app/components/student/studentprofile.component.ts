@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
 import { NgForm } from '@angular/forms';
 import { Student } from '../../interfaces/student.interface';
 import { StudentService } from '../../services/student.service';
@@ -6,7 +7,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs';
-import { map, take, tap } from 'rxjs/operators';
+import { map, take, tap, finalize } from 'rxjs/operators';
 
 
 @Component({
@@ -56,9 +57,24 @@ export class StudentProfileComponent implements OnInit {
     }
   };
 
+  // Main task
+  task: AngularFireUploadTask;
+
+  // Progress monitoring
+  percentage: Observable<number>;
+
+  snapshot: Observable<any>;
+
+  // Download URL
+  downloadURL: Observable<string>;
+
+  // State for dropzone CSS toggling
+  isHovering: boolean;
+
   constructor(private studentService: StudentService,
     private _auths: AuthService,
     private router: Router,
+    private storage: AngularFireStorage,
     private route: ActivatedRoute) {
       // Obtenemos los parámetros de las rutas...
       this.route.params.subscribe(parametros => {
@@ -115,6 +131,49 @@ export class StudentProfileComponent implements OnInit {
         // });
       }
     });
+  }
+
+  toggleHover(event: boolean) {
+    this.isHovering = event;
+    console.log('isHovering :', this.isHovering);
+  }
+
+
+  startUpload(event: FileList) {
+    // The File object
+    const file = event.item(0);
+
+    // Client-side validation example
+    if (file.type.split('/')[0] !== 'image') {
+      console.error('unsupported file type :( ');
+      return;
+    }
+
+    // The storage path
+    const path = `test/${new Date().getTime()}_${file.name}`;
+
+    // Totally optional metadata
+    const customMetadata = { app: 'My AngularFire-powered PWA!' };
+
+    // The main task
+    this.task = this.storage.upload(path, file, { customMetadata });
+
+    // Progress monitoring
+    this.percentage = this.task.percentageChanges();
+    this.snapshot   = this.task.snapshotChanges();
+
+    const fileRef = this.storage.ref(path);
+
+    // The file's download URL
+    this.task.snapshotChanges().pipe(
+      finalize(() => this.downloadURL = fileRef.getDownloadURL() )
+    ).subscribe();
+
+  }
+
+  // Determines if the upload task is active
+  isActive(snapshot) {
+    return snapshot.state === 'running' && snapshot.bytesTransferred < snapshot.totalBytes;
   }
 
   guardar() {
