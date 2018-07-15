@@ -1,0 +1,157 @@
+<div class="bootstrap-iso">
+    <form [formGroup]="formulario" (ngSubmit)="agregar()">
+        <h3>Datos generales de la empresa</h3>
+        <div class="borde-tec p-b-4"></div>
+        <br>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="">Correo electrónico</label>
+                <input type="email" class="form-control student" formControlName="email" placeholder="example@email.com" [class.is-invalid]="!formulario.get('email').valid && formulario.get('email').dirty" [class.is-valid]="formulario.get('email').valid">
+            </div>
+            <!-- <div *ngIf="!formulario.controls.email.valid && formulario.controls.email.dirty" class="invalid">
+              Excediste el número de letras permitido
+          </div> -->
+            <div class="form-group col-md-6">
+                <label for="">Contraseña</label>
+                <input type="password" class="form-control" [class.is-invalid]="!formulario.get('password').valid && formulario.get('password').dirty" [class.is-valid]="formulario.get('password').valid" formControlName="password" placeholder="******">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="">Confirma tu correo electrónico</label>
+                <input type="email" class="form-control student" formControlName="email_confirm" placeholder="example@email.com" [class.is-invalid]="!formulario.get('email_confirm').valid && formulario.get('email_confirm').dirty" [class.is-valid]="formulario.get('email_confirm').valid">
+
+            </div>
+            <div class="form-group col-md-6">
+                <label for="">Repetir contraseña</label>
+                <input type="password" class="form-control" formControlName="password_confirm" placeholder="******" [class.is-invalid]="!formulario.get('password_confirm').valid && formulario.get('password_confirm').dirty" [class.is-valid]="formulario.get('password_confirm').valid">
+
+            </div>
+        </div>
+        <h4>Datos del contacto</h4>
+        <div class="borde-tec p-b-4"></div>
+        <br>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="">Nombres</label>
+                <input type="text" class="form-control" formControlName="firstName" placeholder="Ej. Juan" [class.is-invalid]="!formulario.get('firstName').valid && formulario.get('firstName').dirty" [class.is-valid]="formulario.get('firstName').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Apellido paterno</label>
+                <input type="text" class="form-control" formControlName="lastName" [class.is-invalid]="!formulario.get('lastName').valid && formulario.get('lastName').dirty" [class.is-valid]="formulario.get('lastName').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Apellido materno</label>
+                <input type="text" class="form-control" formControlName="middleName" [class.is-invalid]="!formulario.get('middleName').valid && formulario.get('middleName').dirty" [class.is-valid]="formulario.get('middleName').valid"> </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="">Puesto</label>
+                <input type="text" class="form-control" formControlName="job" placeholder="" [class.is-invalid]="!formulario.get('job').valid && formulario.get('job').dirty" [class.is-valid]="formulario.get('job').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Departamento</label>
+                <input type="text" class="form-control" formControlName="department" placeholder="" [class.is-invalid]="!formulario.get('department').valid && formulario.get('department').dirty" [class.is-valid]="formulario.get('department').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Telefono</label>
+                <input type="text" class="form-control" formControlName="phone" placeholder="Ej. Juan" [class.is-invalid]="!formulario.get('phone').valid && formulario.get('phone').dirty" [class.is-valid]="formulario.get('phone').valid">
+            </div>
+        </div>
+        <div class="form-row">
+
+            <div class="form-group col-md-12">
+                <label for="">Dirección</label>
+                <input type="text" class="form-control" formControlName="address" [class.is-invalid]="!formulario.get('address').valid && formulario.get('address').dirty" [class.is-valid]="formulario.get('address').valid">
+            </div>
+        </div>
+
+
+
+        <h4>Datos de la empresa </h4>
+        <div class="borde-tec p-b-4"></div>
+        <br>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="">Nombre comercial</label>
+                <input type="text" class="form-control" formControlName="comercialName" [class.is-invalid]="!formulario.get('comercialName').valid && formulario.get('comercialName').dirty" [class.is-valid]="formulario.get('comercialName').valid">
+            </div>
+            <div class="form-group col-md-12">
+                <label for="">Razón social</label>
+                <input type="text" class="form-control" formControlName="bussinesName" [class.is-invalid]="!formulario.get('bussinesName').valid && formulario.get('bussinesName').dirty" [class.is-valid]="formulario.get('bussinesName').valid">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="">RFC</label>
+                <input type="text" class="form-control" formControlName="RFC" [class.is-invalid]="!formulario.get('RFC').valid && formulario.get('RFC').dirty" [class.is-valid]="formulario.get('RFC').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Teléfono</label>
+                <input type="text" class="form-control" formControlName="bussinessPhone" [class.is-invalid]="!formulario.get('bussinessPhone').valid && formulario.get('bussinessPhone').dirty" [class.is-valid]="formulario.get('bussinessPhone').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Sitio web</label>
+                <input type="text" class="form-control" formControlName="webURL" [class.is-invalid]="!formulario.get('webURL').valid && formulario.get('webURL').dirty" [class.is-valid]="formulario.get('webURL').valid && formulario.get('webURL').dirty">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="">Calle</label>
+                <input type="text" class="form-control" formControlName="mainStreet" placeholder="ej. 22" [class.is-invalid]="!formulario.get('mainStreet').valid && formulario.get('mainStreet').dirty" [class.is-valid]="formulario.get('mainStreet').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Cruzamientos</label>
+                <input type="text" class="form-control" formControlName="crossing" placeholder="ej. x61 y 61-A" [class.is-invalid]="!formulario.get('crossing').valid && formulario.get('crossing').dirty" [class.is-valid]="formulario.get('crossing').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Código postal</label>
+                <input type="text" class="form-control" formControlName="postalCode" [class.is-invalid]="!formulario.get('postalCode').valid && formulario.get('postalCode').dirty" [class.is-valid]="formulario.get('postalCode').valid">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="">Ciudad</label>
+                <input type="text" class="form-control" formControlName="city" [class.is-invalid]="!formulario.get('city').valid && formulario.get('city').dirty" [class.is-valid]="formulario.get('city').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Municipio</label>
+                <input type="text" class="form-control" formControlName="municipality" [class.is-invalid]="!formulario.get('municipality').valid && formulario.get('municipality').dirty" [class.is-valid]="formulario.get('municipality').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Estado</label>
+                <input type="text" formControlName="state" class="form-control" [class.is-invalid]="!formulario.get('state').valid && formulario.get('state').dirty" [class.is-valid]="formulario.get('state').valid">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="">Descripción</label>
+                <textarea class="form-control" formControlName="description" aria-label="With textarea"></textarea>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="">Giro del negocio</label>
+                <input type="text" class="form-control" formControlName="businessTurn" [class.is-invalid]="!formulario.get('businessTurn').valid && formulario.get('businessTurn').dirty" [class.is-valid]="formulario.get('businessTurn').valid">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="">Logotipo</label>
+                <input type="file" accept="image/*" class="form-control" formControlName="logo" placeholder="ej. 22">
+            </div>
+        </div>
+        <!-- <hr> -->
+        <div class="form-row">
+            <div class="col-md-5 p-2">
+                <button type="submit" class="text-center btn btn-red-tec col-md-12">Registrar</button>
+            </div>
+
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-5 p-2">
+                <button type="button" class="text-center btn btn-red-tec col-md-12">Cancelar</button>
+            </div>
+        </div>
+    </form>
+</div>
