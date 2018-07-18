@@ -24,7 +24,7 @@ export class StudentProfileComponent implements OnInit {
     lastName: '',
     email:    '',
     phone:    0,
-    role: 'student',
+    // role: 'student',
     address: {
       mainStreet: '',
       crossings:  '',
