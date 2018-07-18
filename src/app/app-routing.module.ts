@@ -8,13 +8,13 @@ import { StudentRegisterComponent } from './components/student/studentregister.c
 import { StudentProfileComponent } from './components/student/studentprofile.component';
 import { StudentsComponent } from './components/students/students.component';
 import { LoginComponent } from './components/login/login.component';
-import { EmpresaregisterComponent } from './components/empresa/empresaregister/empresaregister.component';
+import { EnterpriseRegisterComponent } from './components/enterprise/enterpriseregister/enterpriseregister.component';
 
 const routes: Routes = [
      { path: 'index', component: IndexComponent },
      { path: 'students', component: StudentsComponent },
      { path: 'register/student',  component: StudentRegisterComponent },
-     { path: 'register/employeer',  component: EmpresaregisterComponent },
+     { path: 'register/employeer',  component: EnterpriseRegisterComponent },
      { path: 'profile/student/:id', component: StudentProfileComponent, canActivate: [ProfileGuard] },
      { path: 'login', component: LoginComponent },
      { path: '**', pathMatch: 'full', redirectTo: 'index' },

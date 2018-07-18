@@ -40,7 +40,7 @@ export interface Student {
     isActive?:  boolean;
   }
 
-  export interface Empresa {
+  export interface Enterprise {
     uid?:      any;
     email:     string;
     // Datos contacto

@@ -17,8 +17,8 @@ export class StudentFormComponent implements OnInit {
     this.formulario = this.formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.email])],
       email_confirm: ['', Validators.compose([Validators.required, this.match('email')])],
-      password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/),this.match('password_confirm')])],
-      password_confirm: ['', Validators.compose([Validators.required,this.match('password')])],
+      password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/), this.match('password_confirm')])],
+      password_confirm: ['', Validators.compose([Validators.required, this.match('password')])],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       middleName: ['', Validators.required],
@@ -45,7 +45,7 @@ export class StudentFormComponent implements OnInit {
 
   ngOnInit() {
   }
-  
+
   match(controlKey: string) {
     return (control: FormControl): { [s: string]: boolean } => {
         // control.parent es el FormGroup

@@ -18,7 +18,7 @@ export class StudentRegisterComponent implements OnInit {
     lastName: 'Pérez',
     email:    'eduardo.perez@correo.mx',
     phone:    9991131415,
-    role: 'student',
+    // role: 'student',
     address: {
       mainStreet: 'Calle 21',
       crossings:  '17 y 29',

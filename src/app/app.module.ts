@@ -36,9 +36,9 @@ import { StudentProfileComponent } from './components/student/studentprofile.com
 import { DropZoneDirective } from './drop-zone.directive';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { StudentFormComponent } from './components/student/student-form/student-form.component';
-import { EmpresaprofileComponent } from './components/empresa/empresaprofile/empresaprofile.component';
-import { EmpresaregisterComponent } from './components/empresa/empresaregister/empresaregister.component';
-import { EmpresaFormComponent } from './components/empresa/empresa-form/empresa-form.component';
+import { EnterpriseprofileComponent } from './components/enterprise/enterpriseprofile/enterpriseprofile.component';
+import { EnterpriseRegisterComponent } from './components/enterprise/enterpriseregister/enterpriseregister.component';
+import { EnterpriseFormComponent } from './components/enterprise/enterprise-form/enterprise-form.component';
 
 @NgModule({
   declarations: [
@@ -53,9 +53,9 @@ import { EmpresaFormComponent } from './components/empresa/empresa-form/empresa-
     DropZoneDirective,
     FileSizePipe,
     StudentFormComponent,
-    EmpresaprofileComponent,
-    EmpresaregisterComponent,
-    EmpresaFormComponent
+    EnterpriseprofileComponent,
+    EnterpriseRegisterComponent,
+    EnterpriseFormComponent
   ],
   imports: [
     BrowserModule,

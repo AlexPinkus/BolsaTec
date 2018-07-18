@@ -1,19 +1,20 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl, AbstractControl } from '@angular/forms';
-import { Empresa } from '../../../interfaces/interfaces';
+import { Enterprise } from '../../../interfaces/interfaces';
 import { Router, ActivatedRoute } from '@angular/router';
+
 @Component({
-  selector: 'app-empresaregister',
-  templateUrl: './empresaregister.component.html',
-  styleUrls: ['./empresaregister.component.scss']
+  selector: 'app-enterpriseregister',
+  templateUrl: './enterpriseregister.component.html',
+  styleUrls: ['./enterpriseregister.component.scss']
 })
-export class EmpresaregisterComponent implements OnInit {
+export class EnterpriseRegisterComponent implements OnInit {
   public valid_form: boolean;
   public formulario: FormGroup;
-  public empresa: Empresa;
+  public enterprise: Enterprise;
   @Input() ruta: string;
   read_flag: boolean;
-  constructor(private formBuilder: FormBuilder, private rutaURL: Router, private activatedRoute:ActivatedRoute) {
+  constructor(private formBuilder: FormBuilder, private rutaURL: Router, private activatedRoute: ActivatedRoute) {
     this.formulario = this.formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.email, this.match('email_confirm')])],
       email_confirm: ['', Validators.compose([Validators.required, this.match('email')])],
@@ -27,7 +28,7 @@ export class EmpresaregisterComponent implements OnInit {
       department: ['', Validators.required],
       phone: ['', Validators.required],
       address: [''],
-      // Datos para la empresa
+      // Datos para la enterprise
       comercialName: ['', Validators.required],
       bussinessName: ['', Validators.required],
       RFC: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z]{4}[0-9]{6}[a-zA-Z0-9]{3}/)])],
@@ -48,7 +49,7 @@ export class EmpresaregisterComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.rutaURL.url);
-    console.log(); 
+    console.log();
     if (this.rutaURL.url === '/register/employeer') {
      this.read_flag = false;
     } else {
@@ -73,30 +74,30 @@ export class EmpresaregisterComponent implements OnInit {
 
   agregar() {
         console.log(this.formulario);
-        this.empresa.email = this.formulario.value.email;
-        this.empresa.firstName = this.formulario.value.firstName;
-        this.empresa.lastName = this.formulario.value.lastName;
-        this.empresa.middleName = this.formulario.value.middleName;
-        this.empresa.job = this.formulario.value.job;
-        this.empresa.department = this.formulario.value.department;
-        this.empresa.phone_contact = this.formulario.value.phone;
-        this.empresa.address_contact = this.formulario.value.address;
-        this.empresa.comercialName = this.formulario.value.comercialName;
-        this.empresa.bussinessName = this.formulario.value.bussinessName;
-        this.empresa.RFC = this.formulario.value.RFC;
-        this.empresa.bussinessPhone = this.formulario.value.bussinessPhone;
-        this.empresa.webURL = this.formulario.value.webURL;
-        this.empresa.address.mainStreet = this.formulario.value.mainStreet;
-        this.empresa.address.crossings = this.formulario.value.crossing;
-        this.empresa.address.postalCode = this.formulario.value.postalCode;
-        this.empresa.address.city = this.formulario.value.city;
-        this.empresa.address.municipality = this.formulario.value.municipality;
-        this.empresa.address.state = this.formulario.value.state;
-        this.empresa.description = this.formulario.value.description;
-        this.empresa.bussinessTurn = this.formulario.value.bussinessTurn;
-        this.empresa.logo = this.formulario.value.logo;
-        this.empresa.createdOn = Date.now();
-        console.log(this.empresa);
+        this.enterprise.email = this.formulario.value.email;
+        this.enterprise.firstName = this.formulario.value.firstName;
+        this.enterprise.lastName = this.formulario.value.lastName;
+        this.enterprise.middleName = this.formulario.value.middleName;
+        this.enterprise.job = this.formulario.value.job;
+        this.enterprise.department = this.formulario.value.department;
+        this.enterprise.phone_contact = this.formulario.value.phone;
+        this.enterprise.address_contact = this.formulario.value.address;
+        this.enterprise.comercialName = this.formulario.value.comercialName;
+        this.enterprise.bussinessName = this.formulario.value.bussinessName;
+        this.enterprise.RFC = this.formulario.value.RFC;
+        this.enterprise.bussinessPhone = this.formulario.value.bussinessPhone;
+        this.enterprise.webURL = this.formulario.value.webURL;
+        this.enterprise.address.mainStreet = this.formulario.value.mainStreet;
+        this.enterprise.address.crossings = this.formulario.value.crossing;
+        this.enterprise.address.postalCode = this.formulario.value.postalCode;
+        this.enterprise.address.city = this.formulario.value.city;
+        this.enterprise.address.municipality = this.formulario.value.municipality;
+        this.enterprise.address.state = this.formulario.value.state;
+        this.enterprise.description = this.formulario.value.description;
+        this.enterprise.bussinessTurn = this.formulario.value.bussinessTurn;
+        this.enterprise.logo = this.formulario.value.logo;
+        this.enterprise.createdOn = Date.now();
+        console.log(this.enterprise);
   }
 
 }

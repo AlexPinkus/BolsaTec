@@ -46,7 +46,7 @@ export class StudentService {
     //   hearts: 0,
     //   time: new Date().getTime(),
     // };
-    student.role = 'student';
+    // student.role = 'student';
     return this.studentsCollection.doc(student.uid).set(student);
   }
 
