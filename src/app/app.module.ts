@@ -37,6 +37,7 @@ import { StudentProfileComponent } from './components/student/studentprofile.com
 import { StudentFormComponent } from './components/student/student-form/student-form.component';
 import { EmpresaprofileComponent } from './components/empresa/empresaprofile/empresaprofile.component';
 import { EmpresaregisterComponent } from './components/empresa/empresaregister/empresaregister.component';
+import { EmpresaFormComponent } from './components/empresa/empresa-form/empresa-form.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { EmpresaregisterComponent } from './components/empresa/empresaregister/e
     StudentProfileComponent,
     StudentFormComponent,
     EmpresaprofileComponent,
-    EmpresaregisterComponent
+    EmpresaregisterComponent,
+    EmpresaFormComponent
   ],
   imports: [
     BrowserModule,

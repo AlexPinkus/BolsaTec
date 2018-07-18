@@ -35,7 +35,7 @@ export interface Student {
     resumeURL?:  string;
     speciality?: string;
     maritalStatus?: string;
-    createdOn?: Date;
+    createdOn?: number;
     isGraduated?: boolean;
     isActive?:  boolean;
   }
@@ -68,6 +68,6 @@ export interface Student {
       municipality?: string;
       city?: string;
     };
-    createdOn?: Date;
+    createdOn?: number;
     isActive?:  boolean;
   }

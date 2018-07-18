@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { Component, OnInit, Input } from '@angular/core';
+import { FormBuilder, Validators, FormGroup, FormControl, AbstractControl } from '@angular/forms';
 import { Empresa } from '../../../interfaces/interfaces';
-
+import { Router, ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-empresaregister',
   templateUrl: './empresaregister.component.html',
@@ -11,12 +11,14 @@ export class EmpresaregisterComponent implements OnInit {
   public valid_form: boolean;
   public formulario: FormGroup;
   public empresa: Empresa;
-  constructor(private formBuilder: FormBuilder) {
+  @Input() ruta: string;
+  read_flag: boolean;
+  constructor(private formBuilder: FormBuilder, private rutaURL: Router, private activatedRoute:ActivatedRoute) {
     this.formulario = this.formBuilder.group({
-      email: ['', Validators.compose([Validators.required, Validators.email])],
-      email_confirm: ['', Validators.compose([Validators.required, this.duplicateEmail])],
-      password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/)])],
-      password_confirm: ['', Validators.compose([Validators.required, this.duplicatePassword])],
+      email: ['', Validators.compose([Validators.required, Validators.email, this.match('email_confirm')])],
+      email_confirm: ['', Validators.compose([Validators.required, this.match('email')])],
+      password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/), this.match('password_confirm')])],
+      password_confirm: ['', Validators.compose([Validators.required,  this.match('password')])],
       // Datos contacto
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -45,23 +47,56 @@ export class EmpresaregisterComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.rutaURL.url);
+    console.log(); 
+    if (this.rutaURL.url === '/register/employeer') {
+     this.read_flag = false;
+    } else {
+      this.read_flag = true;
+    }
   }
-  duplicatePassword(input: FormControl) {
-  // if (!input.root.controls) {
-  //   return null;
-  // }
-  // const exactMatch = input.root.controls.password.value === input.value;
-  // return exactMatch ? null : { mismatchedPassword: true };
-}
-duplicateEmail(input: FormControl) {
-  // if (!input.root.controls) {
-  //   return null;
-  // }
-  // const exactMatch = input.root.controls.email.value === input.value;
-  // return exactMatch ? null : { mismatchedEmail: true };
-}
+
+  match(controlKey: string) {
+    return (control: FormControl): { [s: string]: boolean } => {
+        // control.parent es el FormGroup
+        if (control.parent) { // en las primeras llamadas control.parent es undefined
+          const checkValue  = control.parent.controls[controlKey].value;
+          if (control.value !== checkValue) {
+            return {
+              match: false
+            };
+          }
+        }
+        return null;
+    };
+  }
+
   agregar() {
         console.log(this.formulario);
+        this.empresa.email = this.formulario.value.email;
+        this.empresa.firstName = this.formulario.value.firstName;
+        this.empresa.lastName = this.formulario.value.lastName;
+        this.empresa.middleName = this.formulario.value.middleName;
+        this.empresa.job = this.formulario.value.job;
+        this.empresa.department = this.formulario.value.department;
+        this.empresa.phone_contact = this.formulario.value.phone;
+        this.empresa.address_contact = this.formulario.value.address;
+        this.empresa.comercialName = this.formulario.value.comercialName;
+        this.empresa.bussinessName = this.formulario.value.bussinessName;
+        this.empresa.RFC = this.formulario.value.RFC;
+        this.empresa.bussinessPhone = this.formulario.value.bussinessPhone;
+        this.empresa.webURL = this.formulario.value.webURL;
+        this.empresa.address.mainStreet = this.formulario.value.mainStreet;
+        this.empresa.address.crossings = this.formulario.value.crossing;
+        this.empresa.address.postalCode = this.formulario.value.postalCode;
+        this.empresa.address.city = this.formulario.value.city;
+        this.empresa.address.municipality = this.formulario.value.municipality;
+        this.empresa.address.state = this.formulario.value.state;
+        this.empresa.description = this.formulario.value.description;
+        this.empresa.bussinessTurn = this.formulario.value.bussinessTurn;
+        this.empresa.logo = this.formulario.value.logo;
+        this.empresa.createdOn = Date.now();
+        console.log(this.empresa);
   }
 
 }

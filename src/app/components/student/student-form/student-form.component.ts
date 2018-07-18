@@ -16,9 +16,9 @@ export class StudentFormComponent implements OnInit {
   constructor(private formBuilder: FormBuilder) {
     this.formulario = this.formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.email])],
-      email_confirm: ['', Validators.compose([Validators.required, this.duplicateEmail])],
-      password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/)])],
-      password_confirm: ['', Validators.compose([Validators.required, this.duplicatePassword])],
+      email_confirm: ['', Validators.compose([Validators.required, this.match('email')])],
+      password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/),this.match('password_confirm')])],
+      password_confirm: ['', Validators.compose([Validators.required,this.match('password')])],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       middleName: ['', Validators.required],
@@ -46,20 +46,21 @@ export class StudentFormComponent implements OnInit {
   ngOnInit() {
   }
   
-  duplicatePassword(input: FormControl) {
-//   if (!input.root.controls) {
-//     return null;
-//   }
-//   const exactMatch = input.root.controls.password.value === input.value;
-//   return exactMatch ? null : { mismatchedPassword: true };
-}
-duplicateEmail(input: FormControl) {
-//   if (!input.root.controls) {
-//     return null;
-//   }
-//   const exactMatch = input.root.controls.email.value === input.value;
-//   return exactMatch ? null : { mismatchedEmail: true };
-}
+  match(controlKey: string) {
+    return (control: FormControl): { [s: string]: boolean } => {
+        // control.parent es el FormGroup
+        if (control.parent) { // en las primeras llamadas control.parent es undefined
+          const checkValue  = control.parent.controls[controlKey].value;
+          if (control.value !== checkValue) {
+            return {
+              match: false
+            };
+          }
+        }
+        return null;
+    };
+  }
+
   agregar() {
         console.log(this.formulario);
   }
