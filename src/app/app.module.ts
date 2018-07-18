@@ -3,10 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-
 // Bootstrap
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-
 
 // Routing
 import { AppRoutingModule } from './app-routing.module';
@@ -37,6 +35,10 @@ import { LoginComponent } from './components/login/login.component';
 import { StudentProfileComponent } from './components/student/studentprofile.component';
 import { DropZoneDirective } from './drop-zone.directive';
 import { FileSizePipe } from './pipes/file-size.pipe';
+import { StudentFormComponent } from './components/student/student-form/student-form.component';
+import { EmpresaprofileComponent } from './components/empresa/empresaprofile/empresaprofile.component';
+import { EmpresaregisterComponent } from './components/empresa/empresaregister/empresaregister.component';
+import { EmpresaFormComponent } from './components/empresa/empresa-form/empresa-form.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,11 @@ import { FileSizePipe } from './pipes/file-size.pipe';
     LoginComponent,
     StudentProfileComponent,
     DropZoneDirective,
-    FileSizePipe
+    FileSizePipe,
+    StudentFormComponent,
+    EmpresaprofileComponent,
+    EmpresaregisterComponent,
+    EmpresaFormComponent
   ],
   imports: [
     BrowserModule,

@@ -1,3 +1,4 @@
+<!-- Navbar general para inicio de sesión -->
 <nav class="navbar navbar-expand-md navbar-default ">
     <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
         <ul class="navbar-nav mr-auto">
@@ -14,7 +15,7 @@
     </div>
 
     <!-- User not logged in -->
-    <div *ngIf="!(_as.user | async)" class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+    <div *ngIf="!(_as.user | async)  && role == 0" class="navbar-collapse collapse w-100 order-3 dual-collapse2">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
                 <a class="nav-link" [routerLink]="['login']">Iniciar Sesión</a>
@@ -23,13 +24,27 @@
                 <a class="nav-link" [routerLink]="['/register/student']">Registro de Usuario</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" [routerLink]="['/register/student']">Registro de Empresa</a>
+                <a class="nav-link" [routerLink]="['/register/employeer']">Registro de Empresa</a>
             </li>
         </ul>
     </div>
 
-    <!-- User logged in -->
-    <div *ngIf="_as.user | async as user" class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+    <!-- User administrator logged in -->
+    <div *ngIf="role == 1 && _as.user | async as user" class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+
+                <a class="nav-link" [routerLink]="['login']" (click)="_as.logout()">Cerrar Sesión
+              <!-- <button (click)="_as.logout()" type="button" class="btn btn-outline-danger" >Cerrar Sesión</button> -->
+           </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" [routerLink]="['/profile/student', user.uid]">Perfil de Usuario</a>
+            </li>
+        </ul>
+    </div>
+    <!-- User student logged in -->
+    <div *ngIf="role==2 && _as.user | async as user  " class="navbar-collapse collapse w-100 order-3 dual-collapse2">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
 

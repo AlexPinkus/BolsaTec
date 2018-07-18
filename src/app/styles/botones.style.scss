@@ -1,0 +1,92 @@
+.btn-red-tec {
+    color: #FFFFFF;
+    background-color: $red-tec;
+    border-color: $amarillo-tec;
+}
+
+.btn-red-tec:hover,
+.btn-red-tec:focus,
+.btn-red-tec:active,
+.btn-red-tec.active,
+.open .dropdown-toggle.btn-red-tec {
+    color: #FFFFFF;
+    background-color: $amarillo-tec;
+    border-color: $amarillo-tec;
+}
+
+.btn-red-tec:active,
+.btn-red-tec.active,
+.open .dropdown-toggle.btn-red-tec {
+    background-image: none;
+}
+
+.btn-red-tec.disabled,
+.btn-red-tec[disabled],
+fieldset[disabled] .btn-red-tec,
+.btn-red-tec.disabled:hover,
+.btn-red-tec[disabled]:hover,
+fieldset[disabled] .btn-red-tec:hover,
+.btn-red-tec.disabled:focus,
+.btn-red-tec[disabled]:focus,
+fieldset[disabled] .btn-red-tec:focus,
+.btn-red-tec.disabled:active,
+.btn-red-tec[disabled]:active,
+fieldset[disabled] .btn-red-tec:active,
+.btn-red-tec.disabled.active,
+.btn-red-tec[disabled].active,
+fieldset[disabled] .btn-red-tec.active {
+    background-color: $red-tec;
+    border-color: $amarillo-tec;
+}
+
+.btn-red-tec .badge {
+    color: $red-tec;
+    background-color: #FFFFFF;
+}
+
+// Botón amarillo TEC
+.btn-tec-outline {
+    color: #D19800;
+    background-color: #FFFFFF;
+    border-color: #D19800;
+}
+
+.btn-tec-outline:hover,
+.btn-tec-outline:focus,
+.btn-tec-outline:active,
+.btn-tec-outline.active,
+.open .dropdown-toggle.btn-tec-outline {
+    color: #FFFFFF;
+    background-color: #D19800;
+    border-color: #D19800;
+}
+
+.btn-tec-outline:active,
+.btn-tec-outline.active,
+.open .dropdown-toggle.btn-tec-outline {
+    background-image: none;
+}
+
+.btn-tec-outline.disabled,
+.btn-tec-outline[disabled],
+fieldset[disabled] .btn-tec-outline,
+.btn-tec-outline.disabled:hover,
+.btn-tec-outline[disabled]:hover,
+fieldset[disabled] .btn-tec-outline:hover,
+.btn-tec-outline.disabled:focus,
+.btn-tec-outline[disabled]:focus,
+fieldset[disabled] .btn-tec-outline:focus,
+.btn-tec-outline.disabled:active,
+.btn-tec-outline[disabled]:active,
+fieldset[disabled] .btn-tec-outline:active,
+.btn-tec-outline.disabled.active,
+.btn-tec-outline[disabled].active,
+fieldset[disabled] .btn-tec-outline.active {
+    background-color: #FFFFFF;
+    border-color: #D19800;
+}
+
+.btn-tec-outline .badge {
+    color: #FFFFFF;
+    background-color: #D19800;
+}
