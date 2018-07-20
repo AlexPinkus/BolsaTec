@@ -19,6 +19,7 @@ export class StudentService {
 
   constructor(private http: Http, private afs: AngularFirestore) {
     // Obten la colección con todos los estudiantes:
+    // Hay que obtener esto a partir del rol.
     this.studentsCollection = this.afs.collection('users');
     // , (ref) => ref.orderBy('time', 'desc')
   }

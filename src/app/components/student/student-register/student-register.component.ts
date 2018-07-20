@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Student } from '../../interfaces/student.interface';
-import { StudentService } from '../../services/student.service';
-import { AuthService } from '../../services/auth.service';
+import { Student } from '../../../interfaces/student.interface';
+import { StudentService } from '../../../services/student.service';
+import { AuthService } from '../../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-studentregister',
-  templateUrl: './studentregister.component.html',
-  styleUrls: ['./studentregister.component.scss']
+  templateUrl: './student-register.component.html',
+  styleUrls: ['./student-register.component.scss']
 })
 export class StudentRegisterComponent implements OnInit {
 

@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StudentRegisterComponent } from './studentregister.component';
+import { StudentRegisterComponent } from './student-register.component';
 
 describe('StudentRegisterComponent', () => {
   let component: StudentRegisterComponent;

@@ -2,8 +2,8 @@ import {AbstractControl} from '@angular/forms';
 export class MatchValidation {
 
     static MatchPassword(AC: AbstractControl) {
-       let password = AC.get('password').value; // to get value in input tag
-       let confirmPassword = AC.get('password_confirm').value; // to get value in input tag
+       const password = AC.get('password').value; // to get value in input tag
+       const confirmPassword = AC.get('password_confirm').value; // to get value in input tag
         if  (password !== confirmPassword) {
             console.log('false');
             AC.get('confirmPassword').setErrors( {MatchPassword: true} );
@@ -14,8 +14,8 @@ export class MatchValidation {
     }
 
     static MatchEmail(AC: AbstractControl) {
-       let email = AC.get('email').value; // to get value in input tag
-       let confirmEmail = AC.get('email_confirm').value; // to get value in input tag
+       const email = AC.get('email').value; // to get value in input tag
+       const confirmEmail = AC.get('email_confirm').value; // to get value in input tag
         if  (email !== confirmEmail) {
             console.log('false');
             AC.get('confirmemail').setErrors( {MatchPassword: true} );

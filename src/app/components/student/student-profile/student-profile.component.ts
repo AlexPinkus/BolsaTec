@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
 import { NgForm } from '@angular/forms';
-import { Student } from '../../interfaces/student.interface';
-import { StudentService } from '../../services/student.service';
-import { AuthService } from '../../services/auth.service';
+import { Student } from '../../../interfaces/student.interface';
+import { StudentService } from '../../../services/student.service';
+import { AuthService } from '../../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs';
@@ -12,8 +12,8 @@ import { map, take, tap, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-studentprofile',
-  templateUrl: './studentprofile.component.html',
-  styleUrls: ['./studentprofile.component.scss']
+  templateUrl: './student-profile.component.html',
+  styleUrls: ['./student-profile.component.scss']
 })
 export class StudentProfileComponent implements OnInit {
 

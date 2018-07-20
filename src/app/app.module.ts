@@ -27,17 +27,17 @@ import { KeysPipe } from './pipes/keys.pipe';
 
 // Components
 import { AppComponent } from './app.component';
-import { StudentRegisterComponent } from './components/student/studentregister.component';
+import { StudentRegisterComponent } from './components/student/student-register/student-register.component';
 import { StudentsComponent } from './components/students/students.component';
 import { IndexComponent } from './components/index/index.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoginComponent } from './components/login/login.component';
-import { StudentProfileComponent } from './components/student/studentprofile.component';
+import { StudentProfileComponent } from './components/student/student-profile/student-profile.component';
 import { DropZoneDirective } from './drop-zone.directive';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { StudentFormComponent } from './components/student/student-form/student-form.component';
-import { EnterpriseprofileComponent } from './components/enterprise/enterpriseprofile/enterpriseprofile.component';
-import { EnterpriseRegisterComponent } from './components/enterprise/enterpriseregister/enterpriseregister.component';
+import { EnterpriseProfileComponent } from './components/enterprise/enterprise-profile/enterprise-profile.component';
+import { EnterpriseRegisterComponent } from './components/enterprise/enterprise-register/enterprise-register.component';
 import { EnterpriseFormComponent } from './components/enterprise/enterprise-form/enterprise-form.component';
 
 @NgModule({
@@ -53,7 +53,7 @@ import { EnterpriseFormComponent } from './components/enterprise/enterprise-form
     DropZoneDirective,
     FileSizePipe,
     StudentFormComponent,
-    EnterpriseprofileComponent,
+    EnterpriseProfileComponent,
     EnterpriseRegisterComponent,
     EnterpriseFormComponent
   ],

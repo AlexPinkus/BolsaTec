@@ -25,8 +25,14 @@
     </form>
   </div>
   <div class="text-center">
-      <label>¿Olvidó su contraseña?</label>
-      <button [disabled]="!forma.valid" class="btn btn-outline-info" (click)="resetPassword()" name="reset" >Recuperar contraseña</button>
+      <!-- <label>¿Olvidó su contraseña?</label>
+      <button [disabled]="!forma.valid" class="btn btn-outline-info" (click)="resetPassword()" name="reset" >Recuperar contraseña</button> -->
+      <!-- <div class="text-center" *ngIf="forma.valid"> -->
+      <p>¿Olvidó su contraseña?</p>
+      <p>
+          <button [disabled]="!forma.valid" class="btn btn-outline-info" (click)="resetPassword()" name="reset" >Recuperar contraseña</button>
+        </p>
+      <!-- </div> -->
       <p>¿Aún no tienes cuenta?</p>
       <p>
           <a [routerLink]="['/register/student']">Registrarse como candidato</a>

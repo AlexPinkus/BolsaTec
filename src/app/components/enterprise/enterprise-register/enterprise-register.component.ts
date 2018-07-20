@@ -5,8 +5,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-enterpriseregister',
-  templateUrl: './enterpriseregister.component.html',
-  styleUrls: ['./enterpriseregister.component.scss']
+  templateUrl: './enterprise-register.component.html',
+  styleUrls: ['./enterprise-register.component.scss']
 })
 export class EnterpriseRegisterComponent implements OnInit {
   public valid_form: boolean;
