@@ -28,4 +28,5 @@ export interface Enterprise {
   };
   createdOn?: number;
   isActive?:  boolean;
+  role?: string;
 }

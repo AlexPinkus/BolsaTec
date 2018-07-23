@@ -58,7 +58,7 @@ export interface Student {
     bussinessTurn: string;
     description: string;
     RFC: string;
-    logo: string;
+    logo?: string;
     webURL?: string;
     address: {
       mainStreet: string;

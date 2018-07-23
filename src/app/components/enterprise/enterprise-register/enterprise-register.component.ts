@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl, AbstractControl } from '@angular/forms';
-import { Enterprise } from '../../../interfaces/interfaces';
+import { Enterprise } from '../../../interfaces/enterprise.interface';
+import { EnterpriseService } from '../../../services/enterprise.service';
+import { AuthService } from '../../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -11,10 +13,42 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class EnterpriseRegisterComponent implements OnInit {
   public valid_form: boolean;
   public formulario: FormGroup;
-  public enterprise: Enterprise;
+  // Definimos un objeto empresa con los valores default.
+  public enterprise: Enterprise = {
+    email:      'alexpinkus@hotmail.com',
+    firstName:  'José',
+    lastName:   'Castillo Pinkus',
+    middleName: 'Alejandro',
+    job:        'Gerente',
+    department: 'Ventas',
+    phone_contact: 99999999999,
+    address_contact: '',
+    // Datos empresa
+    comercialName:  '',
+    bussinessName:  'Monsters Inc.',
+    bussinessPhone: '9999999',
+    bussinessTurn:  'Enegería Eléctrica',
+    description:    'Sustos que dan gusto',
+    RFC:            'CAAA9901019Y0',
+    logo: '',
+    webURL: 'www.google.com',
+    address: {
+      mainStreet: 'Avenida siempre viva',
+      crossings:  '20 y 21',
+      postalCode:  97101,
+      state:      'Yucatán',
+      municipality: 'Mérida',
+      city: 'Mérida'
+    }
+  };
+
   @Input() ruta: string;
   read_flag: boolean;
-  constructor(private formBuilder: FormBuilder, private rutaURL: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private enterpriseService: EnterpriseService,
+    private authService: AuthService,
+    private formBuilder: FormBuilder,
+    private rutaURL: Router,
+    private activatedRoute: ActivatedRoute) {
     this.formulario = this.formBuilder.group({
       email: ['', Validators.compose([Validators.required, Validators.email, this.match('email_confirm')])],
       email_confirm: ['', Validators.compose([Validators.required, this.match('email')])],
@@ -72,32 +106,35 @@ export class EnterpriseRegisterComponent implements OnInit {
     };
   }
 
-  agregar() {
-        console.log(this.formulario);
-        this.enterprise.email = this.formulario.value.email;
-        this.enterprise.firstName = this.formulario.value.firstName;
-        this.enterprise.lastName = this.formulario.value.lastName;
-        this.enterprise.middleName = this.formulario.value.middleName;
-        this.enterprise.job = this.formulario.value.job;
-        this.enterprise.department = this.formulario.value.department;
-        this.enterprise.phone_contact = this.formulario.value.phone;
-        this.enterprise.address_contact = this.formulario.value.address;
-        this.enterprise.comercialName = this.formulario.value.comercialName;
-        this.enterprise.bussinessName = this.formulario.value.bussinessName;
-        this.enterprise.RFC = this.formulario.value.RFC;
-        this.enterprise.bussinessPhone = this.formulario.value.bussinessPhone;
-        this.enterprise.webURL = this.formulario.value.webURL;
-        this.enterprise.address.mainStreet = this.formulario.value.mainStreet;
-        this.enterprise.address.crossings = this.formulario.value.crossing;
-        this.enterprise.address.postalCode = this.formulario.value.postalCode;
-        this.enterprise.address.city = this.formulario.value.city;
-        this.enterprise.address.municipality = this.formulario.value.municipality;
-        this.enterprise.address.state = this.formulario.value.state;
-        this.enterprise.description = this.formulario.value.description;
-        this.enterprise.bussinessTurn = this.formulario.value.bussinessTurn;
-        this.enterprise.logo = this.formulario.value.logo;
-        this.enterprise.createdOn = Date.now();
-        console.log(this.enterprise);
+  register() {
+    // Esta es la primera forma en la que se puede hacer...
+    // es más rápida y elegante pero podría ser propensa a errores
+
+    // Borramos los valores que no sirven de nada ...
+    // delete this.formulario.value.email;
+    // this.enterprise = this.formulario.value as Enterprise;
+
+    // Está es la segunda y es a prueba de fallas:
+
+    // for (const key in this.enterprise) {
+    //   if (this.enterprise.hasOwnProperty(key)) {
+    //       this.enterprise[key] = this.formulario.value[key];
+    //   }
+    // }
+    // this.enterprise.createdOn = Date.now();
+    // this.enterprise.isActive = false;
+    console.log(this.enterprise);
+  // insertando
+  this.authService.signup(this.enterprise.email, 'password').then(credential => {
+    alert('Usuario registrado :');
+    this.enterprise.uid = credential.user.uid;
+    // const newStudent :
+    this.enterpriseService.createEnterprise(this.enterprise).then(smt => {
+      console.log('smt :', smt);
+      console.log('Registrado');
+    });
+});
+
   }
 
 }

@@ -15,8 +15,9 @@ export class EnterpriseService {
   enterpriseDocument:   AngularFirestoreDocument<any>;
 
   constructor( private http: Http, private afs: AngularFirestore ) {
-    // Obten la colección con todos los estudiantes:
-    this.enterprisesCollection = this.afs.collection('users');
+    // Obten la colección con todas las empresas:
+    this.enterprisesCollection = this.afs.collection('users',
+    (ref) => ref.where('role', '==', 'enterprise'));
     // , (ref) => ref.orderBy('time', 'desc')
   }
 
@@ -43,7 +44,7 @@ export class EnterpriseService {
     //   hearts: 0,
     //   time: new Date().getTime(),
     // };
-    // enterprise.role = 'enterprise';
+    enterprise.role = 'enterprise';
     return this.enterprisesCollection.doc(enterprise.uid).set(enterprise);
   }
 
