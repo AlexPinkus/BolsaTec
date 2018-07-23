@@ -39,6 +39,8 @@ import { StudentFormComponent } from './components/student/student-form/student-
 import { EnterpriseProfileComponent } from './components/enterprise/enterprise-profile/enterprise-profile.component';
 import { EnterpriseRegisterComponent } from './components/enterprise/enterprise-register/enterprise-register.component';
 import { EnterpriseFormComponent } from './components/enterprise/enterprise-form/enterprise-form.component';
+import { JobofferListComponent } from './components/joboffer/joboffer-list/joboffer-list.component';
+import { JobofferRegisterComponent } from './components/joboffer/joboffer-register/joboffer-register.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +57,9 @@ import { EnterpriseFormComponent } from './components/enterprise/enterprise-form
     StudentFormComponent,
     EnterpriseProfileComponent,
     EnterpriseRegisterComponent,
-    EnterpriseFormComponent
+    EnterpriseFormComponent,
+    JobofferListComponent,
+    JobofferRegisterComponent
   ],
   imports: [
     BrowserModule,
