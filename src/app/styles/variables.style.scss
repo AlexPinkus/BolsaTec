@@ -1,2 +1,28 @@
 $red-tec: #7E0827;
 $amarillo-tec:#D19800;
+$rojo: #891E3A;
+$rojo-accent: #730824;
+$amarillo: #D9AA2E;
+$amarillo-accent: #D19800;
+$verde: #C2C68B;
+$verde-accent: #B5BA72;
+$cafe: #7E7667;
+$cafe-accent: #625C50;
+$morado: #ACA3B2;
+$morado-accent: #7D6F86;
+$verde-succes: #9EE493;
+$verde-succes2: #82ce34;
+$size-vars: ( "x-small": .8, "small": .9, "big": 1.5, "huge": 2);
+@each $size,
+$font-size in $size-vars {
+    .font-#{$size} {
+        font-size: $font-size * 1rem;
+    }
+    .icon-#{$size} {
+        font-size: $font-size * 3rem;
+    }
+}
+
+.icon-modal {
+    font-size: 12rem;
+}

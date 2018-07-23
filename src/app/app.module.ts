@@ -38,6 +38,7 @@ import { StudentFormComponent } from './components/student/student-form/student-
 import { EmpresaprofileComponent } from './components/empresa/empresaprofile/empresaprofile.component';
 import { EmpresaregisterComponent } from './components/empresa/empresaregister/empresaregister.component';
 import { EmpresaFormComponent } from './components/empresa/empresa-form/empresa-form.component';
+import { LoaderComponent } from './shared/loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { EmpresaFormComponent } from './components/empresa/empresa-form/empresa-
     StudentFormComponent,
     EmpresaprofileComponent,
     EmpresaregisterComponent,
-    EmpresaFormComponent
+    EmpresaFormComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,

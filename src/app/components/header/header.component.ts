@@ -7,7 +7,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  @Input() role = 0;
+  @Input() role = '';
 
   constructor(public _as: AuthService) { }
 

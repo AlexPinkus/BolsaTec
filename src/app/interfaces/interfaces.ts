@@ -33,7 +33,6 @@ export interface Student {
     };
     experience?: string;
     resumeURL?:  string;
-    speciality?: string;
     maritalStatus?: string;
     createdOn?: number;
     isGraduated?: boolean;
