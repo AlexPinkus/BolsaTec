@@ -15,7 +15,7 @@
     </div>
 
     <!-- User not logged in -->
-    <div *ngIf="!(_as.user | async)  && role == 0" class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+    <div *ngIf="!(_as.user | async)" class="navbar-collapse collapse w-100 order-3 dual-collapse2">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
                 <a class="nav-link" [routerLink]="['login']">Iniciar Sesión</a>
@@ -29,26 +29,10 @@
         </ul>
     </div>
 
-    <!-- User administrator logged in -->
-    <div *ngIf="role == 1 && _as.user | async as user" class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-
-                <a class="nav-link" [routerLink]="['login']" (click)="_as.logout()">Cerrar Sesión
-              <!-- <button (click)="_as.logout()" type="button" class="btn btn-outline-danger" >Cerrar Sesión</button> -->
-           </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" [routerLink]="['/profile/student', user.uid]">Perfil de Usuario</a>
-            </li>
-        </ul>
-    </div>
-    <!-- User student logged in -->
-    <!-- <div *ngIf="role==2 && _as.user | async as user  " class="navbar-collapse collapse w-100 order-3 dual-collapse2"> -->
+    <!-- User logged in -->
     <div *ngIf=" _as.user | async as user  " class="navbar-collapse collapse w-100 order-3 dual-collapse2">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-
                 <a class="nav-link" [routerLink]="['login']" (click)="_as.logout()">Cerrar Sesión
               <!-- <button (click)="_as.logout()" type="button" class="btn btn-outline-danger" >Cerrar Sesión</button> -->
               </a>
@@ -56,6 +40,10 @@
             <!-- Si el usuario es un estudiante -->
             <li class="nav-item" *ngIf="user.role == 'student'">
                 <a class="nav-link" [routerLink]="['/profile/student', user.uid]">Perfil de Usuario</a>
+            </li>
+            <!-- Si el usuario es una empresa -->
+            <li class="nav-item" *ngIf="user.role == 'enterprise'">
+              <a class="nav-link" [routerLink]="['/profile/enterprise', user.uid]">Perfil de Empresa</a>
             </li>
         </ul>
     </div>

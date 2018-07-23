@@ -11,6 +11,7 @@ interface User {
   email?: string | null;
   photoURL?: string;
   displayName?: string;
+  role?: string;
 }
 
 @Injectable({
@@ -51,7 +52,6 @@ export class AuthService {
       this.afAuth.auth.createUserWithEmailAndPassword(email, password).then(credential => {
         // Notificamos de la creación del usuario en google Firebase
         alert('Nuevo usuario creado');
-
         // Se envía el correo de verificación antes de continuar
         credential.user.sendEmailVerification().then(() => {
           // El correo de verificación se envió correctamente
