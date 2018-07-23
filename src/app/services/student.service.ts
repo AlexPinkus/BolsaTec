@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Http, Headers } from '@angular/http';
 import { Student } from '../interfaces/student.interface';
-// import 'rxjs/Rx';
 import { Observable, of } from 'rxjs';
 import { map, switchMap, startWith, tap, filter } from 'rxjs/operators';
 
@@ -20,7 +19,8 @@ export class StudentService {
   constructor(private http: Http, private afs: AngularFirestore) {
     // Obten la colección con todos los estudiantes:
     // Hay que obtener esto a partir del rol.
-    this.studentsCollection = this.afs.collection('users');
+    this.studentsCollection = this.afs.collection('users',
+    (ref) => ref.where('role', '==', 'student'));
     // , (ref) => ref.orderBy('time', 'desc')
   }
 

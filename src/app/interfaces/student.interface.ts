@@ -59,4 +59,5 @@ export interface Student {
   createdOn?: Date;
   isGraduated?: boolean;
   isActive?:  boolean;
+  role?: string;
 }
