@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
 import { NgForm } from '@angular/forms';
 import { Student } from '../../../interfaces/student.interface';
 import { StudentService } from '../../../services/student.service';
-import { AuthService } from '../../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs';
@@ -19,6 +19,7 @@ export class StudentProfileComponent implements OnInit {
 
   password: string;
   studentO: Observable<Student>;
+  public formulario: FormGroup;
   student: Student = {
     firstName: '',
     lastName: '',
@@ -35,8 +36,6 @@ export class StudentProfileComponent implements OnInit {
 
   nuevo = false;
   id: string;
-  successMessage: string;
-  successMessagebool = false;
 
   // Posibles errores de validación...
   formErrors = {
@@ -72,10 +71,38 @@ export class StudentProfileComponent implements OnInit {
   isHovering: boolean;
 
   constructor(private studentService: StudentService,
-    private _auths: AuthService,
     private router: Router,
     private storage: AngularFireStorage,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder) {
+      this.formulario = this.formBuilder.group({
+        email: ['', Validators.compose([Validators.required, Validators.email])],
+        email_confirm: ['', Validators.compose([Validators.required, this.match('email')])],
+        password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/),
+        this.match('password_confirm')])],
+        password_confirm: ['', Validators.compose([Validators.required, this.match('password')])],
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        middleName: ['', Validators.required],
+        sex: ['', Validators.required],
+        age: ['', Validators.required],
+        maritalStatus: ['', Validators.required],
+        mainStreet: ['', Validators.required],
+        crossings: ['', Validators.required],
+        postalCode: ['', Validators.compose([Validators.required, Validators.minLength(4)])],
+        city: ['', Validators.required],
+        municipality: ['', Validators.required],
+        state: ['', Validators.required],
+        idStudent: ['', Validators.compose([Validators.required, Validators.pattern(/^E{1}[0-9]{7}/)])],
+        bachelor: ['', Validators.required],
+        speciality: ['', Validators.required],
+        master: ['', Validators.required],
+        phd: ['', Validators.required],
+        spoken: ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
+        written: ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
+        translation: ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
+
+      });
       // Obtenemos los parámetros de las rutas...
       this.route.params.subscribe(parametros => {
         console.log(parametros);
@@ -102,35 +129,35 @@ export class StudentProfileComponent implements OnInit {
           // });
         }
       });
-    }
+  }
 
   ngOnInit() {
-    console.log('this.student :', this.student);
-    this.route.params.subscribe(parametros => {
-      console.log(parametros);
-      this.id = parametros['id'];
-      if ( this.id !== 'nuevo') {
-        this.studentO = this.studentService.getStudent(this.id).valueChanges().pipe(
-          take(1),
-          map(user => {
-          console.log('123123user :', user);
-          return user;
-          }),
-          tap(smt => {
-            console.log('object :', smt);
-            this.student = smt;
-            console.log('this.student :', this.student);
-          })
-        );
-        console.log('studentO :', this.studentO);
-        // this._studentService.studentDocument
-        // this._studentService.getStudent(this.id)
-        // this._studentService.getStudent(this.id).subscribe(student => {
-        //   console.log('student :', student);
-        //   this.student = student;
-        // });
-      }
-    });
+    // console.log('this.student :', this.student);
+    // this.route.params.subscribe(parametros => {
+    //   console.log(parametros);
+    //   this.id = parametros['id'];
+    //   if ( this.id !== 'nuevo') {
+    //     this.studentO = this.studentService.getStudent(this.id).valueChanges().pipe(
+    //       take(1),
+    //       map(user => {
+    //       console.log('123123user :', user);
+    //       return user;
+    //       }),
+    //       tap(smt => {
+    //         console.log('object :', smt);
+    //         this.student = smt;
+    //         console.log('this.student :', this.student);
+    //       })
+    //     );
+    //     console.log('studentO :', this.studentO);
+    //     // this._studentService.studentDocument
+    //     // this._studentService.getStudent(this.id)
+    //     // this._studentService.getStudent(this.id).subscribe(student => {
+    //     //   console.log('student :', student);
+    //     //   this.student = student;
+    //     // });
+    //   }
+    // });
   }
 
   toggleHover(event: boolean) {
@@ -174,6 +201,25 @@ export class StudentProfileComponent implements OnInit {
   // Determines if the upload task is active
   isActive(snapshot) {
     return snapshot.state === 'running' && snapshot.bytesTransferred < snapshot.totalBytes;
+  }
+
+  match(controlKey: string) {
+    return (control: FormControl): { [s: string]: boolean } => {
+        // control.parent es el FormGroup
+        if (control.parent) { // en las primeras llamadas control.parent es undefined
+          const checkValue  = control.parent.controls[controlKey].value;
+          if (control.value !== checkValue) {
+            return {
+              match: false
+            };
+          }
+        }
+        return null;
+    };
+  }
+
+  agregar() {
+        console.log(this.formulario);
   }
 
   guardar() {

@@ -1,89 +1,185 @@
-<h3>Perfil de Estudiante</h3>
+<div *ngIf="studentO | async as student">
+  <h1>Perfil de Estudiante {{student.uid}}</h1>
+</div>
 
-<app-student-form></app-student-form>
+
+<div class="bootstrap-iso" *ngIf="studentO | async as student">
+  <form [formGroup]="formulario" (ngSubmit)="agregar()">
+      <h3>Actualizar contraseña</h3>
+      <div class="borde-tec p-b-4"></div>
+      <br>
+      <div class="form-row">
+          <div class="form-group col-md-6">
+              <label for="">Correo electrónico</label>
+              <input type="email" class="form-control student" formControlName="email" placeholder={{student.email}} [class.is-invalid]="!formulario.get('email').valid && formulario.get('email').dirty" [class.is-valid]="formulario.get('email').valid">
+          </div>
+          <!-- <div *ngIf="!formulario.controls.email.valid && formulario.controls.email.dirty" class="invalid">
+              Excediste el número de letras permitido
+          </div> -->
+          <div class="form-group col-md-6">
+              <label for="">Contraseña</label>
+              <input type="password" class="form-control" [class.is-invalid]="!formulario.get('password').valid && formulario.get('password').dirty" [class.is-valid]="formulario.get('password').valid" formControlName="password" id="inputPassword4" placeholder="******">
+          </div>
+          <div class="form-group col-md-6">
+              <label for="">Confirma tu correo electrónico</label>
+              <input type="email" class="form-control student" formControlName="email_confirm" placeholder="example@email.com" [class.is-invalid]="!formulario.get('email_confirm').valid && formulario.get('email_confirm').dirty" [class.is-valid]="formulario.get('email_confirm').valid">
+
+          </div>
+          <div class="form-group col-md-6">
+              <label for="">Repetir contraseña</label>
+              <input type="password" class="form-control" formControlName="password_confirm" placeholder="******" [class.is-invalid]="!formulario.get('password_confirm').valid && formulario.get('password_confirm').dirty" [class.is-valid]="formulario.get('password_confirm').valid">
+
+          </div>
+      </div>
+      <h4>Datos de registro</h4>
+      <div class="borde-tec p-b-4"></div>
+      <br>
+      <div class="form-row">
+          <div class="form-group col-md-4">
+              <label for="">Nombres</label>
+              <input type="text" class="form-control" formControlName="firstName" value={{student.firstName}}  [class.is-invalid]="!formulario.get('firstName').valid && formulario.get('firstName').dirty" [class.is-valid]="formulario.get('firstName').valid">
+          </div>
+          <div class="form-group col-md-4">
+              <label for="">Apellido paterno</label>
+              <input type="text" class="form-control" formControlName="lastName" value={{student.lastName}} [class.is-invalid]="!formulario.get('lastName').valid && formulario.get('lastName').dirty" [class.is-valid]="formulario.get('lastName').valid">
+          </div>
+          <div class="form-group col-md-4">
+              <label for="">Apellido materno</label>
+              <input type="text" class="form-control" formControlName="middleName" value={{student.middleName}} [class.is-invalid]="!formulario.get('middleName').valid && formulario.get('middleName').dirty" [class.is-valid]="formulario.get('middleName').valid">                </div>
+      </div>
+      <div class="form-row">
+          <div class="form-group col-md-4">
+              <label class="mr-sm-2" for="sexo">*Sexo</label>
+              <select class="custom-select select-tec mr-sm-2" formControlName="sex">
+                    <!-- <option value="" selected>Elige una opción...</option> -->
+                    <option selected value="hombre">Hombre</option>
+                    <option value="mujer">Mujer</option>
+              </select>
+          </div>
+          <div class="form-group col-md-4">
+              <label for="">Fecha de nacimiento</label>
+              <input type="date" class="form-control" formControlName="age" value="" [class.is-invalid]="!formulario.get('age').valid && formulario.get('age').dirty" [class.is-valid]="formulario.get('age').valid">
+          </div>
+          <div class="form-group col-md-4">
+              <label class="mr-sm-2" for="sexo">Estado civil</label>
+              <select class="custom-select select-tec mr-sm-2" formControlName="maritalStatus">
+                    <!-- <option value="" selected>Elige una opción...</option> -->
+                    <option selected value="hombre">Soltero(a)</option>
+                    <option value="mujer">Casado(a)</option>
+              </select>
+          </div>
+      </div>
+      <div class="form-row">
+          <div class="form-group col-md-4">
+              <label for="">Calle</label>
+              <input type="text" class="form-control" formControlName="mainStreet" value={{student.address.mainStreet}} [class.is-invalid]="!formulario.get('mainStreet').valid && formulario.get('mainStreet').dirty" [class.is-valid]="formulario.get('mainStreet').valid">                >
+          </div>
+          <div class="form-group col-md-4">
+              <label for="">Cruzamientos</label>
+              <input type="text" class="form-control" formControlName="crossings" value={{student.address.crossings}} [class.is-invalid]="!formulario.get('crossings').valid && formulario.get('crossings').dirty" [class.is-valid]="formulario.get('crossings').valid">
+          </div>
+          <div class="form-group col-md-4">
+              <label for="">Código postal</label>
+              <input type="text" class="form-control" formControlName="postalCode" value={{student.address.postalCode}} [class.is-invalid]="!formulario.get('postalCode').valid && formulario.get('postalCode').dirty" [class.is-valid]="formulario.get('postalCode').valid">
+          </div>
+      </div>
+      <div class="form-row">
+          <div class="form-group col-md-4">
+              <label for="">Ciudad</label>
+              <input type="text" class="form-control" formControlName="city" value={{student.address.city}} [class.is-invalid]="!formulario.get('city').valid && formulario.get('city').dirty" [class.is-valid]="formulario.get('city').valid">
+          </div>
+          <div class="form-group col-md-4">
+              <label for="">Municipio</label>
+              <input type="text" class="form-control" formControlName="municipality" value={{student.address.municipality}} [class.is-invalid]="!formulario.get('municipality').valid && formulario.get('municipality').dirty" [class.is-valid]="formulario.get('municipality').valid">
+          </div>
+          <div class="form-group col-md-4">
+              <label for="">Estado</label>
+              <input type="text" formControlName="state" value={{student.address.state}} class="form-control" [class.is-invalid]="!formulario.get('state').valid && formulario.get('state').dirty" [class.is-valid]="formulario.get('state').valid">
+          </div>
+      </div>
+
+      <h4>Datos del alumno </h4>
+      <div class="borde-tec p-b-4"></div>
+      <br>
+      <div class="form-row">
+          <div class="form-group col-md-3">
+              <label for="">Matricula</label>
+              <input type="text" class="form-control" formControlName="idStudent" value={{student.idStudent}} [class.is-invalid]="!formulario.get('idStudent').valid && formulario.get('idStudent').dirty" [class.is-valid]="formulario.get('idStudent').valid">
+          </div>
+          <div class="form-group col-md-4">
+              <label class="mr-sm-2" for="carrera">*Carrera de egreso</label>
+              <select class="custom-select select-tec mr-sm-2" formControlName="bachelor">
+                          <!-- <option selected>Elige una carrera...</option> -->
+                            <option value="industrial">Licenciatura en Ingeniería Industrial</option>
+                            <option value="bioquimica">Licenciatura en Ingeniería Bioquímica</option>
+                            <option value="ambiental">Licenciatura en Ingeniería Ambiental</option>
+                            <option value="biomedica">Licenciatura en Ingeniería Biomédica</option>
+                            <option value="gestion">Licenciatura en Ingeniería en Gestión Empresarial</option>
+                            <option value="quimica">Licenciatura en Ingeniería Química</option>
+                            <option value="electrica">Licenciatura en Ingeniería Eléctrica</option>
+                            <option value="electronica">Licenciatura en Ingeniería Electrónica</option>
+                            <option value="mecanica">Licenciatura en Ingeniería Mecánica</option>
+                            <option value="civil">Licenciatura en Ingeniería Civil</option>
+                            <option value="sistemas">Licenciatura en Sistemas Computacionales</option>
+                            <option value="administracion">Licenciatura en Administración</option>
+                            <option value="administracion_distancia">Licenciatura en Administración en Educación a Distancia</option>
+                          </select>
+          </div>
+          <div class="form-group col-md-5">
+              <label for="">Especialidad</label>
+              <input type="text" class="form-control" formControlName="speciality" value={{student.degree.speciality}} [class.is-invalid]="!formulario.get('speciality').valid && formulario.get('speciality').dirty" [class.is-valid]="formulario.get('speciality').valid">
+          </div>
+          <div class="form-group col-md-6">
+              <label for="">Maestría</label>
+              <input type="text" class="form-control" formControlName="master" value={{student.degree.master}} [class.is-invalid]="!formulario.get('master').valid && formulario.get('master').dirty" [class.is-valid]="formulario.get('master').valid">
+          </div>
+          <div class="form-group col-md-6">
+              <label for="">Doctorado</label>
+              <input type="text" class="form-control" formControlName="phd" value={{student.degree.phd}} [class.is-invalid]="!formulario.get('phd').valid && formulario.get('phd').dirty" [class.is-valid]="formulario.get('phd').valid">
+          </div>
+      </div>
+      <div class="form-row">
+          <div class="form-group col-md-12">
+              Inglés(%)
+          </div>
+          <div class="form-group col-md-4">
+              <!-- <label for="">Hablado</label> -->
+              <input type="number" class="form-control" min="0" max="100" formControlName="spoken" value={{student.languages.english.spoken}} [class.is-invalid]="!formulario.get('spoken').valid && formulario.get('spoken').dirty" [class.is-valid]="formulario.get('speciality').valid">
+          </div>
+          <div class="form-group col-md-4">
+              <!-- <label for="">Escrito</label> -->
+              <input type="number" class="form-control" min="0" max="100" formControlName="written" value={{student.languages.english.written}} [class.is-invalid]="!formulario.get('written').valid && formulario.get('written').dirty" [class.is-valid]="formulario.get('written').valid">
+          </div>
+          <div class="form-group col-md-4">
+              <!-- <label for="">Traducción</label> -->
+              <input type="number" class="form-control" max="100" min="0" formControlName="translation" value={{student.languages.english.translation}} [class.is-invalid]="!formulario.get('translation').valid && formulario.get('translation').dirty" [class.is-valid]="formulario.get('translation').valid">
+          </div>
+      </div>
+      <div class="form-row">
+          <div class="form-group col-md-12">
+              <label for="">Curriculum</label>
+              <input type="file" accept="application/pdf" class="form-control" value="ej. 22">
+          </div>
+      </div>
+      <!-- <hr> -->
+      <div class="form-row">
+          <div class="col-md-5 p-2">
+              <button type="submit" class="text-center btn btn-red-tec col-md-12">Actualizar</button>
+
+          </div>
+
+          <div class="col-md-2">
+          </div>
+          <div class="col-md-5 p-2">
+              <button type="button" class="text-center btn btn-red-tec col-md-12">Cancelar</button>
+          </div>
+      </div>
+  </form>
+</div>
+
+
 <hr>
 
-<div class="row animated fadeIn fast">
-    <div class="col-md-12 text-left">
-        <form (ngSubmit)="guardar()" #forma="ngForm">
-            <h4>Datos de Inicio</h4>
-            <hr>
-            <div class="form-group">
-                <label>Correo electronico</label>
-                <input class="form-control" [(ngModel)]="student.email" type="email" name="email" placeholder="alexpinkus@hotmail.com" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" #email="ngModel">
-                <div *ngIf="email?.errors?.required">
-                    Este campo es requerido
-                </div>
-                <div *ngIf="email?.errors?.pattern">
-                    El campo no tiene formato de correo.
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Contraseña</label>
-                <input class="form-control" [(ngModel)]="password" type="password" name="password" placeholder="password" required>
-            </div>
-            <div class="form-group">
-                <label>Repetir Contraseña</label>
-                <input class="form-control" [(ngModel)]="password" type="password" name="password" placeholder="password" required>
-            </div>
-            <h4>Datos de Registro</h4>
-            <hr>
-            <div class="form-group">
-                <label>Nombres</label>
-                <input [(ngModel)]="student.firstName" type="text" name="firstName" class="form-control" placeholder="Nombre del estudiante" required>
-            </div>
-            <div class="form-group">
-                <label>Apellidos</label>
-                <input [(ngModel)]="student.lastName" type="text" name="lastName" class="form-control" placeholder="Apellidos del estudiante" required>
-            </div>
-            <div>
-                <h4>Dirección</h4>
-                <hr>
-                <div class="form-group">
-                    <label>Calle</label>
-                    <input [(ngModel)]="student.address.mainStreet" type="text" name="mainStreet" class="form-control" placeholder="Avenida Kukulkán" required>
-                </div>
-                <div class="form-group">
-                    <label>Cruzamientos</label>
-                    <input [(ngModel)]="student.address.crossings" type="text" name="crossings" class="form-control" placeholder="13 y 15" required>
-                </div>
-                <div class="form-group">
-                    <label>Código Postal</label>
-                    <input [(ngModel)]="student.address.postalCode" type="number" name="postalCode" class="form-control" placeholder="97071" required>
-                </div>
-                <div class="form-group">
-                    <label>Estado</label>
-                    <input [(ngModel)]="student.address.state" type="text" name="mainStreet" class="form-control" placeholder="Yucatán" required>
-                </div>
-            </div>
-            <!-- <div class="form-group">
-          <label>Casa</label>
-          <select [(ngModel)]="student.casa" name="casa" class="form-control">
-            <option value="Marvel">Marvel</option>
-            <option value="DC">DC</option>
-          </select>
-      </div>
-      <div class="form-group">
-          <label>Bio</label>
-          <textarea [(ngModel)]="student.bio"
-                 type="text"
-                 name="bio"
-                 class="form-control"
-                 required
-          ></textarea>
-      </div> -->
-            <div class="form-group">
-                <button [disabled]="!forma.valid" class="btn btn-outline-primary" type="submit" name="button">
-        Actualizar
-        </button>
-                <div class="divider"></div>
-                <button [routerLink]="['students']" class="btn btn-outline-danger">
-            Regresar
-        </button>
-            </div>
-        </form>
-    </div>
-</div>
 
 
 <div class="dropzone"
@@ -153,9 +249,3 @@
 
 </div>
 
-
-<div ng-if="successMessagebool">
-    <div class="col-lg-12 col-sm-12 col-xs-12 alert alert-success">
-        <strong>{{successMessage}}</strong>
-    </div>
-</div>
