@@ -1,5 +1,5 @@
 <!-- Navbar general para inicio de sesión -->
-<nav class="navbar navbar-expand-md navbar-default ">
+<!-- <nav class="navbar navbar-expand-md navbar-default ">
     <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
@@ -14,7 +14,7 @@
       </button>
     </div>
 
-    <!-- User not logged in -->
+    User not logged in
     <div *ngIf="!(_as.user | async)" class="navbar-collapse collapse w-100 order-3 dual-collapse2">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
@@ -29,27 +29,27 @@
         </ul>
     </div>
 
-    <!-- User logged in -->
+    User logged in
     <div *ngIf=" _as.user | async as user  " class="navbar-collapse collapse w-100 order-3 dual-collapse2">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
                 <a class="nav-link" [routerLink]="['login']" (click)="_as.logout()">Cerrar Sesión
-              <!-- <button (click)="_as.logout()" type="button" class="btn btn-outline-danger" >Cerrar Sesión</button> -->
+              <button (click)="_as.logout()" type="button" class="btn btn-outline-danger" >Cerrar Sesión</button>
               </a>
             </li>
-            <!-- Si el usuario es un estudiante -->
+            Si el usuario es un estudiante
             <li class="nav-item" *ngIf="user.role == 'student'">
                 <a class="nav-link" [routerLink]="['/profile/student', user.uid]">Perfil de Usuario</a>
             </li>
-            <!-- Si el usuario es una empresa -->
+            Si el usuario es una empresa
             <li class="nav-item" *ngIf="user.role == 'enterprise'">
               <a class="nav-link" [routerLink]="['/profile/enterprise', user.uid]">Perfil de Empresa</a>
             </li>
         </ul>
     </div>
-</nav>
-
-<nav class="navbar navbar-expand-lg navbar-default" *ngIf=" _as.user | async as user  ">
+</nav> -->
+<!-- *ngIf="_as.user | async as user" -->
+<nav class="navbar navbar-expand-lg navbar-default">
     <a class="navbar-brand  mr-auto">
         <i class="icon ion-ios-home icon-medium p-2"> </i> Inicio
     </a>
@@ -58,7 +58,7 @@
         </button>
 
 
-    <div class="collapse navbar-collapse " [ngSwitch]="user.role">
+    <div class="collapse navbar-collapse " [ngSwitch]="(_as.user | async)?.role ">
         <div class="navbar-nav ml-auto" *ngSwitchCase="'Admin'">
             <a class="nav-item nav-link" [routerLink]="['/inicio']">Inicio</a>
             <a class="nav-item nav-link" [routerLink]="['/empresas']">Empresas</a>
@@ -66,14 +66,14 @@
             <a class="nav-item nav-link" [routerLink]="['/ofertas']">Ofertas de trabajo</a>
             <a class="nav-item nav-link" [routerLink]="['/reportes']">Reportes</a>
         </div>
-        <div class="navbar-nav ml-auto" *ngSwitchCase="'Student'">
+        <div class="navbar-nav ml-auto" *ngSwitchCase="'student'">
             <!-- <a class="nav-item nav-link" [routerLink]="['/inicio']">Inicio</a> -->
             <a class="nav-item nav-link" [routerLink]="['/empresas']">Empresas</a>
             <a class="nav-item nav-link" [routerLink]="['/estudiantes']">Alumnos/Egresados</a>
             <a class="nav-item nav-link" [routerLink]="['/ofertas']">Ofertas de trabajo</a>
             <a class="nav-item nav-link" [routerLink]="['/reportes']">Reportes</a>
         </div>
-        <div class="navbar-nav ml-auto" *ngSwitchCase="'Enterprise'">
+        <div class="navbar-nav ml-auto" *ngSwitchCase="'enterprise'">
             <a class="nav-item nav-link" [routerLink]="['/inicio']">Inicio</a>
             <a class="nav-item nav-link" [routerLink]="['/empresas']">Perfil</a>
             <a class="nav-item nav-link" [routerLink]="['/estudiantes']">Alumnos/Egresados</a>

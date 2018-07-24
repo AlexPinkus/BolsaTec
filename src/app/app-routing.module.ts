@@ -11,9 +11,10 @@ import { StudentsComponent } from './components/students/students.component';
 // Componentes de Enterprises
 import { EnterpriseRegisterComponent } from './components/enterprise/enterprise-register/enterprise-register.component';
 import { EnterpriseProfileComponent } from './components/enterprise/enterprise-profile/enterprise-profile.component';
+
+
 import { LoginComponent } from './components/login/login.component';
 
-// import { EmpresaregisterComponent } from './components/empresa/empresaregister/empresaregister.component';
 import { StudentsAdminComponent } from './components/administrador/students-admin/students-admin.component';
 
 const routes: Routes = [
