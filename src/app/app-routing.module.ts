@@ -13,6 +13,8 @@ import { EnterpriseRegisterComponent } from './components/enterprise/enterprise-
 import { EnterpriseProfileComponent } from './components/enterprise/enterprise-profile/enterprise-profile.component';
 import { LoginComponent } from './components/login/login.component';
 
+// import { EmpresaregisterComponent } from './components/empresa/empresaregister/empresaregister.component';
+import { StudentsAdminComponent } from './components/administrador/students-admin/students-admin.component';
 
 const routes: Routes = [
      { path: 'index', component: IndexComponent },
@@ -22,6 +24,7 @@ const routes: Routes = [
      { path: 'profile/student/:id', component: StudentProfileComponent, canActivate: [ProfileGuard] },
      { path: 'profile/enterprise/:id', component: EnterpriseProfileComponent, canActivate: [ProfileGuard] },
      { path: 'login', component: LoginComponent },
+     { path: 'admin', component: StudentsAdminComponent },
      { path: '**', pathMatch: 'full', redirectTo: 'index' },
 
     // { path: 'path/:routeParam', component: MyComponent },

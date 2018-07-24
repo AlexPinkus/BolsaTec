@@ -1,0 +1,94 @@
+<div>
+    <h3>
+        Checkbox Selection
+        <small>
+    <a href="https://github.com/swimlane/ngx-datatable/blob/master/demo/selection/selection-chkbox.component.ts" target="_blank">
+      Source
+    </a>
+  </small>
+        <small>
+    <a href="javascript:void(0)" (click)="add()">Add</a> |
+    <a href="javascript:void(0)" (click)="update()">Update</a> |
+    <a href="javascript:void(0)" (click)="remove()">Remove</a> 
+  </small>
+    </h3>
+    <div>
+        <!-- <div class="bootstrap-iso"> -->
+        <form class="example-form">
+            <mat-form-field class="example-full-width">
+                <input matInput placeholder="Favorite food" value="Sushi">
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <textarea matInput placeholder="Leave a comment"></textarea>
+            </mat-form-field>
+        </form>
+        <!-- </div> -->
+        <!-- <input type='text' style='padding:8px;margin:15px auto;width:30%;' class="bootstrap-iso" placeholder='Type to filter the name column...' (keyup)='updateFilter($event)' /> -->
+        <ngx-datatable class="material" [rows]="rows" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5" [selected]="selected" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false" [displayCheck]="displayCheck"
+            (activate)="onActivate($event)" (select)='onSelect($event)'>
+            <ngx-datatable-column class="material" [width]="30" [sortable]="true" [canAutoResize]="false" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Nombre" prop="firstName"></ngx-datatable-column>
+            <ngx-datatable-column name="Apellido" prop="lastName"></ngx-datatable-column>
+            <ngx-datatable-column name="Matrícula" prop="idStudent"></ngx-datatable-column>
+            <ngx-datatable-column name="Acciones" prop="uid">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row" let-group="group" let-rowHeight="rowHeight">
+                    <a class="" (click)="verModal(value)" ngbTooltip="Ver estudiante">
+                        <i class="icon icon-visualizar ion-ios-eye icon-medium p-2"> </i>
+                    </a>
+                    <a class="" (click)="verModal(value)" ngbTooltip="Aprobar estudiante">
+                        <i class="icon icon-aprobar ion-ios-checkmark-circle icon-medium p-2"> </i>
+                    </a>
+                    <a class="" (click)="verModal(value)" ngbTooltip="Eliminar solicitud">
+                        <i class="icon icon-eliminar ion-ios-trash icon-medium p-2"> </i>
+                    </a>
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    </div>
+    <br>
+    <div class='selected-column'>
+        <h4>Selections <small>({{selected?.length}})</small></h4>
+        <ul>
+            <li *ngFor='let sel of selected'>
+                {{sel.firstName}}
+            </li>
+            <li *ngIf="!selected?.length">No Selections</li>
+        </ul>
+    </div>
+</div>
+
+
+<div>
+    <div class="bootstrap-iso">
+        <div class="input-group mb-3 col-md-12">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><i class="icon ion-ios-search icon-medium p-2"> </i></span>
+            </div>
+            <input type="text" class="form-control" placeholder="Ingresa tu búsqueda aquí" aria-label="Ingresa tu búsqueda aquí" aria-describedby="basic-addon1" (keyup)='updateFilter($event)'>
+        </div>
+    </div>
+    <!-- <input type='text' style='padding:8px;margin:15px auto;width:30%;' class="bootstrap-iso" placeholder='Type to filter the name column...' (keyup)='updateFilter($event)' /> -->
+    <ngx-datatable class="material" [rows]="rows" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5" [selected]="selected" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false" [displayCheck]="displayCheck"
+        (activate)="onActivate($event)" (select)='onSelect($event)'>
+        <ngx-datatable-column class="material" [width]="30" [sortable]="true" [canAutoResize]="false" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Nombre" prop="firstName"></ngx-datatable-column>
+        <ngx-datatable-column name="Apellido" prop="lastName"></ngx-datatable-column>
+        <ngx-datatable-column name="Matrícula" prop="idStudent"></ngx-datatable-column>
+        <ngx-datatable-column name="Acciones" prop="uid">
+            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row" let-group="group" let-rowHeight="rowHeight">
+                <a class="" (click)="verModal(value)" ngbTooltip="Ver estudiante">
+                    <i class="icon icon-visualizar ion-ios-eye icon-medium p-2"> </i>
+                </a>
+                <a class="" (click)="verModal(value)" ngbTooltip="Aprobar estudiante">
+                    <i class="icon icon-aprobar ion-ios-checkmark-circle icon-medium p-2"> </i>
+                </a>
+                <a class="" (click)="verModal(value)" ngbTooltip="Eliminar solicitud">
+                    <i class="icon icon-eliminar ion-ios-trash icon-medium p-2"> </i>
+                </a>
+            </ng-template>
+        </ngx-datatable-column>
+    </ngx-datatable>
+</div>

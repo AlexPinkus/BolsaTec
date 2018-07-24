@@ -1,0 +1,254 @@
+<!-- <hr class="p-2"> -->
+<div class="bootstrap-iso">
+    <form [formGroup]="formulario" (ngSubmit)="open(modalGuardar,modalExito)">
+        <h3>Datos generales del alumno</h3>
+        <div class="borde-tec p-b-4"></div>
+        <br>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="">Correo electrónico</label>
+                <input type="email" class="form-control student" formControlName="email" placeholder="example@email.com" [class.is-invalid]="!formulario.get('email').valid && formulario.get('email').dirty" [class.is-valid]="formulario.get('email').valid">
+            </div>
+
+            <div class="form-group col-md-6">
+                <label for="">Contraseña</label>
+                <input type="password" class="form-control" [class.is-invalid]="!formulario.get('password').valid && formulario.get('password').dirty" [class.is-valid]="formulario.get('password').valid" formControlName="password" id="inputPassword4" placeholder="******">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="">Confirma tu correo electrónico</label>
+                <input type="email" class="form-control student" formControlName="email_confirm" placeholder="example@email.com" [class.is-invalid]="!formulario.get('email_confirm').valid && formulario.get('email_confirm').dirty" [class.is-valid]="formulario.get('email_confirm').valid">
+
+            </div>
+            <div class="form-group col-md-6">
+                <label for="">Repetir contraseña</label>
+                <input type="password" class="form-control" formControlName="password_confirm" placeholder="******" [class.is-invalid]="!formulario.get('password_confirm').valid && formulario.get('password_confirm').dirty" [class.is-valid]="formulario.get('password_confirm').valid">
+
+            </div>
+        </div>
+        <h4>Datos de registro</h4>
+        <div class="borde-tec p-b-4"></div>
+        <br>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="">Nombres</label>
+                <input type="text" class="form-control" formControlName="firstName" placeholder="Ej. Juan" [class.is-invalid]="!formulario.get('firstName').valid && formulario.get('firstName').dirty" [class.is-valid]="formulario.get('firstName').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Apellido paterno</label>
+                <input type="text" class="form-control" formControlName="lastName" placeholder="Ej. Pérez" [class.is-invalid]="!formulario.get('lastName').valid && formulario.get('lastName').dirty" [class.is-valid]="formulario.get('lastName').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Apellido materno</label>
+                <input type="text" class="form-control" formControlName="middleName" placeholder="Ej. Pérez" [class.is-invalid]="!formulario.get('middleName').valid && formulario.get('middleName').dirty" [class.is-valid]="formulario.get('middleName').valid">                </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="mr-sm-2" for="sexo">*Sexo</label>
+                <select class="custom-select select-tec mr-sm-2" formControlName="sex">
+                      <option value="" selected>Elige una opción...</option>
+                      <option selected value="male">Hombre</option>
+                      <option value="female">Mujer</option>
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Fecha de nacimiento</label>
+                <input type="date" class="form-control" formControlName="age" placeholder="" [class.is-invalid]="!formulario.get('age').valid && formulario.get('age').dirty" [class.is-valid]="formulario.get('age').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <label class="mr-sm-2" for="sexo">Estado civil</label>
+                <select class="custom-select select-tec mr-sm-2" formControlName="maritalStatus">
+                      <option value="" >Elige una opción...</option>
+                      <option value="single">Soltero(a)</option>
+                      <option value="married">Casado(a)</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="">Calle</label>
+                <input type="text" class="form-control" formControlName="mainStreet" placeholder="ej. 22" [class.is-invalid]="!formulario.get('mainStreet').valid && formulario.get('mainStreet').dirty" [class.is-valid]="formulario.get('mainStreet').valid">
+            </div>
+            <div class="form-group col-md-8">
+                <label for="">Cruzamientos</label>
+                <input type="text" class="form-control" formControlName="crossings" placeholder="ej. x61 y 61-A" [class.is-invalid]="!formulario.get('crossings').valid && formulario.get('crossings').dirty" [class.is-valid]="formulario.get('crossings').valid">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="">Código postal</label>
+                <input type="text" class="form-control" formControlName="postalCode" [class.is-invalid]="!formulario.get('postalCode').valid && formulario.get('postalCode').dirty" [class.is-valid]="formulario.get('postalCode').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Colonia</label>
+                <input type="text" class="form-control" formControlName="mainStreet" placeholder="ej. 22" [class.is-invalid]="!formulario.get('mainStreet').valid && formulario.get('mainStreet').dirty" [class.is-valid]="formulario.get('mainStreet').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Teléfono</label>
+                <input type="number" class="form-control" formControlName="crossings" placeholder="ej. x61 y 61-A" [class.is-invalid]="!formulario.get('crossings').valid && formulario.get('crossings').dirty" [class.is-valid]="formulario.get('crossings').valid">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="">Ciudad</label>
+                <input type="text" class="form-control" formControlName="city" placeholder="ej. 22" [class.is-invalid]="!formulario.get('city').valid && formulario.get('city').dirty" [class.is-valid]="formulario.get('city').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Municipio</label>
+                <input type="text" class="form-control" formControlName="municipality" placeholder="ej. x61 y 61-A" [class.is-invalid]="!formulario.get('municipality').valid && formulario.get('municipality').dirty" [class.is-valid]="formulario.get('municipality').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Estado</label>
+                <input type="text" formControlName="state" class="form-control" [class.is-invalid]="!formulario.get('state').valid && formulario.get('state').dirty" [class.is-valid]="formulario.get('state').valid">
+            </div>
+        </div>
+
+        <h4>Datos del alumno </h4>
+        <div class="borde-tec p-b-4"></div>
+        <br>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="">Matricula</label>
+                <input type="text" class="form-control" formControlName="idStudent" placeholder="Ej. Juan" [class.is-invalid]="!formulario.get('idStudent').valid && formulario.get('idStudent').dirty" [class.is-valid]="formulario.get('idStudent').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <label class="mr-sm-2" for="carrera">*Carrera de egreso</label>
+                <select class="custom-select select-tec mr-sm-2" formControlName="bachelor">
+                            <option value="" selected>Elige una carrera...</option>
+                              <option value="industrial">Licenciatura en Ingeniería Industrial</option>
+                              <option value="bioquimica">Licenciatura en Ingeniería Bioquímica</option>
+                              <option value="ambiental">Licenciatura en Ingeniería Ambiental</option>
+                              <option value="biomedica">Licenciatura en Ingeniería Biomédica</option>
+                              <option value="gestion">Licenciatura en Ingeniería en Gestión Empresarial</option>
+                              <option value="quimica">Licenciatura en Ingeniería Química</option>
+                              <option value="electrica">Licenciatura en Ingeniería Eléctrica</option>
+                              <option value="electronica">Licenciatura en Ingeniería Electrónica</option>
+                              <option value="mecanica">Licenciatura en Ingeniería Mecánica</option>
+                              <option value="civil">Licenciatura en Ingeniería Civil</option>
+                              <option value="sistemas">Licenciatura en Sistemas Computacionales</option>
+                              <option value="administracion">Licenciatura en Administración</option>
+                              <option value="administracion_distancia">Licenciatura en Administración en Educación a Distancia</option>
+                            </select>
+            </div>
+            <div class="form-group col-md-5">
+                <label for="">Especialidad</label>
+                <input type="text" class="form-control" formControlName="speciality" placeholder="ej. 22" [class.is-invalid]="!formulario.get('speciality').valid && formulario.get('speciality').dirty" [class.is-valid]="formulario.get('speciality').valid">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="">Maestría</label>
+                <input type="text" class="form-control" formControlName="master" placeholder="ej. 22" [class.is-invalid]="!formulario.get('master').valid && formulario.get('master').dirty" [class.is-valid]="formulario.get('master').valid">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="">Doctorado</label>
+                <input type="text" class="form-control" formControlName="phd" placeholder="ej. 22" [class.is-invalid]="!formulario.get('phd').valid && formulario.get('phd').dirty" [class.is-valid]="formulario.get('phd').valid">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                Inglés(%)
+            </div>
+            <div class="form-group col-md-4">
+                <!-- <label for="">Hablado</label> -->
+                <input type="number" class="form-control" min="0" max="100" formControlName="spoken" placeholder="Hablado (%)" [class.is-invalid]="!formulario.get('spoken').valid && formulario.get('spoken').dirty" [class.is-valid]="formulario.get('speciality').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <!-- <label for="">Escrito</label> -->
+                <input type="number" class="form-control" min="0" max="100" formControlName="written" placeholder="Escrito (%)" [class.is-invalid]="!formulario.get('written').valid && formulario.get('written').dirty" [class.is-valid]="formulario.get('written').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <!-- <label for="">Traducción</label> -->
+                <input type="number" class="form-control" max="100" min="0" formControlName="translation" placeholder="Traducción (%)" [class.is-invalid]="!formulario.get('translation').valid && formulario.get('translation').dirty" [class.is-valid]="formulario.get('translation').valid">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="">Curriculum</label>
+                <input type="file" accept="application/pdf" class="form-control" placeholder="ej. 22">
+            </div>
+        </div>
+        <!-- <hr> -->
+        <div class="form-row">
+            <div class="col-md-5 p-2">
+                <button type="submit" class="text-center btn btn-rojo col-md-12">Registrarte</button>
+
+            </div>
+
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-5 p-2">
+                <button type="button" class="text-center btn btn-morado col-md-12" (click)="cancelar()">Cancelar</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Template para guardar los cambios -->
+<ng-template #modalGuardar let-c="close" let-d="dismiss">
+    <!-- <div class="modal fade "> -->
+    <!-- <div class="modal-content"> -->
+    <div class="modal-header">
+        <h4 class="modal-title">Guardar cambios</h4>
+        <button type="button" class="close" (click)="d()" aria-hidden="true">&times;</button>
+    </div>
+    <div class="modal-body">
+        <h6>{{mensaje_modal}}</h6>
+    </div>
+    <div class="modal-footer">
+        <!-- <a (click)="d()" class="btn btn-info" data-dismiss="modal">Cancelar</a> -->
+        <!-- <a (click)="c()" class="btn btn-verde">Guardar</a> -->
+        <button type="button" class="btn btn-morado" (click)="d()">Cancelar</button>
+        <button type="button" class="btn btn-info" (click)="c()">Guardar</button>
+    </div>
+    <!-- </div> -->
+    <!-- </div> -->
+</ng-template>
+<!-- <ng-template #modalGuardar let-c="close" let-d="dismiss">
+
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Confirmation</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete your account? This action cannot be undone and you will be unable to recover any data.</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-info" data-dismiss="modal">Cancel</a>
+                <a href="#" class="btn btn-danger">Yes, delete it!</a>
+            </div>
+        </div>
+    </div>
+
+</ng-template> -->
+
+<!-- Template para guardar los cambios -->
+
+<!-- <ng-template #modalGuardar let-c="close" let-d="dismiss">
+    <div class="modal-body animated fadeIn">
+        <h6><i class="icon ion-ios-call icon-huge p-2 text-center"> </i></h6>
+         <h6>{{mensaje_modal}}</h6> 
+</div>
+
+</ng-template> -->
+
+<ng-template #modalExito let-c="close" let-d="dismiss">
+    <div class="modal-dialog modal-success animated fadeIn " [class.fadeOut]="flag_exitModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="icon-box">
+                    <!-- <i class="icon ion-ios-checkmark-circle p-2 text-center">&#xE876;</i> -->
+                    <i class="material-icons">person_add</i>
+                </div>
+                <!-- <h4 class="modal-title">Awesome!</h4> -->
+            </div>
+            <div class="modal-body">
+                <h4 class="text-center">Estudiante Agregado</h4>
+                <br>
+                <p class="text-justify">Tu solicitud fue enviada con éxito, se te notificará por correo electrónico cuando tu solicitud sea aprobada</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success btn-block" (click)="d()">OK</button>
+            </div>
+        </div>
+    </div>
+</ng-template>

@@ -8,6 +8,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class HeaderComponent implements OnInit {
 
+  public role;
   constructor(public _as: AuthService) { }
 
   ngOnInit() {

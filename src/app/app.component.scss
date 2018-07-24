@@ -1,20 +1,26 @@
+@import './styles/variables.style';
 .image-size {
     height: 100px;
     width: auto;
 }
 
 .background-header {
-    background-color: #7e0827
+    background-color: $red-tec;
 }
 
 .background-header2 {
-    background-color: #d19800
+    background-color: $amarillo-tec
 }
 
 .border-class {
-    border-bottom: 5px solid #d19800;
+    border-bottom: 5px solid $amarillo-tec;
 }
 
 .text-color {
     color: #f8f8f8;
+}
+
+.image-header {
+    width: 100%;
+    // height: auto;
 }

@@ -59,6 +59,16 @@ export class StudentService {
     return this.getStudent(id).delete();
   }
 
+
+  leerJSONStudents() {
+    this.http.get('assets/estudiantes.json').subscribe(res => {
+      const data = res.json();
+      console.log(data);
+      
+    });
+  }
+
+
   //#region Implementación FireBase
   /*
   createStudent( student: Student ) {

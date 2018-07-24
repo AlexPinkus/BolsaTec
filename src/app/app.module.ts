@@ -3,8 +3,12 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-// Bootstrap
+// Plugins
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 // Routing
 import { AppRoutingModule } from './app-routing.module';
@@ -41,6 +45,11 @@ import { EnterpriseRegisterComponent } from './components/enterprise/enterprise-
 import { EnterpriseFormComponent } from './components/enterprise/enterprise-form/enterprise-form.component';
 import { JobofferListComponent } from './components/joboffer/joboffer-list/joboffer-list.component';
 import { JobofferRegisterComponent } from './components/joboffer/joboffer-register/joboffer-register.component';
+import { EmpresaprofileComponent } from './components/empresa/empresaprofile/empresaprofile.component';
+import { EmpresaregisterComponent } from './components/empresa/empresaregister/empresaregister.component';
+import { EmpresaFormComponent } from './components/empresa/empresa-form/empresa-form.component';
+import { LoaderComponent } from './shared/loader/loader.component';
+import { StudentsAdminComponent } from './components/administrador/students-admin/students-admin.component';
 
 @NgModule({
   declarations: [
@@ -59,10 +68,16 @@ import { JobofferRegisterComponent } from './components/joboffer/joboffer-regist
     EnterpriseRegisterComponent,
     EnterpriseFormComponent,
     JobofferListComponent,
-    JobofferRegisterComponent
+    JobofferRegisterComponent,
+    EmpresaprofileComponent,
+    EmpresaregisterComponent,
+    EmpresaFormComponent,
+    LoaderComponent,
+    StudentsAdminComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     HttpModule,
     ReactiveFormsModule,
@@ -71,7 +86,10 @@ import { JobofferRegisterComponent } from './components/joboffer/joboffer-regist
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireStorageModule, // imports firebase/storage only needed for storage features
     NgbModule.forRoot(),
-    AppRoutingModule
+    AppRoutingModule,
+    NgxDatatableModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   providers: [
     AuthService,
