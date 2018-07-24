@@ -55,7 +55,10 @@ export class StudentsAdminComponent {
 
   verModal(id: string) {
     console.log(id);
-    
+  }
+
+  updateFilter(event) {
+    console.log('updateFilter', event);
   }
 }
 
