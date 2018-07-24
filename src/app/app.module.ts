@@ -3,9 +3,12 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-// Bootstrap
+// Plugins
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 // Routing
 import { AppRoutingModule } from './app-routing.module';
@@ -39,6 +42,7 @@ import { EmpresaprofileComponent } from './components/empresa/empresaprofile/emp
 import { EmpresaregisterComponent } from './components/empresa/empresaregister/empresaregister.component';
 import { EmpresaFormComponent } from './components/empresa/empresa-form/empresa-form.component';
 import { LoaderComponent } from './shared/loader/loader.component';
+import { StudentsAdminComponent } from './components/administrador/students-admin/students-admin.component';
 
 @NgModule({
   declarations: [
@@ -54,10 +58,12 @@ import { LoaderComponent } from './shared/loader/loader.component';
     EmpresaprofileComponent,
     EmpresaregisterComponent,
     EmpresaFormComponent,
-    LoaderComponent
+    LoaderComponent,
+    StudentsAdminComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     HttpModule,
     ReactiveFormsModule,
@@ -66,7 +72,10 @@ import { LoaderComponent } from './shared/loader/loader.component';
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireStorageModule, // imports firebase/storage only needed for storage features
     NgbModule.forRoot(),
-    AppRoutingModule
+    AppRoutingModule,
+    NgxDatatableModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   providers: [
     AuthService,

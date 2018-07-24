@@ -9,6 +9,7 @@ import { StudentProfileComponent } from './components/student/studentprofile.com
 import { StudentsComponent } from './components/students/students.component';
 import { LoginComponent } from './components/login/login.component';
 import { EmpresaregisterComponent } from './components/empresa/empresaregister/empresaregister.component';
+import { StudentsAdminComponent } from './components/administrador/students-admin/students-admin.component';
 
 const routes: Routes = [
      { path: 'index', component: IndexComponent },
@@ -17,6 +18,7 @@ const routes: Routes = [
      { path: 'register/employeer',  component: EmpresaregisterComponent },
      { path: 'profile/student/:id', component: StudentProfileComponent, canActivate: [ProfileGuard] },
      { path: 'login', component: LoginComponent },
+     { path: 'admin', component: StudentsAdminComponent },
      { path: '**', pathMatch: 'full', redirectTo: 'index' },
 
     // { path: 'path/:routeParam', component: MyComponent },

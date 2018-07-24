@@ -12,6 +12,11 @@ $morado: #ACA3B2;
 $morado-accent: #7D6F86;
 $verde-succes: #9EE493;
 $verde-succes2: #82ce34;
+$danger: #d9534f;
+$ligth: #f9f9f9;
+$info: #5bc0de;
+$success: #5cb85c;
+$primary : #428bca;
 $size-vars: ( "x-small": .8, "small": .9, "big": 1.5, "huge": 2);
 @each $size,
 $font-size in $size-vars {

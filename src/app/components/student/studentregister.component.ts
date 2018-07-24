@@ -186,6 +186,7 @@ export class StudentRegisterComponent implements OnInit {
 
     this.modalService.open(modalConfirmacion).result.then(() => {
       this.agregar();
+      this.studentService.leerJSONStudents();
       
       //  const notificacion = this.modalService.open(modalNotificacion);
       $.bigBox({
@@ -206,6 +207,7 @@ export class StudentRegisterComponent implements OnInit {
 
 
   private getDismissReason(reason: any): string {
+    
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {

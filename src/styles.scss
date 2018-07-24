@@ -3,6 +3,11 @@
 @import './app/styles/variables.style.scss';
 @import './app/styles/modals.style.scss';
 @import './app/styles/animate.scss';
+@import '~@swimlane/ngx-datatable/release/index.css';
+@import '~@swimlane/ngx-datatable/release/themes/material.css';
+@import '~@swimlane/ngx-datatable/release/assets/icons.css';
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+// @import './app/styles/tecnologico-app-theme.scss';
 .main-container {
     margin-top: 40px;
     margin-bottom: 150px;
