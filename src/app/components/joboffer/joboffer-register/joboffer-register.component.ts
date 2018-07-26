@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl, AbstractControl } from '@angular/forms';
 import { Joboffer } from '../../../interfaces/joboffer.interface';
+import { JobofferService } from '../../../services/joboffer.service';
+import { AuthService } from '../../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -11,68 +13,98 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class JobofferRegisterComponent implements OnInit {
   public valid_form: boolean;
   public formulario: FormGroup;
-  public joboffer: Joboffer;
+  public joboffer: Joboffer = {
+    // Datos del puesto
+    position:     'Asistente de ventas',
+    description:  'Aquí tienen que poner todo',
+    salary:       10000,
+    vacantNumber: 4,
+    weeklyHours:  48,
+
+    applicants: ['vtV4JEZRanhUVaLAbAIibSQZSSI3'],
+
+    // Perfil deseado
+    aptitudes:    'Limpieza, orden, puntualidad, trabajo duro',
+    experience:   1,
+    bachelor: 'Ingenería Industrial',
+    languages: {
+      english: {
+        written:  '80',
+        spoken:   '70',
+        translation: '80'
+      }
+    }
+  };
   read_flag: boolean;
 
   // @Input() ruta: string;
 
-  constructor(private formBuilder: FormBuilder, private rutaURL: Router, private activatedRoute: ActivatedRoute) {
+  constructor( private jobofferService: JobofferService,
+    public authService: AuthService,
+    private formBuilder: FormBuilder,
+    private rutaURL: Router,
+    private activatedRoute: ActivatedRoute) {
     this.formulario = this.formBuilder.group({
 
-      email: ['', Validators.compose([Validators.required, Validators.email, this.match('email_confirm')])],
-      email_confirm: ['', Validators.compose([Validators.required, this.match('email')])],
-      password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/), this.match('password_confirm')])],
-      password_confirm: ['', Validators.compose([Validators.required,  this.match('password')])],
-      // Datos contacto
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      middleName: ['', Validators.required],
-      job: ['', Validators.required],
-      department: ['', Validators.required],
-      phone: ['', Validators.required],
-      address: [''],
-      // Datos para la enterprise
-      comercialName: ['', Validators.required],
-      bussinessName: ['', Validators.required],
-      RFC: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z]{4}[0-9]{6}[a-zA-Z0-9]{3}/)])],
-      bussinessPhone: ['', Validators.required],
-      webURL: ['', Validators.compose([
-        Validators.pattern(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)])],
-       mainStreet: ['', Validators.required],
-      crossing: ['', Validators.required],
-      postalCode: ['', Validators.compose([Validators.required, Validators.minLength(4)])],
-      city: ['', Validators.required],
-      municipality: ['', Validators.required],
-      state: ['', Validators.required],
-      description: ['', Validators.required],
-      bussinessTurn: ['', Validators.required],
-      logo: [''],
+      // Datos del puesto:
+      position:     ['', Validators.required],
+      description:  ['', Validators.required],
+      salary:       ['', Validators.required],
+      economicaid:  ['', Validators.required],
+      vacantNumber: ['', Validators.required],
+      weeklyHours:  ['', Validators.required],
+      // Perfil deseado:
+      aptitudes:    ['', Validators.required],
+      experience:   ['', Validators.required],
+      bachelor:   ['', Validators.required],
+      written:   ['', Validators.required],
+      spoken:   ['', Validators.required],
+      translation:   ['', Validators.required]
     });
   }
 
   ngOnInit() {
-    console.log(this.rutaURL.url);
-    console.log();
-    if (this.rutaURL.url === '/register/employeer') {
-     this.read_flag = false;
-    } else {
-      this.read_flag = true;
-    }
+    // console.log(this.rutaURL.url);
+    // console.log();
+    // if (this.rutaURL.url === '/register/employeer') {
+    //  this.read_flag = false;
+    // } else {
+    //   this.read_flag = true;
+    // }
+    this.read_flag = false;
   }
 
-  match(controlKey: string) {
-    return (control: FormControl): { [s: string]: boolean } => {
-        // control.parent es el FormGroup
-        if (control.parent) { // en las primeras llamadas control.parent es undefined
-          const checkValue  = control.parent.controls[controlKey].value;
-          if (control.value !== checkValue) {
-            return {
-              match: false
-            };
-          }
-        }
-        return null;
-    };
+  register(userId) {
+    // Esta es la primera forma en la que se puede hacer...
+    // es más rápida y elegante pero podría ser propensa a errores
+
+    // Borramos los valores que no sirven de nada ...
+    // delete this.formulario.value.email;
+    // this.student = this.formulario.value as Enterprise;
+
+    // Está es la segunda y es a prueba de fallas:
+
+    // for (const key in this.student) {
+    //   if (this.student.hasOwnProperty(key)) {
+    //       this.student[key] = this.formulario.value[key];
+    //   }
+    // }
+    // this.student.createdOn = Date.now();
+    // this.student.isActive = false;
+    console.log( this.joboffer );
+    // insertando
+    this.joboffer.idEnterprise = userId;
+    this.joboffer.state = 'active';
+    this.jobofferService.createJoboffer(this.joboffer).then(result => {
+      console.log('result :', result);
+      console.log('Creado');
+    });
+  }
+
+  cancel( ) {
+    // this.router.navigate(['/index']);
+    console.log('cancelar');
+    this.formulario.reset();
   }
 
 }

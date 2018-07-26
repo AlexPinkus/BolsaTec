@@ -12,6 +12,9 @@ import { StudentsComponent } from './components/students/students.component';
 import { EnterpriseRegisterComponent } from './components/enterprise/enterprise-register/enterprise-register.component';
 import { EnterpriseProfileComponent } from './components/enterprise/enterprise-profile/enterprise-profile.component';
 
+import { JobofferRegisterComponent } from './components/joboffer/joboffer-register/joboffer-register.component';
+import { JobofferListComponent } from './components/joboffer/joboffer-list/joboffer-list.component';
+
 
 import { LoginComponent } from './components/login/login.component';
 
@@ -20,10 +23,15 @@ import { StudentsAdminComponent } from './components/administrador/students-admi
 const routes: Routes = [
      { path: 'index', component: IndexComponent },
      { path: 'students', component: StudentsComponent },
-     { path: 'register/student',  component: StudentRegisterComponent },
-     { path: 'register/employeer',  component: EnterpriseRegisterComponent },
+     // Rutas de registro (creación en DB).
+     { path: 'register/student',   component: StudentRegisterComponent },
+     { path: 'register/employeer', component: EnterpriseRegisterComponent },
+     { path: 'register/joboffer',  component: JobofferRegisterComponent, canActivate: [AuthGuard]  },
+
      { path: 'profile/student/:id', component: StudentProfileComponent, canActivate: [ProfileGuard] },
      { path: 'profile/enterprise/:id', component: EnterpriseProfileComponent, canActivate: [ProfileGuard] },
+    // Ruta para listar las ofertas de trabajo de la empresa id.
+     { path: 'list/joboffer/:id', component: JobofferListComponent, canActivate: [ProfileGuard] },
      { path: 'login', component: LoginComponent },
      { path: 'admin', component: StudentsAdminComponent },
      { path: '**', pathMatch: 'full', redirectTo: 'index' },

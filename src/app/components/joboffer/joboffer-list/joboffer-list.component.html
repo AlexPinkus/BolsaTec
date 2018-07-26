@@ -1,3 +1,23 @@
-<p>
-  joboffer-list works!
-</p>
+
+<h1>Ofertas Registradas: </h1>
+<ngx-datatable class="material" [rows]="jobOffers | async" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5" [selected]="selected" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false" [displayCheck]="displayCheck"
+(activate)="onActivate($event)" (select)='onSelect($event)'>
+<ngx-datatable-column class="material" [width]="30" [sortable]="true" [canAutoResize]="false" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
+</ngx-datatable-column>
+<ngx-datatable-column name="Puesto" prop="position"></ngx-datatable-column>
+<ngx-datatable-column name="Apellido" prop="lastName"></ngx-datatable-column>
+<ngx-datatable-column name="Aplicantes" prop="applicants.length"></ngx-datatable-column>
+<ngx-datatable-column name="Acciones" prop="uid">
+    <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="hello" let-row="row" let-group="group" let-rowHeight="rowHeight">
+        <a class="" (click)="verModal(value)" ngbTooltip="Ver estudiante">
+            <i class="icon icon-visualizar ion-ios-eye icon-medium p-2"> </i>
+        </a>
+        <a class="" (click)="verModal(value)" ngbTooltip="Aprobar estudiante">
+            <i class="icon icon-aprobar ion-ios-checkmark-circle icon-medium p-2"> </i>
+        </a>
+        <a class="" (click)="verModal(value)" ngbTooltip="Eliminar solicitud">
+            <i class="icon icon-eliminar ion-ios-trash icon-medium p-2"> </i>
+        </a>
+    </ng-template>
+</ngx-datatable-column>
+</ngx-datatable>

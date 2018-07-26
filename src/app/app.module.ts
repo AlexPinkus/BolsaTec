@@ -38,36 +38,45 @@ import { AppComponent } from './app.component';
 import { IndexComponent } from './components/index/index.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoginComponent } from './components/login/login.component';
+import { LoaderComponent } from './shared/loader/loader.component';
+import { StudentsAdminComponent } from './components/administrador/students-admin/students-admin.component';
+
+// Students:
 import { StudentProfileComponent } from './components/student/student-profile/student-profile.component';
 import { StudentRegisterComponent } from './components/student/student-register/student-register.component';
 import { StudentFormComponent } from './components/student/student-form/student-form.component';
 import { StudentsComponent } from './components/students/students.component';
+// Enterprises:
 import { EnterpriseProfileComponent } from './components/enterprise/enterprise-profile/enterprise-profile.component';
 import { EnterpriseRegisterComponent } from './components/enterprise/enterprise-register/enterprise-register.component';
 import { EnterpriseFormComponent } from './components/enterprise/enterprise-form/enterprise-form.component';
+
+// JobOffers:
 import { JobofferListComponent } from './components/joboffer/joboffer-list/joboffer-list.component';
 import { JobofferRegisterComponent } from './components/joboffer/joboffer-register/joboffer-register.component';
-import { LoaderComponent } from './shared/loader/loader.component';
-import { StudentsAdminComponent } from './components/administrador/students-admin/students-admin.component';
+import { JobofferEditComponent } from './components/joboffer/joboffer-edit/joboffer-edit.component';
+import { JobofferViewComponent } from './components/joboffer/joboffer-view/joboffer-view.component';
 
 @NgModule({
   declarations: [
     KeysPipe,
     AppComponent,
-    StudentRegisterComponent,
     StudentsComponent,
     IndexComponent,
     HeaderComponent,
     LoginComponent,
-    StudentProfileComponent,
     DropZoneDirective,
     FileSizePipe,
+    StudentRegisterComponent,
+    StudentProfileComponent,
     StudentFormComponent,
     EnterpriseProfileComponent,
     EnterpriseRegisterComponent,
     EnterpriseFormComponent,
     JobofferListComponent,
     JobofferRegisterComponent,
+    JobofferEditComponent,
+    JobofferViewComponent,
     LoaderComponent,
     StudentsAdminComponent
   ],

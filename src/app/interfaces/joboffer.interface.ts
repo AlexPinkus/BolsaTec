@@ -1,11 +1,24 @@
 export interface Joboffer {
-  uid?:         any;
-  idEnterprise: any;
-  createdOn?:   Date;
+  uid?:          any;
+  idEnterprise?: any;
+  createdOn?:    Date;
+  applicants:    Array<any>;
+
+  // Datos del puesto
   position:     string;
-  salary:       number;
   description:  string;
-  vacantsNumber: number;
+  salary?:      number;
+  economicaid?: number;
+  vacantNumber: number;
+  // # de horas a trabajar a la semana
+  weeklyHours:     number;
+  // location:     string;
+
+
+  // Perfil deseado
+  bachelor:     string;
+  aptitudes:    string;
+  experience:   number;
   languages?: {
     english: {
       written:  string;
@@ -13,6 +26,5 @@ export interface Joboffer {
       translation: string;
     }
   };
-  schedule: number;
-  state:    string;
+  state?:    string;
 }
