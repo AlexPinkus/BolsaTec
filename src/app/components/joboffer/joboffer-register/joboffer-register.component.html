@@ -1,106 +1,174 @@
 <div class="bootstrap-iso" *ngIf="(authService.user | async ) as user ">
-  <form [formGroup]="formulario" (ngSubmit)="register(user.uid )">
-    <h3>Datos del puesto</h3>
-    <div class="borde-tec p-b-4"></div>
-    <br>
-    <div class="form-row">
-      <div class="form-group col-md-12">
-        <label for="">Puesto</label>
-        <input type="text" class="form-control" [readonly]="read_flag" formControlName="position" placeholder="Nombre del puesto" [class.is-invalid]="!formulario.get('position').valid && formulario.get('position').dirty" [class.is-valid]="formulario.get('position').valid">
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group col-md-12">
-        <label for="">Descripción</label>
-        <textarea class="form-control" [readonly]="read_flag" formControlName="description" aria-label="With textarea"></textarea>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="">Salario Mensual:</label>
-        <input type="number" class="form-control" min="1000" max="99999" formControlName="salary" placeholder="1000"
-        [class.is-invalid]="!formulario.get('salary').valid && formulario.get('salary').dirty" [class.is-valid]="formulario.get('salary').valid">
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="economicaid">Ayuda Económica</label>
-        <input type="number" class="form-control" min="1000" max="99999" id="economicaid" formControlName="economicaid" placeholder="1000"
-        [class.is-invalid]="!formulario.get('economicaid').valid && formulario.get('economicaid').dirty" [class.is-valid]="formulario.get('economicaid').valid">
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="weeklyHours">Horas a la semana</label>
-        <input type="number" class="form-control" min="10" max="48" id="weeklyHours" formControlName="weeklyHours" placeholder="10"
-        [class.is-invalid]="!formulario.get('weeklyHours').valid && formulario.get('weeklyHours').dirty" [class.is-valid]="formulario.get('weeklyHours').valid">
-      </div>
-    </div>
-    <h4>Perfil deseado</h4>
-    <div class="borde-tec p-b-4"></div>
-    <br>
-    <div class="form-row">
-      <div class="form-group col-md-4">
-        <label class="mr-sm-2" for="carrera">Carrera de egreso</label>
-        <select class="custom-select select-tec mr-sm-2" formControlName="bachelor">
-          <option value="" selected>Elige una carrera...</option>
-          <option value="industrial">Licenciatura en Ingeniería Industrial</option>
-          <option value="bioquimica">Licenciatura en Ingeniería Bioquímica</option>
-          <option value="ambiental">Licenciatura en Ingeniería Ambiental</option>
-          <option value="biomedica">Licenciatura en Ingeniería Biomédica</option>
-          <option value="gestion">Licenciatura en Ingeniería en Gestión Empresarial</option>
-          <option value="quimica">Licenciatura en Ingeniería Química</option>
-          <option value="electrica">Licenciatura en Ingeniería Eléctrica</option>
-          <option value="electronica">Licenciatura en Ingeniería Electrónica</option>
-          <option value="mecanica">Licenciatura en Ingeniería Mecánica</option>
-          <option value="civil">Licenciatura en Ingeniería Civil</option>
-          <option value="sistemas">Licenciatura en Sistemas Computacionales</option>
-          <option value="administracion">Licenciatura en Administración</option>
-          <option value="administracion_distancia">Licenciatura en Administración en Educación a Distancia</option>
-        </select>
-      </div>
-      <div class="form-group col-md-4">
-        <label for="">Años de experiencia:</label>
-        <input type="number" class="form-control" min="0" max="10" formControlName="experience" placeholder="0"
-        [class.is-invalid]="!formulario.get('experience').valid && formulario.get('experience').dirty" [class.is-valid]="formulario.get('experience').valid">
-      </div>
-      <div class="form-group col-md-4">
-        <label for="">Aptitudes</label>
-        <input type="text" class="form-control" formControlName="aptitudes"
-        [class.is-invalid]="!formulario.get('aptitudes').valid && formulario.get('aptitudes').dirty" [class.is-valid]="formulario.get('aptitudes').valid">
-      </div>
-    </div>
-
-    <div class="form-row">
-        <div class="form-group col-md-12">
-            Inglés(%)
+    <form [formGroup]="formulario" (ngSubmit)="register(user.uid, modalGuardar )">
+        <h3>Datos del puesto</h3>
+        <div class="borde-tec p-b-4"></div>
+        <br>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="">Puesto</label>
+                <input type="text" class="form-control" [readonly]="read_flag" formControlName="position" placeholder="Nombre del puesto" [class.is-invalid]="!formulario.get('position').valid && formulario.get('position').dirty" [class.is-valid]="formulario.get('position').valid">
+            </div>
         </div>
-        <div class="form-group col-md-4">
-            <!-- <label for="">Hablado</label> -->
-            <input type="number" class="form-control" min="0" max="100" formControlName="spoken" placeholder="Hablado (%)" [class.is-invalid]="!formulario.get('spoken').valid && formulario.get('spoken').dirty" [class.is-valid]="formulario.get('spoken').valid">
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="">Descripción</label>
+                <textarea class="form-control" [readonly]="read_flag" formControlName="description" aria-label="With textarea"></textarea>
+            </div>
         </div>
-        <div class="form-group col-md-4">
-            <!-- <label for="">Escrito</label> -->
-            <input type="number" class="form-control" min="0" max="100" formControlName="written" placeholder="Escrito (%)" [class.is-invalid]="!formulario.get('written').valid && formulario.get('written').dirty" [class.is-valid]="formulario.get('written').valid">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="mr-sm-2" for="carrera">Tipo de remuneración económica</label>
+                <select class="custom-select select-tec mr-sm-2">
+              <option value="">Elige un tipo ...</option>
+              <option value="salario">Salario mensual</option>
+              <option value="apoyo">Apoyo económico</option>
+            </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Cantidad</label>
+                <input type="number" class="form-control" min="1000" max="99999" formControlName="salary" placeholder="$1000.00" [class.is-invalid]="!formulario.get('salary').valid && formulario.get('salary').dirty" [class.is-valid]="formulario.get('salary').valid">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="weeklyHours">Horas a la semana</label>
+                <input type="number" class="form-control" min="10" max="48" id="weeklyHours" formControlName="weeklyHours" placeholder="10" [class.is-invalid]="!formulario.get('weeklyHours').valid && formulario.get('weeklyHours').dirty" [class.is-valid]="formulario.get('weeklyHours').valid">
+            </div>
         </div>
-        <div class="form-group col-md-4">
-            <!-- <label for="">Traducción</label> -->
-            <input type="number" class="form-control" min="0" max="100" formControlName="translation" placeholder="Traducción (%)" [class.is-invalid]="!formulario.get('translation').valid && formulario.get('translation').dirty" [class.is-valid]="formulario.get('translation').valid">
+
+        <h4>Perfil deseado</h4>
+        <div class="borde-tec p-b-4"></div>
+        <br>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class=" mr-sm-2" for="carrera">Carrera de egreso</label>
+                <div class="">
+                    <select class="custom-select select-tec mr-sm-2" (change)="agregarcarrera($event.target.value)">
+                <option value="" disabled>Elige una carrera...</option>
+                <option [value]="carrera.value" *ngFor="let carrera of carreras">{{carrera.name}}</option>        
+              </select>
+                </div>
+            </div>
+            <div class="form-group col-md-4 ">
+                <label for=" ">Años de experiencia:</label>
+                <input type="number " class="form-control " min="0 " max="10 " formControlName="experience" placeholder="0 " [class.is-invalid]="!formulario.get( 'experience').valid && formulario.get( 'experience').dirty " [class.is-valid]="formulario.get(
+              'experience').valid ">
+            </div>
+            <div class="form-group col-md-4 ">
+                <label for=" ">Aptitudes</label>
+                <input type="text " class="form-control" formControlName="aptitudes" [class.is-invalid]="!formulario.get( 'aptitudes').valid && formulario.get( 'aptitudes').dirty " [class.is-valid]="formulario.get( 'aptitudes').valid ">
+            </div>
         </div>
-    </div>
 
+        <div class="form-row ">
+            <div class="form-group col-md-12 ">
+                Inglés(%)
+            </div>
+            <div class="form-group col-md-4 ">
+                <!-- <label for=" ">Hablado</label> -->
+                <input type="number " class="form-control " min="0 " max="100 " formControlName="spoken" placeholder="Hablado (%) " [class.is-invalid]="!formulario.get( 'spoken').valid && formulario.get( 'spoken').dirty " [class.is-valid]="formulario.get(
+                'spoken').valid ">
+            </div>
+            <div class="form-group col-md-4 ">
+                <!-- <label for=" ">Escrito</label> -->
+                <input type="number " class="form-control " min="0 " max="100 " formControlName="written" placeholder="Escrito (%) " [class.is-invalid]="!formulario.get( 'written').valid && formulario.get( 'written').dirty " [class.is-valid]="formulario.get(
+                  'written').valid ">
+            </div>
+            <div class="form-group col-md-4 ">
+                <!-- <label for=" ">Traducción</label> -->
 
+                <input type="number " class="form-control " min="0 " max="100 " formControlName="translation" placeholder="Traducción (%) " [class.is-invalid]="!formulario.get( 'translation').valid && formulario.get( 'translation').dirty
+                    " [class.is-valid]="formulario.get( 'translation').valid">
+            </div>
+        </div>
 
-    <!-- <hr> -->
-    <div class="form-row">
-      <div class="col-md-5 p-2">
-        <button type="submit" class="text-center btn btn-rojo col-md-12">Registrar</button>
-      </div>
-      <div class="col-md-2">
-      </div>
-      <div class="col-md-5 p-2">
-        <button type="button" (click)="cancel()" class="text-center btn btn-morado col-md-12">Cancelar</button>
-      </div>
-    </div>
-  </form>
+        <div class="form-row">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-rojo" (click)="agregaraptitud()"><i class="icon icon-visualizar ion-ios-add icon-medium p-2"> </i> Agregar aptitud al perfil</button>
+
+            </div>
+        </div>
+        <br>
+
+        <div class="form-row">
+            <label class=" mr-sm-2" for="aptitud">Aptitudes</label>
+            <div class="input-group ">
+                <div formArrayName="aptitudes">
+                    <div class="container-fluid d-flex" *ngFor="let aptitud of formulario.controls['aptitudes'].controls let i = index">
+                        <div>
+                            <button class=" btn btn-danger " type="button " (click)="eliminaraptitud(i) " ngbTooltip="Eliminar Aptitud "><i class="icon icon-visualizar ion-ios-trash icon-medium p-2 "> </i></button>
+                        </div>
+                        <div class=" ">
+                            <input type="text " class="form-control" [formControlName]="i" [class.is-invalid]="!formulario.get( 'aptitudes').valid && formulario.get( 'aptitudes').dirty " [class.is-valid]="formulario.get( 'aptitudes').valid ">
+                        </div>
+                        <br><br>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <br>
+        <div class="form-row">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-rojo" (click)="agregarcarrera()"><i class="icon icon-visualizar ion-ios-add icon-medium p-2"> </i> Agregar carrera al perfil</button>
+
+            </div>
+        </div>
+        <br>
+
+        <div class="form-row">
+            <label class=" mr-sm-2" for="carrera">Carrera de egreso</label>
+            <div class="input-group ">
+                <div formArrayName="bachelors">
+                    <div class="container-fluid d-flex" *ngFor="let bachelors of formulario.controls['bachelors'].controls let i = index">
+                        <div>
+                            <button class=" btn btn-danger " type="button " (click)="eliminarcarrera(i) " ngbTooltip="Eliminar licenciatura "><i class="icon icon-visualizar ion-ios-trash icon-medium p-2 "> </i></button>
+                        </div>
+                        <div class=" ">
+                            <select class="custom-select select-tec mr-sm-2 " [formControlName]="i ">
+                      <option value=" " >Elige una carrera...</option>
+                      <option [value]="carrera.value " *ngFor="let carrera of carreras ">{{carrera.name}}</option>        
+                    </select>
+                        </div>
+                        <br><br>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <br>
+        <!-- <hr> -->
+        <div class="form-row ">
+            <div class="col-md-5 p-2 ">
+                <button type="submit " class="text-center btn btn-rojo col-md-12 ">Registrar</button>
+            </div>
+            <div class="col-md-2 ">
+            </div>
+            <div class="col-md-5 p-2 ">
+                <button type="button " (click)="cancel() " class="text-center btn btn-morado col-md-12 ">Cancelar</button>
+            </div>
+        </div>
+    </form>
 </div>
+
+
+<ng-template #modalGuardar let-c="close" let-d="dismiss">
+    <!-- <div class="modal fade "> -->
+    <!-- <div class="modal-content"> -->
+    <div class="modal-header">
+        <h4 class="modal-title">Guardar cambios</h4>
+        <button type="button" class="close" (click)="d()" aria-hidden="true">&times;</button>
+    </div>
+    <div class="modal-body">
+        <h6>{{mensaje_modal}}</h6>
+    </div>
+    <div class="modal-footer">
+        <!-- <a (click)="d()" class="btn btn-info" data-dismiss="modal">Cancelar</a> -->
+        <!-- <a (click)="c()" class="btn btn-verde">Guardar</a> -->
+        <button type="button" class="btn btn-morado" (click)="d()">Cancelar</button>
+        <button type="button" class="btn btn-info" (click)="c()">Guardar</button>
+    </div>
+    <!-- </div> -->
+    <!-- </div> -->
+</ng-template>

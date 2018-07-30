@@ -16,8 +16,8 @@ export interface Joboffer {
 
 
   // Perfil deseado
-  bachelor:     string;
-  aptitudes:    string;
+  bachelor:     string[];
+  aptitudes:    string[];
   experience:   number;
   languages?: {
     english: {

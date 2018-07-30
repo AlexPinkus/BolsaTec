@@ -19,6 +19,7 @@ import { JobofferListComponent } from './components/joboffer/joboffer-list/jobof
 import { LoginComponent } from './components/login/login.component';
 
 import { StudentsAdminComponent } from './components/administrador/students-admin/students-admin.component';
+import { JobofferViewComponent } from './components/joboffer/joboffer-view/joboffer-view.component';
 
 const routes: Routes = [
      { path: 'index', component: IndexComponent },
@@ -27,7 +28,7 @@ const routes: Routes = [
      { path: 'register/student',   component: StudentRegisterComponent },
      { path: 'register/employeer', component: EnterpriseRegisterComponent },
      { path: 'register/joboffer',  component: JobofferRegisterComponent, canActivate: [AuthGuard]  },
-
+     { path: 'jobofferView',  component: JobofferViewComponent},
      { path: 'profile/student/:id', component: StudentProfileComponent, canActivate: [ProfileGuard] },
      { path: 'profile/enterprise/:id', component: EnterpriseProfileComponent, canActivate: [ProfileGuard] },
     // Ruta para listar las ofertas de trabajo de la empresa id.

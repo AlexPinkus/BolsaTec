@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormControl, AbstractControl } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormControl, AbstractControl, FormArray } from '@angular/forms';
 import { Joboffer } from '../../../interfaces/joboffer.interface';
 import { JobofferService } from '../../../services/joboffer.service';
 import { AuthService } from '../../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+declare var $: any;
 @Component({
   selector: 'app-joboffer-register',
   templateUrl: './joboffer-register.component.html',
@@ -24,9 +25,18 @@ export class JobofferRegisterComponent implements OnInit {
     applicants: ['vtV4JEZRanhUVaLAbAIibSQZSSI3'],
 
     // Perfil deseado
-    aptitudes:    'Limpieza, orden, puntualidad, trabajo duro',
+    aptitudes:    [
+      'Limpieza',
+      'orden',
+      'puntualidad',
+      'trabajo duro'
+    ],
     experience:   1,
-    bachelor: 'Ingenería Industrial',
+    bachelor: [
+      'industrial',
+      'bioquimica',
+      'ambiental'
+    ],
     languages: {
       english: {
         written:  '80',
@@ -36,14 +46,46 @@ export class JobofferRegisterComponent implements OnInit {
     }
   };
   read_flag: boolean;
-
+  carreras: any[] = [
+   { value: 'industrial', name: 'Licenciatura en Ingeniería Industrial'},
+   { value: 'bioquimica', name: 'Licenciatura en Ingeniería Bioquímica'},
+   { value: 'ambiental', name: 'Licenciatura en Ingeniería Ambiental'},
+   { value: 'biomedica', name: 'Licenciatura en Ingeniería Biomédica'},
+   { value: 'gestion', name: 'Licenciatura en Ingeniería en Gestión Empresarial'},
+   { value: 'quimica', name: 'Licenciatura en Ingeniería Química'},
+   { value: 'electrica', name: 'Licenciatura en Ingeniería Eléctrica'},
+   { value: 'electronica', name: 'Licenciatura en Ingeniería Electrónica'},
+   { value: 'mecanica', name: 'Licenciatura en Ingeniería Mecánica'},
+   { value: 'civil', name: 'Licenciatura en Ingeniería Civil'},
+   { value: 'sistemas', name: 'Licenciatura en Sistemas Computacionales'},
+   { value: 'administracion', name: 'Licenciatura en Administración'},
+   { value: 'administracion_distancia', name: 'Licenciatura en Administración en Educación a Distancia'}
+  ];
+  carreras2 = {
+   industrial: 'Ingeniería Industrial',
+   bioquimica: 'Ingeniería Bioquímica',
+   ambiental: 'Ingeniería Ambiental',
+   biomedica: 'Ingeniería Biomédica',
+   gestion: 'Ingeniería en Gestión Empresarial',
+   quimica: 'Ingeniería Química',
+   electrica: 'Ingeniería Eléctrica',
+   electronica: 'Ingeniería Electrónica',
+   mecanica: 'Ingeniería Mecánica',
+   civil: 'Ingeniería Civil',
+   sistemas: 'Sistemas Computacionales',
+   administracion: 'Administración',
+   administracion_distancia: 'Administración en Educación a Distancia'
+  };
+  carreras_selected: any[];
+  mensaje_modal: string;
   // @Input() ruta: string;
 
   constructor( private jobofferService: JobofferService,
     public authService: AuthService,
     private formBuilder: FormBuilder,
     private rutaURL: Router,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute: ActivatedRoute,
+  private modalService: NgbModal) {
     this.formulario = this.formBuilder.group({
 
       // Datos del puesto:
@@ -54,12 +96,17 @@ export class JobofferRegisterComponent implements OnInit {
       vacantNumber: ['', Validators.required],
       weeklyHours:  ['', Validators.required],
       // Perfil deseado:
-      aptitudes:    ['', Validators.required],
+      aptitudes:    new FormArray([
+        new FormControl('', Validators.required)
+      ]),
       experience:   ['', Validators.required],
-      bachelor:   ['', Validators.required],
-      written:   ['', Validators.required],
-      spoken:   ['', Validators.required],
-      translation:   ['', Validators.required]
+      bachelors:  new FormArray([
+        new FormControl('', Validators.required)
+      ]),
+      written:   [''],
+      spoken:   [''],
+      translation:   [''],
+
     });
   }
 
@@ -74,7 +121,7 @@ export class JobofferRegisterComponent implements OnInit {
     this.read_flag = false;
   }
 
-  register(userId) {
+  register(userId, modalConfirmacion) {
     // Esta es la primera forma en la que se puede hacer...
     // es más rápida y elegante pero podría ser propensa a errores
 
@@ -91,14 +138,37 @@ export class JobofferRegisterComponent implements OnInit {
     // }
     // this.student.createdOn = Date.now();
     // this.student.isActive = false;
-    console.log( this.joboffer );
+    console.log( this.formulario.value );
     // insertando
-    this.joboffer.idEnterprise = userId;
-    this.joboffer.state = 'active';
-    this.jobofferService.createJoboffer(this.joboffer).then(result => {
-      console.log('result :', result);
-      console.log('Creado');
+    this.mensaje_modal = '¿Deseas publicar esta oferta de trabajo?';
+    // El modal se invoca con una promesa que se resuelve si el modal es aceptado o se reachaza si es cerrado
+    this.modalService.open(modalConfirmacion).result.then(() => {
+      // Aquí se incluye la lógica cuando el modal ha sido aceptado
+      this.joboffer.idEnterprise = userId;
+      this.joboffer.state = 'active';
+      this.jobofferService.createJoboffer(this.joboffer).then(result => {
+        // Cuando la oferta se ha realizado se lanza el plugin de notificaciones
+        $.bigBox({
+          title: 'Oferta realizada',
+          content: 'Tu oferta ha sido realizada, ' +
+          'esta oferta ya está disponible para que los egresados puedan consultarla',
+          fa: 'fa-save fa-lg',
+          tabicon: false,
+          sound: false,
+          color: '#82ce34',
+          timeout: 4000,
+          delay: 0.5,
+          });
+        console.log('result :', result);
+        console.log('Creado');
+      });
+
+      //  const notificacion = this.modalService.open(modalNotificacion);
+     
+    }, (reason) => {
+
     });
+   
   }
 
   cancel( ) {
@@ -107,4 +177,54 @@ export class JobofferRegisterComponent implements OnInit {
     this.formulario.reset();
   }
 
+  agregarcarrera() {
+    (<FormArray>this.formulario.controls['bachelors']).push(
+      new FormControl('', Validators.required)
+    );
+  }
+
+  eliminarcarrera(index:   number) {
+    (<FormArray>this.formulario.controls['bachelors']).removeAt(index);
+  }
+  agregaraptitud() {
+    (<FormArray>this.formulario.controls['aptitudes']).push(
+      new FormControl('', Validators.required)
+    );
+  }
+
+  eliminaraptitud(index: number) {
+    (<FormArray>this.formulario.controls['aptitudes']).removeAt(index);
+  }
+
+  open(modalConfirmacion, modalNotificacion) {
+    this.mensaje_modal = '¿Deseas realizar esta oferta de trabajo?';
+
+    this.modalService.open(modalConfirmacion).result.then(() => {
+
+
+      //  const notificacion = this.modalService.open(modalNotificacion);
+      $.bigBox({
+        title: 'Solicitud enviada',
+        content: 'Tu perfil será revisado por el administrador de esta página,' +
+        'se te notificará por correo electrónico cuando tu solicitud sea aprobada',
+        fa: 'fa-save fa-lg',
+        tabicon: false,
+        sound: false,
+        color: '#82ce34',
+        timeout: 4000,
+        delay: 0.5,
+        });
+    }, (reason) => {
+
+    });
+  }
+//   function buscar_item_por_id(id){
+
+//     return items.find(function(item){
+//         return item.id === id;
+//     });
+
+// }
+
+  
 }
