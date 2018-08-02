@@ -84,7 +84,7 @@ export class JobofferViewComponent {
   licenciaturas: string[] = [];
   public formulario: FormGroup;
   role: string;
-  students: AngularFirestoreDocument<any>;
+  students: any;
   constructor( private jobofferService: JobofferService,
     public authService: AuthService,
     private formBuilder: FormBuilder,
@@ -104,7 +104,9 @@ export class JobofferViewComponent {
 //     this.role = 'enterprise';
 //   }
  
-  this.students = this.studentService.getStudent('vtV4JEZRanhUVaLAbAIibSQZSSI3');
+  this.students = this.studentService.getStudent('vtV4JEZRanhUVaLAbAIibSQZSSI3').valueChanges();
+  console.log(this.students);
+  
  }
 
   // ----------------------------------------------------------------------------------------------------------------
