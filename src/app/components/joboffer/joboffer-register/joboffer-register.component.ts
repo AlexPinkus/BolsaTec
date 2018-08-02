@@ -138,6 +138,7 @@ export class JobofferRegisterComponent implements OnInit {
     // }
     // this.student.createdOn = Date.now();
     // this.student.isActive = false;
+
     console.log( this.formulario.value );
     // insertando
     this.mensaje_modal = '¿Deseas publicar esta oferta de trabajo?';
@@ -164,15 +165,14 @@ export class JobofferRegisterComponent implements OnInit {
       });
 
       //  const notificacion = this.modalService.open(modalNotificacion);
-     
+
     }, (reason) => {
 
     });
-   
+
   }
 
   cancel( ) {
-    // this.router.navigate(['/index']);
     console.log('cancelar');
     this.formulario.reset();
   }
@@ -226,5 +226,5 @@ export class JobofferRegisterComponent implements OnInit {
 
 // }
 
-  
+
 }

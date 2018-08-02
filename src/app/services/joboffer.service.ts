@@ -49,6 +49,7 @@ export class JobofferService {
   }
 
   deleteJoboffer(id: string) {
+    // return this.getJoboffer(id).update(data);
     return this.getJoboffer(id).delete();
   }
 }

@@ -8,10 +8,13 @@ import { AuthService } from '../../services/auth.service';
 })
 export class HeaderComponent implements OnInit {
 
+  showSpinner = true;
+
   public role;
   constructor(public _as: AuthService) { }
 
   ngOnInit() {
+    this._as.user.subscribe(() => this.showSpinner = false);
   }
 
 }

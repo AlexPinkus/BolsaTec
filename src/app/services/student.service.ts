@@ -41,6 +41,21 @@ export class StudentService {
     return this.afs.doc<Student>(`users/${id}`);
   }
 
+  // let students = getStudentsInArray(arreglo);
+
+  // <ngFor let student in students | async>
+
+  getStudentsInArray(students: Array<string>) {
+    let query = null;
+    students.forEach(student => {
+      query += query.where('uid', '==', student);
+    });
+    return this.afs.collection('users',
+    (ref) => // ref.where('role', '==', 'student')
+    query);
+    // return this.afs.doc<Student>(`users/${id}`);
+  }
+
   createStudent(student: Student) {
     // const student = {
     //   content,
@@ -64,7 +79,7 @@ export class StudentService {
     this.http.get('assets/estudiantes.json').subscribe(res => {
       const data = res.json();
       console.log(data);
-      
+
     });
   }
 

@@ -53,8 +53,10 @@ export class JobofferListComponent implements OnInit {
     this.selected = [ this.rows[1], this.rows[3] ];
   }
 
-  remove() {
+  remove(id: string) {
     this.selected = [];
+    console.log('id :', id);
+    this.jobofferService.deleteJoboffer(id);
     console.log('removido el elemento');
   }
 
@@ -62,7 +64,7 @@ export class JobofferListComponent implements OnInit {
     return row.name !== 'Ethel Price';
   }
 
-  verModal(id: string) {
+  verModal(id: any) {
     console.log('id', id);
   }
 
