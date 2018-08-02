@@ -64,7 +64,6 @@ export class StudentService {
     this.http.get('assets/estudiantes.json').subscribe(res => {
       const data = res.json();
       console.log(data);
-      
     });
   }
 

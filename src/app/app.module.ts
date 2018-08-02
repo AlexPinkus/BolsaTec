@@ -57,6 +57,7 @@ import { JobofferRegisterComponent } from './components/joboffer/joboffer-regist
 import { JobofferEditComponent } from './components/joboffer/joboffer-edit/joboffer-edit.component';
 import { JobofferViewComponent } from './components/joboffer/joboffer-view/joboffer-view.component';
 
+
 @NgModule({
   declarations: [
     KeysPipe,

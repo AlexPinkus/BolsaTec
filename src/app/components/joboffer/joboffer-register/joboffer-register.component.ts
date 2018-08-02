@@ -32,7 +32,7 @@ export class JobofferRegisterComponent implements OnInit {
       'trabajo duro'
     ],
     experience:   1,
-    bachelor: [
+    bachelors: [
       'industrial',
       'bioquimica',
       'ambiental'
@@ -164,11 +164,9 @@ export class JobofferRegisterComponent implements OnInit {
       });
 
       //  const notificacion = this.modalService.open(modalNotificacion);
-     
     }, (reason) => {
 
     });
-   
   }
 
   cancel( ) {
@@ -225,6 +223,4 @@ export class JobofferRegisterComponent implements OnInit {
 //     });
 
 // }
-
-  
 }
