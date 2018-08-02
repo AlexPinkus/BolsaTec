@@ -79,10 +79,6 @@ export class StudentService {
     this.http.get('assets/estudiantes.json').subscribe(res => {
       const data = res.json();
       console.log(data);
-<<<<<<< HEAD
-
-=======
->>>>>>> c2c61916cd8b79a2a937c16f7f735e433cf6ca3a
     });
   }
 

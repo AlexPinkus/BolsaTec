@@ -165,17 +165,11 @@ export class JobofferRegisterComponent implements OnInit {
       });
 
       //  const notificacion = this.modalService.open(modalNotificacion);
-<<<<<<< HEAD
 
     }, (reason) => {
 
     });
 
-=======
-    }, (reason) => {
-
-    });
->>>>>>> c2c61916cd8b79a2a937c16f7f735e433cf6ca3a
   }
 
   cancel( ) {
@@ -231,9 +225,6 @@ export class JobofferRegisterComponent implements OnInit {
 //     });
 
 // }
-<<<<<<< HEAD
 
 
-=======
->>>>>>> c2c61916cd8b79a2a937c16f7f735e433cf6ca3a
 }
