@@ -1,30 +1,63 @@
-<h3>
-    Oferta de trabajo
-</h3>
-<h4>
-    Posición: {{joboffer.position}}
-</h4>
+<div class="card">
+    <h5 class="card-header"> Nombre de la empresa</h5>
+    <div class="card-body">
+        <h5 class="card-title"><strong>{{joboffer.position}}</strong></h5>
+        <p class="card-text">{{joboffer.description}}</p>
+        <p class="card-text"><strong>Número de vacantes:</strong> <span class="badge badge-secondary">{{joboffer.vacantNumber}}</span></p>
+        <p class="card-text"><strong>Años de Experiencia:</strong> <span class="badge badge-secondary"> {{joboffer.experience}}</span> </p>
+        <p class="card-text"><strong>Salario:</strong> <span class="badge badge-secondary"> {{joboffer.salary | currency}}</span> </p>
+        <p class="card-text"><strong>Aptitudes:</strong></p>
+        <ul class="card-text">
+            <li *ngFor="let aptitud of joboffer.aptitudes">{{aptitud | titlecase}}</li>
+        </ul>
+        <p class="card-text"><strong> Licenciaturas buscadas:</strong></p>
+        <ul class="card-text">
+            <li *ngFor="let licenciatura of licenciaturas">{{licenciatura}}</li>
+        </ul>
+        <p class="card-text"><strong>Inglés</strong> </p>
+        <ul class="card-text">
+            <li>Hablado: <span class="badge badge-secondary">{{joboffer.languages.english.spoken}}%</span></li>
+            <li>Escrito: <span class="badge badge-secondary">{{joboffer.languages.english.written}}%</span></li>
+            <li>Traducción: <span class="badge badge-secondary">{{joboffer.languages.english.translation}}%</span></li>
+        </ul>
+    </div>
+</div>
 <br>
-<h4>Descripción:</h4>
-<br>
-<p>{{joboffer.description}}</p>
-<br>
-<h4>Salario {{joboffer.salary | currency}}</h4>
-<br>
-<h4>Número de vacantes: {{joboffer.vacantNumber}}</h4>
-<br>
-<h4>Años de Experiencia: {{joboffer.experience}}</h4>
-<br>
-<h4>Aptitudes</h4>
-<ul>
-    <li *ngFor="let aptitud of joboffer.aptitudes">{{aptitud}}</li>
-</ul>
-<br>
-<h4>Descripción:</h4>
-<p>{{joboffer.description}}</p>
-<br>
-<h4>Descripción:</h4>
-<p>{{joboffer.description}}</p>
-<br>
-<h4>Descripción:</h4>
-<p>{{joboffer.description}}</p>
+
+<div>
+    <form [formGroup]="formulario" (ngSubmit)="postularse(modalGuardar)">
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <!-- <label for="">Postularme a esta oferta</label> -->
+                <textarea class="form-control" formControlName="postulación" aria-label="With textarea" placeholder="Escribe un mensaje de postulación para que la empresa te conozca..."></textarea>
+            </div>
+        </div>
+        <div class="form-row">
+            <button class="btn btn-info ml-auto" type="submit">Postularme</button>
+        </div>
+    </form>
+</div>
+
+<div>
+    {{students | async | json}}
+</div>
+
+<ng-template #modalGuardar let-c="close" let-d="dismiss">
+    <!-- <div class="modal fade "> -->
+    <!-- <div class="modal-content"> -->
+    <div class="modal-header">
+        <h4 class="modal-title">Guardar cambios</h4>
+        <button type="button" class="close" (click)="d()" aria-hidden="true">&times;</button>
+    </div>
+    <div class="modal-body">
+        <h6>{{mensaje_modal}}</h6>
+    </div>
+    <div class="modal-footer">
+        <!-- <a (click)="d()" class="btn btn-info" data-dismiss="modal">Cancelar</a> -->
+        <!-- <a (click)="c()" class="btn btn-verde">Guardar</a> -->
+        <button type="button" class="btn btn-morado" (click)="d()">Cancelar</button>
+        <button type="button" class="btn btn-info" (click)="c()">Guardar</button>
+    </div>
+    <!-- </div> -->
+    <!-- </div> -->
+</ng-template>

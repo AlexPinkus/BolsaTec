@@ -37,7 +37,7 @@ export class AuthService {
         // Aquí obtenemos el user si sólo queremos el item...
         tap(user => {
           this.userDoc = user;
-          console.log('this.userDoc :', this.userDoc);
+          // console.log('this.userDoc :', this.userDoc);
         }),
         // startWith(JSON.parse(localStorage.getItem('user')))
       );

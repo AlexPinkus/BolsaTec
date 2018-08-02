@@ -26,13 +26,13 @@ export class LoginComponent implements OnInit {
   }
 
   logIn() {
-    console.log( 'Usuario a logear:', this.user );
+    // console.log( 'Usuario a logear:', this.user );
     this.authService.login(this.user.email, this.user.password);
-    console.log('Usuario Loggeado:', this.authService.userDoc);
+    // console.log('Usuario Loggeado:', this.authService.userDoc);
   }
 
   resetPassword() {
-    console.log('recuperar contraseña...');
+    // console.log('recuperar contraseña...');
     this.authService.recoverPassword(this.user.email);
   }
 
