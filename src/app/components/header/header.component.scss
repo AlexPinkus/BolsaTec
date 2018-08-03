@@ -65,17 +65,17 @@ $dropDown: true;
             }
         }
     }
-    .navbar-toggle {
+    .navbar-toggler {
         border-color: $bgHighlight;
-        &:hover,
-        &:focus {
-            background-color: $bgHighlight;
-        }
-        .navbar-toggler-icon {
-            color: $colDefault;
-        }
     }
-    .navbar-collapse,
+    .navbar-toggler-icon {
+      color: $colDefault;
+      &:hover,
+      &:focus {
+          color: $colHighlight;
+      }
+    }
+    .navbar-collapse{}
     .navbar-form {
         border-color: $colDefault;
     }

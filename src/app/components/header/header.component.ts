@@ -1,20 +1,33 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { takeUntil } from 'rxjs/operators';
+import { Subject} from 'rxjs/Subject';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
-
-  showSpinner = true;
+export class HeaderComponent implements OnInit, OnDestroy {
+  private ngUnsubscribe = new Subject();
+  public loading = true;
+  public user;
+  show: boolean = false;
 
   public role;
-  constructor(public _as: AuthService) { }
+  constructor(public authService: AuthService) { }
 
   ngOnInit() {
-    this._as.user.subscribe(() => this.showSpinner = false);
+    this.authService.user.pipe(takeUntil(this.ngUnsubscribe)).subscribe((user) => {
+      this.loading = false;
+      this.user = user;
+    });
+  }
+  ngOnDestroy(): void {
+    // Called once, before the instance is destroyed.
+    // Add 'implements OnDestroy' to the class.
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
 }
