@@ -17,9 +17,25 @@ import { map, take, tap, finalize } from 'rxjs/operators';
 })
 export class StudentProfileComponent implements OnInit {
 
-  password: string;
   studentO: Observable<Student>;
   public formulario: FormGroup;
+  public genders = ['Hombre', 'Mujer'];
+  public maritalStatuses = ['Soltero(a)', 'Casado(a)'];
+  public bachelors = [
+    'Licenciatura en Ingeniería Industrial',
+    'Licenciatura en Ingeniería Bioquímica',
+    'Licenciatura en Ingeniería Ambiental',
+    'Licenciatura en Ingeniería Biomédica',
+    'Licenciatura en Ingeniería en Gestión Empresarial',
+    'Licenciatura en Ingeniería Química',
+    'Licenciatura en Ingeniería Eléctrica',
+    'Licenciatura en Ingeniería Electrónica',
+    'Licenciatura en Ingeniería Mecánica',
+    'Licenciatura en Ingeniería Civil',
+    'Licenciatura en Sistemas Computacionales',
+    'Licenciatura en Administración',
+    'Licenciatura en Administración en Educación a Distancia'];
+  public read_flag = true;
   student: Student = {
     firstName: '',
     lastName: '',
@@ -101,12 +117,11 @@ export class StudentProfileComponent implements OnInit {
         spoken: ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
         written: ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
         translation: ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
-
       });
       // Obtenemos los parámetros de las rutas...
-      this.route.params.subscribe(parametros => {
-        console.log(parametros);
-        this.id = parametros['id'];
+      this.route.params.subscribe(params => {
+        console.log(params);
+        this.id = params['id'];
         if ( this.id !== 'nuevo') {
           this.studentO = this.studentService.getStudent(this.id).valueChanges().pipe(
             take(1),
@@ -132,32 +147,7 @@ export class StudentProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    // console.log('this.student :', this.student);
-    // this.route.params.subscribe(parametros => {
-    //   console.log(parametros);
-    //   this.id = parametros['id'];
-    //   if ( this.id !== 'nuevo') {
-    //     this.studentO = this.studentService.getStudent(this.id).valueChanges().pipe(
-    //       take(1),
-    //       map(user => {
-    //       console.log('123123user :', user);
-    //       return user;
-    //       }),
-    //       tap(smt => {
-    //         console.log('object :', smt);
-    //         this.student = smt;
-    //         console.log('this.student :', this.student);
-    //       })
-    //     );
-    //     console.log('studentO :', this.studentO);
-    //     // this._studentService.studentDocument
-    //     // this._studentService.getStudent(this.id)
-    //     // this._studentService.getStudent(this.id).subscribe(student => {
-    //     //   console.log('student :', student);
-    //     //   this.student = student;
-    //     // });
-    //   }
-    // });
+
   }
 
   toggleHover(event: boolean) {
@@ -219,7 +209,11 @@ export class StudentProfileComponent implements OnInit {
   }
 
   agregar() {
-        console.log(this.formulario);
+    console.log(this.formulario);
+  }
+
+  actualizar() {
+    this.read_flag = !this.read_flag;
   }
 
   guardar() {
