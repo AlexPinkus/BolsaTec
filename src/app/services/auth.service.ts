@@ -29,15 +29,18 @@ export class AuthService {
       this.user = this.afAuth.authState.pipe(
         switchMap(user => {
           if (user) {
+            // Si el usuario está logeado devolvemos su documento en la base de datos.
             return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
           } else {
+            // Si el usuario no está logeado ...
             return of(null);
           }
         }),
         // Aquí obtenemos el user si sólo queremos el item...
         tap(user => {
           this.userDoc = user;
-          // console.log('this.userDoc :', this.userDoc);
+          // if (!user) { this.userStatus = 'loaded'; }
+          console.log('this.userDoc :', this.userDoc);
         }),
         // startWith(JSON.parse(localStorage.getItem('user')))
       );
@@ -106,13 +109,14 @@ export class AuthService {
     // Hacemos el login con correo y contraseña
     return this.afAuth.auth.signInWithEmailAndPassword(email, password).then(credential => {
       if (!credential.user.emailVerified) {
+        this.logout().then(() => {
         // Aqui necesitamos un modal que le pregunte al usuario si quiere que le enviemos el correo
         alert('Por favor verifique su correo antes de logearse...');
-        this.logout().then(() => {
           credential.user.sendEmailVerification();
         });
       } else {
         alert('Bienvenido' + credential.user.displayName);
+        return credential;
       }
       // return this.updateUserData(credential.user);
     })
