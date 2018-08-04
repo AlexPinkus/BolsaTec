@@ -122,96 +122,88 @@
       </div>
     </div>
 
-      <h4>Datos Académicos </h4>
-      <div class="borde-tec p-b-4"></div>
-      <br>
-      <div class="form-row">
-          <div class="form-group col-md-3">
-              <label for="">Matricula</label>
-              <input type="text" class="form-control" id="" formControlName="idStudent" placeholder="Ej. Juan"
-              [class.is-invalid]="!formulario.get('idStudent').valid && formulario.get('idStudent').dirty"
-              [class.is-valid]="formulario.get('idStudent').valid">
-          </div>
-          <div class="form-group col-md-4">
-              <label class="mr-sm-2" for="carrera">*Carrera de egreso</label>
-              <select class="custom-select select-tec mr-sm-2" id="" formControlName="bachelor">
-                          <option value="" selected>Elige una carrera...</option>
-                            <option value="industrial">Licenciatura en Ingeniería Industrial</option>
-                            <option value="bioquimica">Licenciatura en Ingeniería Bioquímica</option>
-                            <option value="ambiental">Licenciatura en Ingeniería Ambiental</option>
-                            <option value="biomedica">Licenciatura en Ingeniería Biomédica</option>
-                            <option value="gestion">Licenciatura en Ingeniería en Gestión Empresarial</option>
-                            <option value="quimica">Licenciatura en Ingeniería Química</option>
-                            <option value="electrica">Licenciatura en Ingeniería Eléctrica</option>
-                            <option value="electronica">Licenciatura en Ingeniería Electrónica</option>
-                            <option value="mecanica">Licenciatura en Ingeniería Mecánica</option>
-                            <option value="civil">Licenciatura en Ingeniería Civil</option>
-                            <option value="sistemas">Licenciatura en Sistemas Computacionales</option>
-                            <option value="administracion">Licenciatura en Administración</option>
-                            <option value="administracion_distancia">Licenciatura en Administración en Educación a Distancia</option>
-                          </select>
-          </div>
-          <div class="form-group col-md-5">
-              <label for="">Especialidad</label>
-              <input type="text" class="form-control" id="" formControlName="speciality" placeholder="ej. 22"
-
-              [class.is-invalid]="!formulario.get('speciality').valid && formulario.get('speciality').dirty" [class.is-valid]="formulario.get('speciality').valid">
-          </div>
-          <div class="form-group col-md-6">
-              <label for="">Maestría</label>
-              <input type="text" class="form-control" id="" formControlName="master" placeholder="ej. 22"
-
-              [class.is-invalid]="!formulario.get('master').valid && formulario.get('master').dirty" [class.is-valid]="formulario.get('master').valid">
-          </div>
-          <div class="form-group col-md-6">
-              <label for="">Doctorado</label>
-              <input type="text" class="form-control" id="" formControlName="phd" placeholder="ej. 22"
-
-              [class.is-invalid]="!formulario.get('phd').valid && formulario.get('phd').dirty" [class.is-valid]="formulario.get('phd').valid">
-          </div>
+    <h4>Datos Académicos </h4>
+    <div class="borde-tec p-b-4"></div>
+    <br>
+    <div class="form-row">
+      <div class="form-group col-md-3">
+        <label for="idStudent">Matrícula</label>
+        <input type="text" class="form-control" formControlName="idStudent" id="idStudent" placeholder="Matrícula"
+        [class.is-invalid]="!formulario.get('idStudent').valid && formulario.get('idStudent').dirty"
+        [class.is-valid]="formulario.get('idStudent').valid">
       </div>
-      <div class="form-row">
-          <div class="form-group col-md-12">
-              Inglés(%)
-          </div>
-          <div class="form-group col-md-4">
-              <!-- <label for="">Hablado</label> -->
-              <input type="number" class="form-control" min="0" max="100" id="" formControlName="spoken" placeholder="Hablado (%)"
-              [class.is-invalid]="!formulario.get('spoken').valid && formulario.get('spoken').dirty"
-              [class.is-valid]="formulario.get('speciality').valid">
-          </div>
-          <div class="form-group col-md-4">
-              <!-- <label for="">Escrito</label> -->
-              <input type="number" class="form-control" min="0" max="100" id="" formControlName="written" placeholder="Escrito (%)"
-              [class.is-invalid]="!formulario.get('written').valid && formulario.get('written').dirty"
-              [class.is-valid]="formulario.get('written').valid">
-          </div>
-          <div class="form-group col-md-4">
-              <!-- <label for="">Traducción</label> -->
-              <input type="number" class="form-control" max="100" min="0" id="" formControlName="translation" placeholder="Traducción (%)"
-              [class.is-invalid]="!formulario.get('translation').valid && formulario.get('translation').dirty"
-              [class.is-valid]="formulario.get('translation').valid">
-          </div>
+      <div class="form-group col-md-4">
+        <label class="mr-sm-2" for="bachelor">Carrera de egreso</label>
+        <select class="custom-select select-tec mr-sm-2"  formControlName="bachelor" id="bachelor">
+          <option value="" selected disabled hidden>Elige una carrera...</option>
+          <option *ngFor="let bachelor of bachelors" [ngValue]="bachelor">{{bachelor}}</option>
+        </select>
       </div>
-      <div class="form-row">
-          <div class="form-group col-md-12">
-              <label for="">Curriculum</label>
-              <input type="file" accept="application/pdf" class="form-control" placeholder="ej. 22">
-          </div>
+      <div class="form-group col-md-5">
+        <label for="speciality">Especialidad</label>
+        <input type="text" class="form-control" formControlName="speciality" id="speciality" placeholder="Especialidad"
+        [class.is-invalid]="!formulario.get('speciality').valid && formulario.get('speciality').dirty"
+        [class.is-valid]="formulario.get('speciality').valid">
       </div>
+      <div class="form-group col-md-6">
+          <label for="master">Maestría</label>
+          <input type="text" class="form-control" formControlName="master" id="master" placeholder="Maestría"
+          [class.is-invalid]="!formulario.get('master').valid && formulario.get('master').dirty"
+          [class.is-valid]="formulario.get('master').valid">
+      </div>
+      <div class="form-group col-md-6">
+          <label for="phd">Doctorado</label>
+          <input type="text" class="form-control" formControlName="phd" id="phd" placeholder="Doctorado"
+          [class.is-invalid]="!formulario.get('phd').valid && formulario.get('phd').dirty"
+          [class.is-valid]="formulario.get('phd').valid">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-12">
+        Inglés(%)
+      </div>
+      <div class="form-group col-md-4">
+        <label for="spoken">Hablado</label>
+        <input type="number" class="form-control" min="0" max="100" formControlName="spoken" id="spoken" placeholder="Hablado"
+        [class.is-invalid]="!formulario.get('spoken').valid && formulario.get('spoken').dirty"
+        [class.is-valid]="formulario.get('speciality').valid">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="written">Escrito</label>
+        <input type="number" class="form-control" min="0" max="100" formControlName="written" id="written" placeholder="Escrito"
+        [class.is-invalid]="!formulario.get('written').valid && formulario.get('written').dirty"
+        [class.is-valid]="formulario.get('written').valid">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="translation">Traducción</label>
+        <input type="number" class="form-control" min="0" max="100" formControlName="translation" id="translation" placeholder="Traducción"
+        [class.is-invalid]="!formulario.get('translation').valid && formulario.get('translation').dirty"
+        [class.is-valid]="formulario.get('translation').valid">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-12">
+        <label for="">Curriculum</label>
+        <div class="custom-file">
+            <!-- (change)="startUpload($event.target.files)" -->
+          <input type="file" accept="application/pdf" class="custom-file-input">
+          <label class="custom-file-label" for="customFile"><i class="fa fa-upload"></i> Choose file</label>
+        </div>
+      </div>
+    </div>
+
+
       <!-- <hr> -->
-      <div class="form-row">
-          <div class="col-md-5 p-2">
-              <button type="submit" class="text-center btn btn-rojo col-md-12">Registrarte</button>
-
-          </div>
-
-          <div class="col-md-2">
-          </div>
-          <div class="col-md-5 p-2">
-              <button type="button" class="text-center btn btn-morado col-md-12" (click)="cancelar()">Cancelar</button>
-          </div>
+    <div class="form-row">
+      <div class="col-md-5 p-2">
+        <button type="submit" class="text-center btn btn-rojo col-md-12">Registrarte</button>
       </div>
+      <div class="col-md-2">
+      </div>
+      <div class="col-md-5 p-2">
+        <button type="button" class="text-center btn btn-morado col-md-12" (click)="cancelar()">Cancelar</button>
+      </div>
+    </div>
   </form>
 </div>
 

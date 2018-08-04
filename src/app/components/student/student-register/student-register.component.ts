@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
 import { Student } from '../../../interfaces/student.interface';
 import { StudentService } from '../../../services/student.service';
 import { AuthService } from '../../../services/auth.service';
@@ -15,12 +16,33 @@ export class StudentRegisterComponent implements OnInit {
 
   public valid_form: boolean;
   public formulario: FormGroup;
+  public genders = ['Hombre', 'Mujer'];
+  public maritalStatuses = ['Soltero(a)', 'Casado(a)'];
+  public bachelors = [
+    'Licenciatura en Ingeniería Industrial',
+    'Licenciatura en Ingeniería Bioquímica',
+    'Licenciatura en Ingeniería Ambiental',
+    'Licenciatura en Ingeniería Biomédica',
+    'Licenciatura en Ingeniería en Gestión Empresarial',
+    'Licenciatura en Ingeniería Química',
+    'Licenciatura en Ingeniería Eléctrica',
+    'Licenciatura en Ingeniería Electrónica',
+    'Licenciatura en Ingeniería Mecánica',
+    'Licenciatura en Ingeniería Civil',
+    'Licenciatura en Sistemas Computacionales',
+    'Licenciatura en Administración',
+    'Licenciatura en Administración en Educación a Distancia'
+  ];
+
+
+
   password: string;
   nuevo = false;
   id: string;
   closeResult: string;
   mensaje_modal: string;
   flag_exitModal = false;
+
   private student: Student = {
     idStudent:  'Matricula',
     firstName:  'Jaime',
@@ -56,7 +78,9 @@ export class StudentRegisterComponent implements OnInit {
     resumeURL:  'url del doc',
     speciality: 'algo',
     maritalStatus: 'Soltero(a)',
-    isGraduated: true
+    isGraduated: true,
+    isActive: true,
+    role: 'student'
   };
 
   // Posibles errores de validación...
@@ -115,6 +139,7 @@ export class StudentRegisterComponent implements OnInit {
         speciality: ['', Validators.required],
         master:     ['', Validators.required],
         phd:        ['', Validators.required],
+
         // Inglés
         spoken:      ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
         written:     ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
@@ -124,31 +149,7 @@ export class StudentRegisterComponent implements OnInit {
     }
 
   ngOnInit() {
-    if (this.id != null) {
-    this.formulario.patchValue({
-      email: this.student.email,
-      firstName: this.student.firstName,
-      lastName: this.student.lastName,
-      middleName: this.student.middleName,
-      sex: this.student.sex,
-      age: this.student.age,
-      maritalStatus: this.student.maritalStatus,
-      mainStreet: this.student.address.mainStreet,
-      crossings: this.student.address.crossings,
-      postalCode: this.student.address.postalCode,
-      city: this.student.address.city,
-      municipality: this.student.address.municipality,
-      state: this.student.address.state,
-      idStudent: this.student.idStudent,
-      bachelor: this.student.degree.bachelor,
-      speciality: this.student.degree.speciality,
-      master: this.student.degree.master,
-      phd: this.student.degree.phd,
-      spoken: this.student.languages.english.spoken,
-      written: this.student.languages.english.written,
-      translation: this.student.languages.english.translation,
-    });
-    }
+
   }
 
   match(controlKey: string) {
@@ -169,25 +170,22 @@ export class StudentRegisterComponent implements OnInit {
   register( ) {
     this.assign(this.student, this.formulario.value);
     this.student.createdOn = Date.now();
-    this.student.isActive = true;
     console.log(this.student);
 
-    // this.authService.signup(this.student.email, 'password').then(credential => {
-    //     alert('Usuario registrado :');
-    //     this.student.uid = credential.user.uid;
-    //     this.student.role = 'student';
-    //     this.studentService.createStudent(this.student).then(smt => {
-    //       console.log('smt :', smt);
-    //       console.log('Registrado');
-    //       this.router.navigate(['/index']);
-    //     });
-    // });
+    this.authService.signup(this.student.email, 'password').then(credential => {
+        alert('Usuario registrado :');
+        this.student.uid = credential.user.uid;
+        this.studentService.createStudent(this.student).then(smt => {
+          console.log('smt :', smt);
+          console.log('Registrado');
+          this.router.navigate(['/index']);
+        });
+    });
   }
 
   cancelar( ) {
-    // this.router.navigate(['/index']);
-    console.log('cancelar');
     this.formulario.reset();
+    // this.router.navigate(['/index']);
   }
 
 // --------------------------------------------------------------
