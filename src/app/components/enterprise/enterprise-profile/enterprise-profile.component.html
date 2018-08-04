@@ -1,3 +1,217 @@
-<p>
-  enterpriseprofile works!
-</p>
+<h1>Perfil de la empresa</h1>
+<div class="bootstrap-iso" *ngIf="enterpriseO | async as enterprise">
+  <form [formGroup]="formulario" (ngSubmit)="agregar()">
+    <h3>Actualizar correo</h3>
+    <div class="borde-tec p-b-4"></div>
+    <br>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="email">Nuevo Correo electrónico</label>
+        <input type="email" class="form-control student" [readonly]="read_flag" formControlName="email" id="email" placeholder="Nuevo correo"
+        [class.is-invalid]="!formulario.get('email').valid && formulario.get('email').dirty"
+        [class.is-valid]="formulario.get('email').valid">
+      </div>
+      <!-- <div *ngIf="!formulario.controls.email.valid && formulario.controls.email.dirty" class="invalid">
+          Excediste el número de letras permitido
+      </div> -->
+      <div class="form-group col-md-6">
+        <label for="email_confirm">Confirma tu correo electrónico</label>
+        <input type="email" class="form-control student" [readonly]="read_flag" formControlName="email_confirm" id="email_confirm" placeholder="Repetir Correo"
+        [class.is-invalid]="!formulario.get('email_confirm').valid && formulario.get('email_confirm').dirty"
+        [class.is-valid]="formulario.get('email_confirm').valid">
+      </div>
+    </div>
+
+    <h3>Actualizar contraseña</h3>
+    <div class="borde-tec p-b-4"></div>
+    <br>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="password">Nueva Contraseña</label>
+        <input type="password" class="form-control" [readonly]="read_flag" formControlName="password" id="password" placeholder="Nueva Contraseña"
+        [class.is-invalid]="!formulario.get('password').valid && formulario.get('password').dirty"
+        [class.is-valid]="formulario.get('password').valid">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="password_confirm">Repetir contraseña</label>
+        <input type="password" class="form-control" [readonly]="read_flag" formControlName="password_confirm" id="password_confirm" placeholder="Repetir Contraseña"
+        [class.is-invalid]="!formulario.get('password_confirm').valid && formulario.get('password_confirm').dirty"
+        [class.is-valid]="formulario.get('password_confirm').valid">
+      </div>
+    </div>
+
+    <h4>Datos del contacto</h4>
+    <div class="borde-tec p-b-4"></div>
+    <br>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label for="firstName">Nombres</label>
+        <input type="text" class="form-control" [readonly]="read_flag" id="firstName" formControlName="firstName" value={{enterprise.firstName}}
+        [class.is-invalid]="!formulario.get('firstName').valid && formulario.get('firstName').dirty"
+        [class.is-valid]="formulario.get('firstName').valid">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="middleName">Apellido paterno</label>
+        <input type="text" class="form-control" [readonly]="read_flag" id="middleName" formControlName="middleName" value={{enterprise.middleName}}
+        [class.is-invalid]="!formulario.get('lastName').valid && formulario.get('lastName').dirty"
+        [class.is-valid]="formulario.get('lastName').valid">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="lastName">Apellido materno</label>
+        <input type="text" class="form-control" [readonly]="read_flag" id="lastName" formControlName="lastName" value={{enterprise.lastName}}
+        [class.is-invalid]="!formulario.get('middleName').valid && formulario.get('middleName').dirty"
+        [class.is-valid]="formulario.get('middleName').valid">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label for="job">Puesto</label>
+        <input type="text" class="form-control" [readonly]="read_flag" id="job" formControlName="job" value={{enterprise.job}}
+        [class.is-invalid]="!formulario.get('job').valid && formulario.get('job').dirty"
+        [class.is-valid]="formulario.get('job').valid">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="department">Departamento</label>
+        <input type="text" class="form-control" [readonly]="read_flag" id="department" formControlName="department" value={{enterprise.department}}
+        [class.is-invalid]="!formulario.get('department').valid && formulario.get('department').dirty"
+        [class.is-valid]="formulario.get('department').valid">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="contactPhone">Telefono</label>
+        <input type="text" class="form-control" [readonly]="read_flag" id="contactPhone" formControlName="contactPhone" value={{enterprise.contactPhone}}
+        [class.is-invalid]="!formulario.get('contactPhone').valid && formulario.get('contactPhone').dirty"
+        [class.is-valid]="formulario.get('contactPhone').valid">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-12">
+        <label for="contactAddress">Dirección</label>
+        <input type="text" class="form-control" [readonly]="read_flag" id="contactAddress" formControlName="contactAddress" value={{enterprise.contactAddress}}
+        [class.is-invalid]="!formulario.get('contactAddress').valid && formulario.get('contactAddress').dirty"
+        [class.is-valid]="formulario.get('contactAddress').valid">
+      </div>
+    </div>
+
+    <h4>Datos de la empresa </h4>
+    <div class="borde-tec p-b-4"></div>
+    <br>
+    <div class="form-row">
+      <div class="form-group col-md-12">
+        <label for="comercialName">Nombre comercial</label>
+        <input type="text" class="form-control" [readonly]="read_flag" id="comercialName" formControlName="comercialName" value={{enterprise.comercialName}}
+        [class.is-invalid]="!formulario.get('comercialName').valid && formulario.get('comercialName').dirty"
+        [class.is-valid]="formulario.get('comercialName').valid">
+      </div>
+      <div class="form-group col-md-12">
+        <label for="bussinessName">Razón social</label>
+        <input type="text" class="form-control" [readonly]="read_flag" id="bussinessName" formControlName="bussinessName" value={{enterprise.bussinessName}}
+        [class.is-invalid]="!formulario.get('bussinessName').valid && formulario.get('bussinessName').dirty"
+        [class.is-valid]="formulario.get('bussinessName').valid">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label for="RFC">RFC</label>
+        <input type="text" class="form-control" [readonly]="read_flag" id="RFC" formControlName="RFC" value={{enterprise.RFC}}
+        [class.is-invalid]="!formulario.get('RFC').valid && formulario.get('RFC').dirty"
+        [class.is-valid]="formulario.get('RFC').valid">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="bussinessPhone">Teléfono</label>
+        <input type="text" class="form-control" [readonly]="read_flag" id="bussinessPhone" formControlName="bussinessPhone" value={{enterprise.bussinessPhone}}
+        [class.is-invalid]="!formulario.get('bussinessPhone').valid && formulario.get('bussinessPhone').dirty"
+        [class.is-valid]="formulario.get('bussinessPhone').valid">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="webURL">Sitio web</label>
+        <input type="text" class="form-control" [readonly]="read_flag" id="webURL" formControlName="webURL" value={{enterprise.webURL}}
+        [class.is-invalid]="!formulario.get('webURL').valid && formulario.get('webURL').dirty"
+        [class.is-valid]="formulario.get('webURL').valid && formulario.get('webURL').dirty">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label for="mainStreet">Calle</label>
+        <input type="text" class="form-control" [readonly]="read_flag" id="mainStreet" formControlName="mainStreet" value={{enterprise.address.mainStreet}}
+        [class.is-invalid]="!formulario.get('mainStreet').valid && formulario.get('mainStreet').dirty"
+        [class.is-valid]="formulario.get('mainStreet').valid">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="crossings">Cruzamientos</label>
+        <input type="text" class="form-control" [readonly]="read_flag" id="crossings" formControlName="crossings" value={{enterprise.address.crossings}}
+        [class.is-invalid]="!formulario.get('crossings').valid && formulario.get('crossings').dirty"
+        [class.is-valid]="formulario.get('crossings').valid">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="postalCode">Código Postal</label>
+        <input type="text" class="form-control" [readonly]="read_flag" id="postalCode" formControlName="postalCode" value={{enterprise.address.postalCode}}
+        [class.is-invalid]="!formulario.get('postalCode').valid && formulario.get('postalCode').dirty"
+        [class.is-valid]="formulario.get('postalCode').valid">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label for="city">Ciudad</label>
+        <input type="text" class="form-control" [readonly]="read_flag" id="city" formControlName="city" value={{enterprise.address.city}}
+        [class.is-invalid]="!formulario.get('city').valid && formulario.get('city').dirty"
+        [class.is-valid]="formulario.get('city').valid">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="municipality">Municipio</label>
+        <input type="text" class="form-control" [readonly]="read_flag" id="municipality" formControlName="municipality" value={{enterprise.address.municipality}}
+        [class.is-invalid]="!formulario.get('municipality').valid && formulario.get('municipality').dirty"
+        [class.is-valid]="formulario.get('municipality').valid">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="state">Estado</label>
+        <input type="text" class="form-control" [readonly]="read_flag" id="state" formControlName="state" value={{enterprise.address.state}}
+        [class.is-invalid]="!formulario.get('state').valid && formulario.get('state').dirty"
+        [class.is-valid]="formulario.get('state').valid">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-12">
+        <label for="description">Descripción</label>
+        <textarea class="form-control" [readonly]="read_flag" id="description" formControlName="description" value={{enterprise.description}} aria-label="With textarea"></textarea>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-12">
+        <label for="bussinessTurn">Giro del negocio</label>
+        <input type="text" class="form-control" [readonly]="read_flag" id="bussinessTurn" formControlName="bussinessTurn" value={{enterprise.bussinessTurn}}
+        [class.is-invalid]="!formulario.get('bussinessTurn').valid && formulario.get('bussinessTurn').dirty"
+        [class.is-valid]="formulario.get('bussinessTurn').valid">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-12">
+        <label for="logo">Logotipo</label>
+        <div class="custom-file">
+          <input type="file" accept="image/*" class="custom-file-input" [readonly]="read_flag" formControlName="logo">
+          <label class="custom-file-label" for="customFile"><i class="fa fa-upload"></i> Choose file</label>
+        </div>
+      </div>
+    </div>
+
+    <ng-container *ngIf="read_flag; else submit">
+      <div class="form-row justify-content-md-center">
+        <div class="col-md-4">
+          <button type="button" class="text-center btn btn-rojo col-md-12" (click)="actualizar()">Actualizar Información</button>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #submit>
+      <div class="form-row">
+        <div class="col-md-5 p-2">
+          <button type="submit" class="text-center btn btn-rojo col-md-12">Actualizar</button>
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-5 p-2">
+          <button type="button" class="text-center btn btn-morado col-md-12" (click)="actualizar()">Cancelar</button>
+        </div>
+      </div>
+    </ng-template>
+  </form>
+</div>
