@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl, AbstractControl } from '@angular/forms';
 import { Enterprise } from '../../../interfaces/enterprise.interface';
 import { EnterpriseService } from '../../../services/enterprise.service';
@@ -24,10 +24,10 @@ export class EnterpriseRegisterComponent implements OnInit {
     job:        'Gerente',
     department: 'Ventas',
     contactPhone: 99999999999,
-    contactAddress: '',
+    contactAddress: 'Avenida escalofriante #666',
     // Datos empresa
-    comercialName:  '',
-    bussinessName:  'Monsters Inc.',
+    comercialName:  'Monsters Inc.',
+    bussinessName:  'S.A. de C.V.',
     bussinessPhone: '9999999',
     bussinessTurn:  'Enegería Eléctrica',
     description:    'Sustos que dan gusto',
@@ -48,7 +48,7 @@ export class EnterpriseRegisterComponent implements OnInit {
   constructor(private enterpriseService: EnterpriseService,
     private authService: AuthService,
     private formBuilder: FormBuilder,
-    private rutaURL: Router,
+    private router: Router,
     private activatedRoute: ActivatedRoute) {
     this.formulario = this.formBuilder.group({
       // Hay que agregrar verificación si existen usuarios:
@@ -79,7 +79,7 @@ export class EnterpriseRegisterComponent implements OnInit {
 
       // Dirección de la empresa
       mainStreet:   ['', Validators.required],
-      crossing:     ['', Validators.required],
+      crossings:    ['', Validators.required],
       postalCode:   ['', Validators.compose([Validators.required, Validators.minLength(4)])],
       city:         ['', Validators.required],
       municipality: ['', Validators.required],
@@ -88,9 +88,9 @@ export class EnterpriseRegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.rutaURL.url);
+    console.log(this.router.url);
     console.log();
-    if (this.rutaURL.url === '/register/employeer') {
+    if (this.router.url === '/register/employeer') {
      this.read_flag = false;
     } else {
       this.read_flag = true;
@@ -117,17 +117,17 @@ export class EnterpriseRegisterComponent implements OnInit {
     this.enterprise.createdOn = Date.now();
     this.enterprise.isActive = true;
     console.log(this.enterprise);
-    // // insertando
-    // this.authService.signup(this.enterprise.email, 'password').then(credential => {
-    //   alert('Usuario registrado :');
-    //   this.enterprise.uid = credential.user.uid;
-    //   // const newStudent :
-    //   this.enterpriseService.createEnterprise(this.enterprise).then(smt => {
-    //     console.log('smt :', smt);
-    //     console.log('Registrado');
-    //     this.router.navigate(['/index']);
-    //   });
-    // });
+    // insertando
+    this.authService.signup(this.enterprise.email, 'password').then(credential => {
+      alert('Usuario registrado :');
+      this.enterprise.uid = credential.user.uid;
+      // const newStudent :
+      this.enterpriseService.createEnterprise(this.enterprise).then(smt => {
+        console.log('smt :', smt);
+        console.log('Registrado');
+        this.router.navigate(['/index']);
+      });
+    });
 
   }
 

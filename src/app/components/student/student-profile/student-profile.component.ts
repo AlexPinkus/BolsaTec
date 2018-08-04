@@ -17,7 +17,7 @@ import { map, take, tap, finalize } from 'rxjs/operators';
 })
 export class StudentProfileComponent implements OnInit {
 
-  studentO: Observable<Student>;
+  public studentO: Observable<Student>;
   public formulario: FormGroup;
   public genders = ['Hombre', 'Mujer'];
   public maritalStatuses = ['Soltero(a)', 'Casado(a)'];
@@ -76,7 +76,7 @@ export class StudentProfileComponent implements OnInit {
   constructor(private studentService: StudentService,
     private router: Router,
     private storage: AngularFireStorage,
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder) {
       this.formulario = this.formBuilder.group({
         email: ['', Validators.compose([Validators.required, Validators.email])],
@@ -106,7 +106,7 @@ export class StudentProfileComponent implements OnInit {
         translation: ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
       });
       // Obtenemos los parámetros de las rutas...
-      this.route.params.subscribe(params => {
+      this.activatedRoute.params.subscribe(params => {
         console.log(params);
         this.id = params['id'];
         if ( this.id !== 'nuevo') {
