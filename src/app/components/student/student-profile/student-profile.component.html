@@ -40,7 +40,7 @@
       </div>
     </div>
 
-    <h4>Datos de registro</h4>
+    <h4>Datos generales del alumno</h4>
     <div class="borde-tec p-b-4"></div>
     <br>
     <div class="form-row">
@@ -64,40 +64,43 @@
       </div>
     </div>
     <div class="form-row">
-        <div class="form-group col-md-4">
-          <label class="mr-sm-2" for="sex">Sexo</label>
-          <ng-container *ngIf="read_flag; else selectSex">
-            <input type="text" class="form-control" [readonly]="read_flag" value={{student.sex}}>
-          </ng-container>
-          <ng-template #selectSex>
-            <select class="custom-select select-tec mr-sm-2" formControlName="sex" id="sex">
-              <!-- <option value="" selected disabled hidden>Elige una opción...</option> -->
-              <option value="" selected disabled hidden>{{student.sex}}</option>
-              <option *ngFor="let gender of genders" [ngValue]="gender">{{gender}}</option>
+      <div class="form-group col-md-4">
+        <label class="mr-sm-2" for="sex">Sexo</label>
+        <ng-container *ngIf="read_flag; else selectSex">
+          <input type="text" class="form-control" [readonly]="read_flag" value={{student.sex}}>
+        </ng-container>
+        <ng-template #selectSex>
+          <select class="custom-select select-tec mr-sm-2" formControlName="sex" id="sex">
+            <!-- <option value="" selected disabled hidden>Elige una opción...</option> -->
+            <option value="" selected disabled hidden>{{student.sex}}</option>
+            <option *ngFor="let gender of genders" [ngValue]="gender">{{gender}}</option>
+        </select>
+        </ng-template>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="age">Fecha de nacimiento</label>
+        <input type="date" class="form-control" [readonly]="read_flag" formControlName="age" id="age" value={{student.age}}
+        [class.is-invalid]="!formulario.get('age').valid && formulario.get('age').dirty"
+        [class.is-valid]="formulario.get('age').valid">
+      </div>
+      <div class="form-group col-md-4">
+        <label class="mr-sm-2" for="maritalStatus">Estado civil</label>
+        <ng-container *ngIf="read_flag; else selectMaritalStatus">
+          <input type="text" class="form-control" [readonly]="read_flag" value={{student.maritalStatus}}>
+        </ng-container>
+        <ng-template #selectMaritalStatus>
+          <select class="custom-select select-tec mr-sm-2" formControlName="maritalStatus" id="maritalStatus">
+            <!-- <option value="" selected>Elige una opción...</option> -->
+            <option value="" selected disabled hidden>{{student.maritalStatus}}</option>
+            <option *ngFor="let maritalStatus of maritalStatuses" [ngValue]="maritalStatus">{{maritalStatus}}</option>
           </select>
-          </ng-template>
-        </div>
-        <div class="form-group col-md-4">
-          <label for="age">Fecha de nacimiento</label>
-          <input type="date" class="form-control" [readonly]="read_flag" formControlName="age" id="age" value={{student.age}}
-          [class.is-invalid]="!formulario.get('age').valid && formulario.get('age').dirty"
-          [class.is-valid]="formulario.get('age').valid">
-        </div>
-        <div class="form-group col-md-4">
-          <label class="mr-sm-2" for="maritalStatus">Estado civil</label>
-          <ng-container *ngIf="read_flag; else selectMaritalStatus">
-            <input type="text" class="form-control" [readonly]="read_flag" value={{student.maritalStatus}}>
-          </ng-container>
-          <ng-template #selectMaritalStatus>
-            <select class="custom-select select-tec mr-sm-2" formControlName="maritalStatus" id="maritalStatus">
-              <!-- <option value="" selected>Elige una opción...</option> -->
-              <option value="" selected disabled hidden>{{student.maritalStatus}}</option>
-              <option *ngFor="let maritalStatus of maritalStatuses" [ngValue]="maritalStatus">{{maritalStatus}}</option>
-            </select>
-          </ng-template>
-        </div>
+        </ng-template>
+      </div>
     </div>
 
+    <h4>Dirección</h4>
+    <div class="borde-tec p-b-4"></div>
+    <br>
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="mainStreet">Calle</label>
@@ -139,7 +142,7 @@
       </div>
     </div>
 
-    <h4>Datos del alumno </h4>
+    <h4>Datos Académicos</h4>
     <div class="borde-tec p-b-4"></div>
     <br>
     <div class="form-row">
@@ -213,11 +216,15 @@
         </div>
       </div>
     </div>
+
+
+
+
     <ng-container *ngIf="read_flag; else submit">
       <div class="form-row justify-content-md-center">
-          <div class="col-md-4">
-            <button type="button" class="text-center btn btn-rojo col-md-12" (click)="actualizar()">Actualizar Información</button>
-          </div>
+        <div class="col-md-4">
+          <button type="button" class="text-center btn btn-rojo col-md-12" (click)="actualizar()">Actualizar Información</button>
+        </div>
       </div>
     </ng-container>
     <ng-template #submit>

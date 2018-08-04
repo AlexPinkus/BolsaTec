@@ -36,19 +36,6 @@ export class StudentProfileComponent implements OnInit {
     'Licenciatura en Administración',
     'Licenciatura en Administración en Educación a Distancia'];
   public read_flag = true;
-  student: Student = {
-    firstName: '',
-    lastName: '',
-    email:    '',
-    phone:    0,
-    // role: 'student',
-    address: {
-      mainStreet: '',
-      crossings:  '',
-      postalCode: 0,
-      state:      ''
-    }
-  };
 
   nuevo = false;
   id: string;
@@ -131,8 +118,6 @@ export class StudentProfileComponent implements OnInit {
             }),
             tap(smt => {
               console.log('object :', smt);
-              this.student = smt;
-              console.log('this.student :', this.student);
             })
           );
           console.log('studentO :', this.studentO);
@@ -219,7 +204,7 @@ export class StudentProfileComponent implements OnInit {
   guardar() {
     // Aquí hay que verificar que los datos del usuario sean los correctos antes de registrarlo.
 
-    console.log( this.student );
+    // console.log( this.student );
 
       // actualizando
     //   this._studentService.updateStudent(this.student, this.id).subscribe(data => {
