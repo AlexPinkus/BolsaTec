@@ -86,44 +86,44 @@ export class StudentRegisterComponent implements OnInit {
     private modalService: NgbModal) {
       // Aquí se colocan todos los elementos del formulario
       this.formulario = this.formBuilder.group({
+        // Datos de usuario
         email: ['', Validators.compose([Validators.required, Validators.email])],
         email_confirm: ['', Validators.compose([Validators.required, this.match('email')])],
         password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/),
-        this.match('password_confirm')])],
+          this.match('password_confirm')])],
         password_confirm: ['', Validators.compose([Validators.required, this.match('password')])],
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
-        middleName: ['', Validators.required],
-        sex: ['', Validators.required],
-        age: ['', Validators.required],
+
+        // Información Personal
+        firstName:     ['', Validators.required],
+        middleName:    ['', Validators.required],
+        lastName:      ['', Validators.required],
+        sex:           ['', Validators.required],
+        age:           ['', Validators.required],
         maritalStatus: ['', Validators.required],
-        mainStreet: ['', Validators.required],
-        crossings: ['', Validators.required],
-        postalCode: ['', Validators.compose([Validators.required, Validators.minLength(4)])],
-        city: ['', Validators.required],
+
+        // Dirección
+        mainStreet:   ['', Validators.required],
+        crossings:    ['', Validators.required],
+        postalCode:   ['', Validators.compose([Validators.required, Validators.minLength(4)])],
+        city:         ['', Validators.required],
         municipality: ['', Validators.required],
-        state: ['', Validators.required],
-        idStudent: ['', Validators.compose([Validators.required, Validators.pattern(/^E{1}[0-9]{7}/)])],
-        bachelor: ['', Validators.required],
+        state:        ['', Validators.required],
+
+        // Información académica
+        idStudent:  ['', Validators.compose([Validators.required, Validators.pattern(/^E{1}[0-9]{7}/)])],
+        bachelor:   ['', Validators.required],
         speciality: ['', Validators.required],
-        master: ['', Validators.required],
-        phd: ['', Validators.required],
-        spoken: ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
-        written: ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
+        master:     ['', Validators.required],
+        phd:        ['', Validators.required],
+        // Inglés
+        spoken:      ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
+        written:     ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
         translation: ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
 
       });
     }
 
-  // --------------------------------------------------------------
-  // Programador: Félix Ehuan
-  // Fecha: 18/07/2018
-  // Función ngOnInit: Cuando se inicializa la vista se pregunta por el parámetro id para determinar su procedencia
-  // si el id existe entonces se está visualizando un perfil y el formulario se cargará con la función "patchValue"
-  // si el id no existe entonces se cargará el formulario en blanco
   ngOnInit() {
-    // Obtener parámetro de id y llamar al servicio para obtener los datos
-    // En la promesa llenar los datos del usuario
     if (this.id != null) {
     this.formulario.patchValue({
       email: this.student.email,
@@ -151,12 +151,6 @@ export class StudentRegisterComponent implements OnInit {
     }
   }
 
-  // --------------------------------------------------------------
-  // Programador: Félix Ehuan
-  // Fecha: 18/07/2018
-  // Función match: Recibe como parámetro el nombre del control con el que se comparará el valor
-  // regresa un variable asignada a un valor booleano "match:false" si el valor no coincide
-  // regresa un variable null si el valor coincide
   match(controlKey: string) {
     return (control: FormControl): { [s: string]: boolean } => {
         // control.parent es el FormGroup
@@ -171,39 +165,23 @@ export class StudentRegisterComponent implements OnInit {
         return null;
     };
   }
-  // --------------------------------------------------------------
-
 
   register( ) {
-    // Esta es la primera forma en la que se puede hacer...
-    // es más rápida y elegante pero podría ser propensa a errores
+    this.assign(this.student, this.formulario.value);
+    this.student.createdOn = Date.now();
+    this.student.isActive = true;
+    console.log(this.student);
 
-    // Borramos los valores que no sirven de nada ...
-    // delete this.formulario.value.email;
-    // this.student = this.formulario.value as Enterprise;
-
-    // Está es la segunda y es a prueba de fallas:
-
-    // for (const key in this.student) {
-    //   if (this.student.hasOwnProperty(key)) {
-    //       this.student[key] = this.formulario.value[key];
-    //   }
-    // }
-    // this.student.createdOn = Date.now();
-    // this.student.isActive = false;
-    console.log( this.student );
-    // insertando
-    this.authService.signup(this.student.email, 'password').then(credential => {
-        alert('Usuario registrado :');
-        this.student.uid = credential.user.uid;
-        this.student.role = 'student';
-        // const newStudent :
-        this.studentService.createStudent(this.student).then(smt => {
-          console.log('smt :', smt);
-          console.log('Registrado');
-          this.router.navigate(['/index']);
-        });
-    });
+    // this.authService.signup(this.student.email, 'password').then(credential => {
+    //     alert('Usuario registrado :');
+    //     this.student.uid = credential.user.uid;
+    //     this.student.role = 'student';
+    //     this.studentService.createStudent(this.student).then(smt => {
+    //       console.log('smt :', smt);
+    //       console.log('Registrado');
+    //       this.router.navigate(['/index']);
+    //     });
+    // });
   }
 
   cancelar( ) {
@@ -255,31 +233,18 @@ export class StudentRegisterComponent implements OnInit {
     }
   }
 
+  private assign(object: any, objectToCopy: any) {
+    for (const key in object) {
+      if (object.hasOwnProperty(key)) {
+        if ( typeof object[key] === 'object') {
+          this.assign(object[key], objectToCopy);
+        } else if (objectToCopy.hasOwnProperty(key)) {
+          object[key] = objectToCopy[key];
+        }
+      }
+    }
+  }
+
 }
-
-
-  // guardar() {
-  //   // Aquí hay que verificar que los datos del usuario sean los correctos antes de registrarlo.
-
-  //   console.log( this.student );
-  //   // insertando
-  //   this._auths.signup(this.student.email, 'password').then(credential => {
-  //       console.log('Usuario registrado :');
-  //       alert('Usuario registrado :');
-  //       // this.student.id = credential.user['uid'];
-  //       this._studentService.createStudent(this.student).subscribe(data => {
-  //         this.successMessage = 'Estudiante Registrado Exitosamente';
-  //         this.successMessagebool = true;
-  //         // this.router.navigate(['/profile/student', data.name]);
-  //       }, error => {
-  //         console.error(error);
-  //       });
-  //   });
-  // }
-
-  // agregarNuevo( forma: NgForm ) {
-  //   this.router.navigate(['/student', 'nuevo']);
-  //   // forma.reset({casa: 'Marvel'});
-  // }
 
 
