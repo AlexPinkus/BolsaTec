@@ -11,6 +11,8 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./enterprise-register.component.scss']
 })
 export class EnterpriseRegisterComponent implements OnInit {
+
+  public read_flag: boolean;
   public valid_form: boolean;
   public formulario: FormGroup;
   // Definimos un objeto empresa con los valores default.
@@ -21,8 +23,8 @@ export class EnterpriseRegisterComponent implements OnInit {
     middleName: 'Alejandro',
     job:        'Gerente',
     department: 'Ventas',
-    phone_contact: 99999999999,
-    address_contact: '',
+    contactPhone: 99999999999,
+    contactAddress: '',
     // Datos empresa
     comercialName:  '',
     bussinessName:  'Monsters Inc.',
@@ -42,42 +44,46 @@ export class EnterpriseRegisterComponent implements OnInit {
     }
   };
 
-  @Input() ruta: string;
-  read_flag: boolean;
+
   constructor(private enterpriseService: EnterpriseService,
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private rutaURL: Router,
     private activatedRoute: ActivatedRoute) {
     this.formulario = this.formBuilder.group({
-      email: ['', Validators.compose([Validators.required, Validators.email, this.match('email_confirm')])],
+      // Hay que agregrar verificación si existen usuarios:
+      email: ['', Validators.compose([Validators.required, Validators.email])],
       email_confirm: ['', Validators.compose([Validators.required, this.match('email')])],
-      password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/), this.match('password_confirm')])],
+
+      password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/)])],
       password_confirm: ['', Validators.compose([Validators.required,  this.match('password')])],
       // Datos contacto
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      middleName: ['', Validators.required],
-      job: ['', Validators.required],
-      department: ['', Validators.required],
-      phone: ['', Validators.required],
-      address: [''],
-      // Datos para la enterprise
-      comercialName: ['', Validators.required],
-      bussinessName: ['', Validators.required],
-      RFC: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z]{4}[0-9]{6}[a-zA-Z0-9]{3}/)])],
+      firstName:      ['', Validators.required],
+      lastName:       ['', Validators.required],
+      middleName:     ['', Validators.required],
+      job:            ['', Validators.required],
+      department:     ['', Validators.required],
+      contactPhone:   ['', Validators.required],
+      contactAddress: ['', Validators.required],
+
+      // Datos de la empresa
+      comercialName:  ['', Validators.required],
+      bussinessName:  ['', Validators.required],
       bussinessPhone: ['', Validators.required],
+      description:    ['', Validators.required],
+      bussinessTurn:  ['', Validators.required],
+      logo:           [''],
+      RFC: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z]{4}[0-9]{6}[a-zA-Z0-9]{3}/)])],
       webURL: ['', Validators.compose([
         Validators.pattern(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)])],
-       mainStreet: ['', Validators.required],
-      crossing: ['', Validators.required],
-      postalCode: ['', Validators.compose([Validators.required, Validators.minLength(4)])],
-      city: ['', Validators.required],
+
+      // Dirección de la empresa
+      mainStreet:   ['', Validators.required],
+      crossing:     ['', Validators.required],
+      postalCode:   ['', Validators.compose([Validators.required, Validators.minLength(4)])],
+      city:         ['', Validators.required],
       municipality: ['', Validators.required],
-      state: ['', Validators.required],
-      description: ['', Validators.required],
-      bussinessTurn: ['', Validators.required],
-      logo: [''],
+      state:        ['', Validators.required],
     });
   }
 
@@ -107,34 +113,34 @@ export class EnterpriseRegisterComponent implements OnInit {
   }
 
   register() {
-    // Esta es la primera forma en la que se puede hacer...
-    // es más rápida y elegante pero podría ser propensa a errores
-
-    // Borramos los valores que no sirven de nada ...
-    // delete this.formulario.value.email;
-    // this.enterprise = this.formulario.value as Enterprise;
-
-    // Está es la segunda y es a prueba de fallas:
-
-    // for (const key in this.enterprise) {
-    //   if (this.enterprise.hasOwnProperty(key)) {
-    //       this.enterprise[key] = this.formulario.value[key];
-    //   }
-    // }
-    // this.enterprise.createdOn = Date.now();
-    // this.enterprise.isActive = false;
+    this.assign(this.enterprise, this.formulario.value);
+    this.enterprise.createdOn = Date.now();
+    this.enterprise.isActive = true;
     console.log(this.enterprise);
-  // insertando
-  this.authService.signup(this.enterprise.email, 'password').then(credential => {
-    alert('Usuario registrado :');
-    this.enterprise.uid = credential.user.uid;
-    // const newStudent :
-    this.enterpriseService.createEnterprise(this.enterprise).then(smt => {
-      console.log('smt :', smt);
-      console.log('Registrado');
-    });
-});
+    // // insertando
+    // this.authService.signup(this.enterprise.email, 'password').then(credential => {
+    //   alert('Usuario registrado :');
+    //   this.enterprise.uid = credential.user.uid;
+    //   // const newStudent :
+    //   this.enterpriseService.createEnterprise(this.enterprise).then(smt => {
+    //     console.log('smt :', smt);
+    //     console.log('Registrado');
+    //     this.router.navigate(['/index']);
+    //   });
+    // });
 
+  }
+
+  private assign(object: any, objectToCopy: any) {
+    for (const key in object) {
+      if (object.hasOwnProperty(key)) {
+        if ( typeof object[key] === 'object') {
+          this.assign(object[key], objectToCopy);
+        } else if (objectToCopy.hasOwnProperty(key)) {
+          object[key] = objectToCopy[key];
+        }
+      }
+    }
   }
 
 }
