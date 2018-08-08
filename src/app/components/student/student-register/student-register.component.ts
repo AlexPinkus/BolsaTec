@@ -35,13 +35,13 @@ export class StudentRegisterComponent implements OnInit {
   ];
 
 
-
   password: string;
   nuevo = false;
   id: string;
   closeResult: string;
   mensaje_modal: string;
   flag_exitModal = false;
+  successregister = false;
 
   private student: Student = {
     idStudent:  'Matricula',
@@ -173,12 +173,14 @@ export class StudentRegisterComponent implements OnInit {
     console.log(this.student);
 
     this.authService.signup(this.student.email, 'password').then(credential => {
-        alert('Usuario registrado :');
-        this.student.uid = credential.user.uid;
-        this.studentService.createStudent(this.student).then(smt => {
-          console.log('smt :', smt);
-          console.log('Registrado');
-          this.router.navigate(['/index']);
+      this.student.uid = credential.user.uid;
+      this.studentService.createStudent(this.student).then(smt => {
+        this.successregister = true;
+        console.log('smt :', smt);
+        console.log('Registrado');
+            setTimeout(() => {
+              this.router.navigate(['/index']);
+            }, 3000);
         });
     });
   }
@@ -194,25 +196,25 @@ export class StudentRegisterComponent implements OnInit {
 // Función open: Abre un nuevo modal, recibe cómo parámetro un template de angular
 // tiene una promesa con resolve si el modal se cierra con la función close (guardar datos)
 // tiene una promesa con reject  si el modal se cierra con la función dismiss (cancelar)
-  open(modalConfirmacion, modalNotificacion) {
-    this.mensaje_modal = '¿Deseas agregar un nuevo estudiante?';
+  open(modalConfirmacion) {
+    this.mensaje_modal = '¿Deseas registrarte?';
 
     this.modalService.open(modalConfirmacion).result.then(() => {
+      // $.bigBox({
+      //   title: 'Solicitud enviada',
+      //   content: 'Tu perfil será revisado por el administrador de esta página,' +
+      //   'se te notificará por correo electrónico cuando tu solicitud sea aprobada',
+      //   fa: 'fa-save fa-lg',
+      //   tabicon: false,
+      //   sound: false,
+      //   color: '#82ce34',
+      //   timeout: 4000,
+      //   delay: 0,
+      //   });
       this.register();
-      this.studentService.leerJSONStudents();
+      // this.studentService.leerJSONStudents();
 
       //  const notificacion = this.modalService.open(modalNotificacion);
-      $.bigBox({
-        title: 'Solicitud enviada',
-        content: 'Tu perfil será revisado por el administrador de esta página,' +
-        'se te notificará por correo electrónico cuando tu solicitud sea aprobada',
-        fa: 'fa-save fa-lg',
-        tabicon: false,
-        sound: false,
-        color: '#82ce34',
-        timeout: 4000,
-        delay: 0.5,
-        });
     }, (reason) => {
 
     });

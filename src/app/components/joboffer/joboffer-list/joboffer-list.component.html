@@ -1,23 +1,32 @@
-
-<h1>Ofertas Registradas: </h1>
+<h1>
+    Ofertas Registradas: </h1>
 <ngx-datatable class="material" [rows]="jobOffers | async" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5" [selected]="selected" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false" [displayCheck]="displayCheck"
-(activate)="onActivate($event)" (select)='onSelect($event)'>
-  <ngx-datatable-column class="material" [width]="30" [sortable]="true" [canAutoResize]="false" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
-  </ngx-datatable-column>
-  <ngx-datatable-column name="Puesto" prop="position"></ngx-datatable-column>
-  <ngx-datatable-column name="Sueldo" prop="salary"></ngx-datatable-column>
-  <ngx-datatable-column name="Aplicantes" prop="applicants.length"></ngx-datatable-column>
-  <ngx-datatable-column name="Acciones" prop="id">
-      <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row" let-group="group" let-rowHeight="rowHeight">
-          <a class="" (click)="verModal(value)" ngbTooltip="Ver estudiante">
-              <i class="icon icon-visualizar ion-ios-eye icon-medium p-2"> </i>
-          </a>
-          <a class="" (click)="verModal(value)" ngbTooltip="Aprobar estudiante">
-              <i class="icon icon-aprobar ion-ios-checkmark-circle icon-medium p-2"> </i>
-          </a>
-          <a class="" (click)="remove(value)" ngbTooltip="Eliminar solicitud">
-              <i class="icon icon-eliminar ion-ios-trash icon-medium p-2"> </i>
-          </a>
-      </ng-template>
-  </ngx-datatable-column>
+    (activate)="onActivate($event)" (select)='onSelect($event)'>
+    <ngx-datatable-column class="material" [width]="30" [sortable]="true" [canAutoResize]="false" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Puesto" prop="position"></ngx-datatable-column>
+    <ngx-datatable-column name="Sueldo" prop="salary">
+        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value">
+            {{value | currency}}
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Fecha" prop="createdOn.seconds">
+        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value">
+            {{value | date:'fullDate'}}
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Aplicantes" prop="applicants.length"></ngx-datatable-column>
+    <ngx-datatable-column name="Acciones" prop="id">
+        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row" let-group="group" let-rowHeight="rowHeight">
+            <a class="" (click)="verModal(value)" ngbTooltip="Ver oferta">
+                <i class="icon icon-visualizar ion-ios-eye icon-medium p-2"> </i>
+            </a>
+            <a class="" (click)="verModal(value)" ngbTooltip="Desactivar oferta">
+                <i class="icon icon-suspender ion-ios-information-circle icon-medium p-2"> </i>
+            </a>
+            <a class="" (click)="remove(value)" ngbTooltip="Eliminar oferta">
+                <i class="icon icon-eliminar ion-ios-trash icon-medium p-2"> </i>
+            </a>
+        </ng-template>
+    </ngx-datatable-column>
 </ngx-datatable>

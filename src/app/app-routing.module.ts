@@ -28,6 +28,7 @@ const routes: Routes = [
      { path: 'register/student',   component: StudentRegisterComponent },
      { path: 'register/employeer', component: EnterpriseRegisterComponent },
      { path: 'register/joboffer',  component: JobofferRegisterComponent, canActivate: [AuthGuard]  },
+     { path: 'joboffer/:id',  component: JobofferViewComponent, canActivate: [AuthGuard]  },
      { path: 'jobofferView',  component: JobofferViewComponent},
      { path: 'profile/student/:id', component: StudentProfileComponent, canActivate: [ProfileGuard] },
      { path: 'profile/enterprise/:id', component: EnterpriseProfileComponent, canActivate: [ProfileGuard] },

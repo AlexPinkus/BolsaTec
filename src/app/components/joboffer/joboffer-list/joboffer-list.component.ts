@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { JobofferService } from '../../../services/joboffer.service';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-joboffer-list',
@@ -12,26 +13,10 @@ export class JobofferListComponent implements OnInit {
   selected = [];
   jobOffers: Observable<any[]>;
 
-  constructor( private jobofferService: JobofferService ) {
-    this.fetch((data) => {
-      this.rows = data;
-      console.log('this.rows :', this.rows);
-    });
-  }
+  constructor( private jobofferService: JobofferService, private router: Router ) {}
 
   ngOnInit() {
     this.jobOffers = this.jobofferService.getData();
-  }
-
-  fetch(cb) {
-    const req = new XMLHttpRequest();
-    req.open('GET', `assets/estudiantes.json`);
-
-    req.onload = () => {
-      cb(JSON.parse(req.response));
-    };
-
-    req.send();
   }
 
   onSelect({ selected }) {
@@ -60,12 +45,10 @@ export class JobofferListComponent implements OnInit {
     console.log('removido el elemento');
   }
 
-  displayCheck(row) {
-    return row.name !== 'Ethel Price';
-  }
 
   verModal(id: any) {
     console.log('id', id);
+    this.router.navigate(['/joboffer', id]);
   }
 
   updateFilter(event) {

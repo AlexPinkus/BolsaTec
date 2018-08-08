@@ -37,7 +37,25 @@ export class EnterpriseService {
   getEnterprise(id: string) {
     return this.afs.doc<Enterprise>(`users/${id}`);
   }
-
+   // ----------------------------------------------------------------------------------------------------------------
+  // Programador: Félix Ehuan
+  // Fecha: 18/07/2018
+  // Función getJobofferData: Función que retorna una promesa con la data de la oferta de trabajo
+  // ----------------------------------------------------------------------------------------------------------------
+  getEnterpriseData(id: string) {
+    const promesa = new Promise((resolve, reject) => {
+      const JobofferURL = this.afs.doc<Enterprise>(`users/${id}`);
+      JobofferURL.valueChanges().subscribe(
+          data =>  {
+            if (data) {
+              resolve(data);
+            } else {
+              resolve(null);
+            }
+          });
+    });
+      return promesa;
+  }
   createEnterprise(enterprise: Enterprise) {
     // const enterprise = {
     //   content,
