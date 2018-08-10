@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { JobofferService } from '../../../services/joboffer.service';
+import { StudentService } from '../../../services/student.service';
 import { Observable } from 'rxjs';
-
+import { Router, ActivatedRoute } from '@angular/router';
+import { map, switchMap, startWith, tap, filter } from 'rxjs/operators';
+import { Joboffer } from '../../../interfaces/joboffer.interface';
 @Component({
   selector: 'app-joboffer-list',
   templateUrl: './joboffer-list.component.html',
@@ -11,27 +14,28 @@ export class JobofferListComponent implements OnInit {
   rows = [];
   selected = [];
   jobOffers: Observable<any[]>;
+  students: Observable<any[]>;
+  estudiantes = ['FzMQ0Xn59n0aEQkzGzSm', 'YmB0SIb9sKhELNsd2RbE', 'vtV4JEZRanhUVaLAbAIibSQZSSI3'];
 
-  constructor( private jobofferService: JobofferService ) {
-    this.fetch((data) => {
-      this.rows = data;
-      console.log('this.rows :', this.rows);
+  constructor( private jobofferService: JobofferService,
+    private studentService: StudentService,
+    private activatedRoute: ActivatedRoute ) {
+    this.activatedRoute.params.subscribe(params => {
+      if ( params['id'] !== 'nuevo') {
+        // this.enterpriseO = this.enterpriseService.getEnterprise(params['id']).valueChanges();
+        this.jobOffers = this.jobofferService.getData(params['id']).pipe(
+          tap(jobs => {
+            this.rows = jobs;
+            console.log('jobs :', jobs);
+          })
+        );
+      }
     });
   }
 
   ngOnInit() {
-    this.jobOffers = this.jobofferService.getData();
-  }
-
-  fetch(cb) {
-    const req = new XMLHttpRequest();
-    req.open('GET', `assets/estudiantes.json`);
-
-    req.onload = () => {
-      cb(JSON.parse(req.response));
-    };
-
-    req.send();
+    // this.jobOffers = this.jobofferService.getData();
+    this.students = this.studentService.getStudentsInArray(this.estudiantes);
   }
 
   onSelect({ selected }) {
@@ -46,11 +50,11 @@ export class JobofferListComponent implements OnInit {
   }
 
   add() {
-    this.selected.push(this.rows[1], this.rows[3]);
+    // this.selected.push(this.rows[1], this.rows[3]);
   }
 
   update() {
-    this.selected = [ this.rows[1], this.rows[3] ];
+    // this.selected = [ this.rows[1], this.rows[3] ];
   }
 
   remove(id: string) {
@@ -64,8 +68,13 @@ export class JobofferListComponent implements OnInit {
     return row.name !== 'Ethel Price';
   }
 
-  verModal(id: any) {
-    console.log('id', id);
+  verModal(row: Joboffer) {
+    console.log('row', row);
+    this.students = this.studentService.getStudentsInArray(row.applicants);
+    // .pipe(map(arr => {
+    //   console.log('llamado a la db');
+    //   return arr;
+    // }));
   }
 
   updateFilter(event) {

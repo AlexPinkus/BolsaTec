@@ -1,6 +1,6 @@
-
+<div *ngIf="jobOffers | async as jobs; else loading">
 <h1>Ofertas Registradas: </h1>
-<ngx-datatable class="material" [rows]="jobOffers | async" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5" [selected]="selected" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false" [displayCheck]="displayCheck"
+<ngx-datatable class="material" [rows]="jobs" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5" [selected]="selected" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false" [displayCheck]="displayCheck"
 (activate)="onActivate($event)" (select)='onSelect($event)'>
   <ngx-datatable-column class="material" [width]="30" [sortable]="true" [canAutoResize]="false" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
   </ngx-datatable-column>
@@ -9,7 +9,7 @@
   <ngx-datatable-column name="Aplicantes" prop="applicants.length"></ngx-datatable-column>
   <ngx-datatable-column name="Acciones" prop="id">
       <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row" let-group="group" let-rowHeight="rowHeight">
-          <a class="" (click)="verModal(value)" ngbTooltip="Ver estudiante">
+          <a class="" (click)="verModal(row)" ngbTooltip="Ver oferta">
               <i class="icon icon-visualizar ion-ios-eye icon-medium p-2"> </i>
           </a>
           <a class="" (click)="verModal(value)" ngbTooltip="Aprobar estudiante">
@@ -21,3 +21,42 @@
       </ng-template>
   </ngx-datatable-column>
 </ngx-datatable>
+  <hr>
+  <div *ngIf="students | async as stds; else loading">
+    <h1>Estudiantes en oferta : </h1>
+    <ngx-datatable class="material" [rows]="stds" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5" [selected]="selected" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false" [displayCheck]="displayCheck"
+    (activate)="onActivate($event)" (select)='onSelect($event)'>
+      <ngx-datatable-column class="material" [width]="30" [sortable]="true" [canAutoResize]="false" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Nombre" prop="firstName"></ngx-datatable-column>
+      <ngx-datatable-column name="Apellido" prop="lastName"></ngx-datatable-column>
+      <ngx-datatable-column name="Sexo" prop="sex"></ngx-datatable-column>
+      <ngx-datatable-column name="Acciones" prop="id">
+          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row" let-group="group" let-rowHeight="rowHeight">
+              <a class="" (click)="verModal(row)" ngbTooltip="Ver oferta">
+                  <i class="icon icon-visualizar ion-ios-eye icon-medium p-2"> </i>
+              </a>
+              <a class="" (click)="verModal(value)" ngbTooltip="Aprobar estudiante">
+                  <i class="icon icon-aprobar ion-ios-checkmark-circle icon-medium p-2"> </i>
+              </a>
+              <a class="" (click)="remove(value)" ngbTooltip="Eliminar solicitud">
+                  <i class="icon icon-eliminar ion-ios-trash icon-medium p-2"> </i>
+              </a>
+          </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+</div>
+
+<ng-template #loading let-user>Loading...</ng-template>
+
+<li *ngFor="let student of students | async as Studentss; index as i; first as isFirst">
+  {{i}}/{{student.firstName}}. {{student.uid}} {{ student.description }} <span *ngIf="isFirst">default</span>
+</li>
+<div>
+
+</div>
+
+<!-- <li *ngFor="let id of estudiantes; index as i; first as isFirst">
+  {{i}}/{{id}}. {{id}} <span *ngIf="isFirst">default</span>
+</li> -->
