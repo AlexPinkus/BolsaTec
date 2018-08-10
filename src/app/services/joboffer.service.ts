@@ -10,6 +10,7 @@ import { map, switchMap, startWith, tap, filter } from 'rxjs/operators';
 })
 export class JobofferService {
 
+  // Esta es la colección con todos los documentos...
   joboffersCollection: AngularFirestoreCollection<any>;
   jobofferDocument:   AngularFirestoreDocument<any>;
 
@@ -17,21 +18,36 @@ export class JobofferService {
         // Obten la colección con todos los estudiantes:
     // Hay que obtener esto a partir del rol.
     this.joboffersCollection = this.afs.collection('joboffers');
-    // (ref) => ref.where('role', '==', 'joboffer'));
+    // (ref) => ref.where('state', '==', 'inactive'));
     // , (ref) => ref.orderBy('time', 'desc')
   }
 
-  getData(): Observable<any[]> {
+  getData(idEnterprise?: string): Observable<any[]> {
     // ['added', 'modified', 'removed']
-    return this.joboffersCollection.snapshotChanges().pipe(
-      map((actions) => {
-        return actions.map((a) => {
-          // Data es la información de cada uno de los documentos
-          const data = a.payload.doc.data();
-          return { id: a.payload.doc.id, ...data };
-        });
-      })
-    );
+    if (idEnterprise) {
+      return this.afs.collection('joboffers',
+      (ref) => ref.where('state', '==', 'inactive'))
+      .snapshotChanges()
+      .pipe(
+        map((actions) => {
+          return actions.map((a) => {
+            // Data es la información de cada uno de los documentos
+            const data = a.payload.doc.data();
+            return { id: a.payload.doc.id, ...data };
+          });
+        })
+      );
+    } else {
+      return this.joboffersCollection.snapshotChanges().pipe(
+        map((actions) => {
+          return actions.map((a) => {
+            // Data es la información de cada uno de los documentos
+            const data = a.payload.doc.data();
+            return { id: a.payload.doc.id, ...data };
+          });
+        })
+      );
+    }
   }
 
   getJoboffer(id: string) {
