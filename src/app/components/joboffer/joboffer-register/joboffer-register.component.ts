@@ -4,7 +4,7 @@ import { Joboffer } from '../../../interfaces/joboffer.interface';
 import { JobofferService } from '../../../services/joboffer.service';
 import { AuthService } from '../../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 declare var $: any;
 @Component({
   selector: 'app-joboffer-register',

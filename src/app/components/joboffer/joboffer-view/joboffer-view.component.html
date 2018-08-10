@@ -1,5 +1,5 @@
-<div class="card">
-    <h5 class="card-header"> Nombre de la empresa</h5>
+<div class="card" *ngIf="loaded; else loading">
+    <h5 class="card-header">{{enterprise.comercialName}}</h5>
     <div class="card-body">
         <h5 class="card-title"><strong>{{joboffer.position}}</strong></h5>
         <p class="card-text">{{joboffer.description}}</p>
@@ -7,7 +7,7 @@
         <p class="card-text"><strong>Años de Experiencia:</strong> <span class="badge badge-secondary"> {{joboffer.experience}}</span> </p>
         <p class="card-text"><strong>Salario:</strong> <span class="badge badge-secondary"> {{joboffer.salary | currency}}</span> </p>
         <p class="card-text"><strong>Aptitudes:</strong></p>
-        <ul class="card-text">
+        <ul class="card-text" *ngIf="joboffer.aptitudes">
             <li *ngFor="let aptitud of joboffer.aptitudes">{{aptitud | titlecase}}</li>
         </ul>
         <p class="card-text"><strong> Licenciaturas buscadas:</strong></p>
@@ -24,7 +24,7 @@
 </div>
 <br>
 
-<div>
+<div *ngIf="successoffer == false">
     <form [formGroup]="formulario" (ngSubmit)="postularse(modalGuardar)">
         <div class="form-row">
             <div class="form-group col-md-12">
@@ -38,26 +38,37 @@
     </form>
 </div>
 
-<div>
-    {{students | async | json}}
-</div>
+<ngb-alert *ngIf="successoffer" type="success" [dismissible]="false">¡Tu oferta fue enviada exitosamente!</ngb-alert>
 
-<ng-template #modalGuardar let-c="close" let-d="dismiss">
+<!-- <div>
+    {{joboffer2 | async | json}}
+</div> -->
+
+<ng-template #modalGuardar let-c="close()" let-d="dismiss()">
     <!-- <div class="modal fade "> -->
     <!-- <div class="modal-content"> -->
     <div class="modal-header">
         <h4 class="modal-title">Guardar cambios</h4>
-        <button type="button" class="close" (click)="d()" aria-hidden="true">&times;</button>
+        <button type="button" class="close" (click)="d" aria-hidden="true">&times;</button>
     </div>
     <div class="modal-body">
         <h6>{{mensaje_modal}}</h6>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer modal-confirm">
         <!-- <a (click)="d()" class="btn btn-info" data-dismiss="modal">Cancelar</a> -->
         <!-- <a (click)="c()" class="btn btn-verde">Guardar</a> -->
-        <button type="button" class="btn btn-morado" (click)="d()">Cancelar</button>
-        <button type="button" class="btn btn-info" (click)="c()">Guardar</button>
+        <button type="button" class="btn btn-morado" (click)="d">Cancelar</button>
+        <button type="button" class="btn btn-info" (click)="c">Guardar</button>
     </div>
     <!-- </div> -->
     <!-- </div> -->
+</ng-template>
+
+
+
+
+<ng-template #loading>
+    <div>
+        Cargando...
+    </div>
 </ng-template>

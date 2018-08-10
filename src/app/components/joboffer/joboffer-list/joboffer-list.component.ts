@@ -19,7 +19,8 @@ export class JobofferListComponent implements OnInit {
 
   constructor( private jobofferService: JobofferService,
     private studentService: StudentService,
-    private activatedRoute: ActivatedRoute ) {
+    private activatedRoute: ActivatedRoute,
+    private router: Router ) {
     this.activatedRoute.params.subscribe(params => {
       if ( params['id'] !== 'nuevo') {
         // this.enterpriseO = this.enterpriseService.getEnterprise(params['id']).valueChanges();
@@ -64,17 +65,11 @@ export class JobofferListComponent implements OnInit {
     console.log('removido el elemento');
   }
 
-  displayCheck(row) {
-    return row.name !== 'Ethel Price';
-  }
-
-  verModal(row: Joboffer) {
-    console.log('row', row);
-    this.students = this.studentService.getStudentsInArray(row.applicants);
-    // .pipe(map(arr => {
-    //   console.log('llamado a la db');
-    //   return arr;
-    // }));
+  verModal(id: any) {
+    // console.log('row', row);
+    // this.students = this.studentService.getStudentsInArray(row.applicants);
+    console.log('id', id);
+    this.router.navigate(['/joboffer', id]);
   }
 
   updateFilter(event) {

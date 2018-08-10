@@ -5,6 +5,7 @@ import { Joboffer } from '../interfaces/joboffer.interface';
 import { Observable, of } from 'rxjs';
 import { map, switchMap, startWith, tap, filter } from 'rxjs/operators';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -52,6 +53,27 @@ export class JobofferService {
 
   getJoboffer(id: string) {
     return this.afs.doc<Joboffer>(`joboffers/${id}`);
+  }
+
+  // ----------------------------------------------------------------------------------------------------------------
+  // Programador: Félix Ehuan
+  // Fecha: 18/07/2018
+  // Función getJobofferData: Función que retorna una promesa con la data de la oferta de trabajo
+  // ----------------------------------------------------------------------------------------------------------------
+  getJobofferData(id: string) {
+    // tslint:disable-next-line:no-shadowed-variable
+    const promesa = new Promise((resolve, reject) => {
+      const JobofferURL = this.afs.doc<Joboffer>(`joboffers/${id}`);
+      JobofferURL.valueChanges().subscribe(
+          data =>  {
+            if (data) {
+              resolve(data);
+            } else {
+              resolve(null);
+            }
+          });
+    });
+      return promesa;
   }
 
   createJoboffer(joboffer: Joboffer) {

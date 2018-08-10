@@ -12,6 +12,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject();
   public loading = true;
   public user;
+  // tslint:disable-next-line:no-inferrable-types
   show: boolean = false;
 
   public role;
