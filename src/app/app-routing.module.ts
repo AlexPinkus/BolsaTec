@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AuthGuard } from './services/auth.guard';
+import { AuthGuard, NotAuthGuard } from './services/auth.guard';
 import { ProfileGuard } from './services/profile.guard';
+import { StudentGuard, NotStudentGuard } from './services/student.guard';
 import { IndexComponent } from './components/index/index.component';
 // Componentes de Students
 import { StudentRegisterComponent } from './components/student/student-register/student-register.component';
@@ -25,14 +26,18 @@ const routes: Routes = [
      { path: 'index', component: IndexComponent },
      { path: 'students', component: StudentsComponent },
      // Rutas de registro (creación en DB).
-     { path: 'register/student',   component: StudentRegisterComponent },
-     { path: 'register/employeer', component: EnterpriseRegisterComponent },
-     { path: 'register/joboffer',  component: JobofferRegisterComponent, canActivate: [AuthGuard]  },
+     { path: 'register/student',   component: StudentRegisterComponent, canActivate: [NotAuthGuard] },
+     { path: 'register/employeer', component: EnterpriseRegisterComponent, canActivate: [NotAuthGuard] },
+     { path: 'register/joboffer',  component: JobofferRegisterComponent, canActivate: [AuthGuard, NotStudentGuard]  },
+     // Rutas de perfiles
      { path: 'jobofferView',  component: JobofferViewComponent},
      { path: 'profile/student/:id', component: StudentProfileComponent, canActivate: [ProfileGuard] },
      { path: 'profile/enterprise/:id', component: EnterpriseProfileComponent, canActivate: [ProfileGuard] },
     // Ruta para listar las ofertas de trabajo de la empresa id.
-     { path: 'list/joboffer/:id', component: JobofferListComponent, canActivate: [ProfileGuard] },
+    // { path: 'list/joboffer/:id', component: JobofferListComponent, canActivate: [ProfileGuard] }
+     { path: 'list/joboffer/:id', component: JobofferListComponent, canActivate: [ProfileGuard]},
+     { path: 'list/joboffer', component: JobofferListComponent, canActivate: [StudentGuard] },
+
      { path: 'login', component: LoginComponent },
      { path: 'admin', component: StudentsAdminComponent },
      { path: '**', pathMatch: 'full', redirectTo: 'index' },
