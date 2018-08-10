@@ -4,6 +4,7 @@ import { Http, Headers } from '@angular/http';
 import { Student } from '../interfaces/student.interface';
 import { Observable, of } from 'rxjs';
 import { map, switchMap, startWith, tap, filter } from 'rxjs/operators';
+import { combineLatest } from 'rxjs/observable/combineLatest';
 
 @Injectable({
   providedIn: 'root'
@@ -41,19 +42,12 @@ export class StudentService {
     return this.afs.doc<Student>(`users/${id}`);
   }
 
-  // let students = getStudentsInArray(arreglo);
 
-  // <ngFor let student in students | async>
-
-  getStudentsInArray(students: Array<string>) {
-    let query = null;
-    students.forEach(student => {
-      query += query.where('uid', '==', student);
-    });
-    return this.afs.collection('users',
-    (ref) => // ref.where('role', '==', 'student')
-    query);
-    // return this.afs.doc<Student>(`users/${id}`);
+  getStudentsInArray(studentIds: Array<string>) {
+    const studentsDocs = studentIds.map(id => this.afs.doc<Student>(`users/${id}`).valueChanges());
+    return combineLatest<any[]>(studentsDocs);
+    // Lo siguiente es cuando se require combinar colecciones:
+    // .pipe(map(arr => arr.reduce((acc, cur) => acc.concat(cur) )));
   }
 
   createStudent(student: Student) {
