@@ -1,14 +1,16 @@
 import { Component } from "@angular/core";
 import { Joboffer } from "../../../interfaces/joboffer.interface";
+import { Enterprise } from "../../../interfaces/enterprise.interface";
 import { JobofferService } from "../../../services/joboffer.service";
-import { AuthService } from "../../../services/auth.service";
+import { EnterpriseService } from "../../../services/enterprise.service";
+
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
 import { FormBuilder, Validators, FormGroup } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
-import { StudentService } from "../../../services/student.service";
 import { Observable } from "rxjs";
-import { EnterpriseService } from "../../../services/enterprise.service";
-import { Enterprise } from "../../../interfaces/interfaces";
+
+import { map, take, tap, finalize } from 'rxjs/operators';
+
 declare var $: any;
 @Component({
   selector: "app-joboffer-view",
@@ -17,85 +19,58 @@ declare var $: any;
 })
 export class JobofferViewComponent {
 
-  public joboffer: Joboffer;
+  // public joboffer: Joboffer;
   public formulario: FormGroup;
   public loaded = false;
   public successoffer = false;
+  public isIdValid = false;
+  public exists: boolean;
   mensaje_modal: string;
   licenciaturas: string[] = [];
   role: string;
   students: any;
-  joboffer2: Observable<any>;
-  enterprise: Enterprise;
+  public joboffer: Observable<Joboffer>;
+  public enterprise: Observable<Enterprise>;
+
   constructor(
-    private jobofferService: JobofferService,
-    public authService: AuthService,
     private formBuilder: FormBuilder,
-    private rutaURL: Router,
     private activatedRoute: ActivatedRoute,
-    private modalService: NgbModal,
-    private studentService: StudentService,
-    private enterpriseService: EnterpriseService
+    private jobofferService: JobofferService,
+    private enterpriseService: EnterpriseService,
+    private modalService: NgbModal
   ) {
     // Primero se crea el formulario
     this.createform();
-    // Se obtiene el valor del UID de la oferta y se obtiene la oferta
-    // ..
-    // ..
-    // Se busca la licenciatura teniendo el objeto de la oferta
-    //  this.licenciaturas = this.getCarreraName(this.joboffer.bachelors);
-    // // Se obtienen los estudiantes postulados a la oferta si el usuario es empresa
-    //   if (this.authService.userDoc.role == 'enterprise') {
-    //     this.role = 'enterprise';
-    //   }
+
     let id_oferta: string;
     this.activatedRoute.params.subscribe(params => {
       id_oferta = params["id"];
+      this.joboffer = this.jobofferService.getJoboffer(id_oferta).valueChanges().pipe(
+        take(1),
+        tap(joboffer => {
+          // Aqui podemos haccer un filtro si el id fue válido
+          if (!!joboffer) {
+            this.licenciaturas = this.getCarreraName(joboffer.bachelors);
+            this.enterprise = this.enterpriseService.getEnterprise(joboffer.idEnterprise).valueChanges().pipe(
+              take(1),
+              tap(isthere => {
+                this.exists = !!isthere;
+                console.log('exists :', this.exists);
+              })
+            );
+          } else {
+            console.log('No existe');
+          }
+        })
+      );
     });
-
-    console.log(id_oferta);
-    // this.jobofferService.getJoboffer(id_oferta).valueChanges().subscribe(
-    //   data => {
-    //     this.joboffer = data;
-    //     this.licenciaturas = this.getCarreraName(data.bachelors);
-    //     this.loaded = true;
-    //     console.log(this.joboffer);
-    //   });
-
-    this.jobofferService.getJobofferData(id_oferta).then((data: Joboffer) => {
-      this.joboffer = data;
-      this.licenciaturas = this.getCarreraName(data.bachelors);
-      const id_enterprise = this.joboffer.idEnterprise;
-      this.enterpriseService
-        .getEnterpriseData(id_enterprise)
-        .then((res: Enterprise) => {
-          this.enterprise = res;
-          this.loaded = true;
-        });
-    });
-    // this.joboffer = this.jobofferService.getJoboffer(id_oferta).valueChanges();
-
-    // this.joboffer.subscribe(  data => {
-    //       this.licenciaturas = this.getCarreraName(data.bachelors);
-    //     });
   }
 
-  // ----------------------------------------------------------------------------------------------------------------
-  // Programador: Félix Ehuan
-  // Fecha: 18/07/2018
-  // Función createform: Crea el formulario para la postulación
-  // ----------------------------------------------------------------------------------------------------------------
   createform() {
     this.formulario = this.formBuilder.group({
       postulación: ["", Validators.required]
     });
   }
-  // ----------------------------------------------------------------------------------------------------------------
-  // Programador: Félix Ehuan
-  // Fecha: 18/07/2018
-  // Función getCarreraName: Obtiene el nombre de la carrera dado el key
-  // del arreglo bachelors en la oferta de trabajo, puede ser invocado cuando se obtiene el objeto del firebase
-  // ----------------------------------------------------------------------------------------------------------------
 
   getCarreraName(array) {
     const result: string[] = [];

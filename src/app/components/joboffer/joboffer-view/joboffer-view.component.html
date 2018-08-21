@@ -1,27 +1,29 @@
-<div class="card" *ngIf="loaded; else loading">
-    <h5 class="card-header">{{enterprise.comercialName}}</h5>
-    <div class="card-body">
-        <h5 class="card-title"><strong>{{joboffer.position}}</strong></h5>
-        <p class="card-text">{{joboffer.description}}</p>
-        <p class="card-text"><strong>Número de vacantes:</strong> <span class="badge badge-secondary">{{joboffer.vacantNumber}}</span></p>
-        <p class="card-text"><strong>Años de Experiencia:</strong> <span class="badge badge-secondary"> {{joboffer.experience}}</span> </p>
-        <p class="card-text"><strong>Salario:</strong> <span class="badge badge-secondary"> {{joboffer.salary | currency}}</span> </p>
-        <p class="card-text"><strong>Aptitudes:</strong></p>
-        <ul class="card-text" *ngIf="joboffer.aptitudes">
-            <li *ngFor="let aptitud of joboffer.aptitudes">{{aptitud | titlecase}}</li>
-        </ul>
-        <p class="card-text"><strong> Licenciaturas buscadas:</strong></p>
-        <ul class="card-text">
-            <li *ngFor="let licenciatura of licenciaturas">{{licenciatura}}</li>
-        </ul>
-        <p class="card-text"><strong>Inglés</strong> </p>
-        <ul class="card-text">
-            <li>Hablado: <span class="badge badge-secondary">{{joboffer.languages.english.spoken}}%</span></li>
-            <li>Escrito: <span class="badge badge-secondary">{{joboffer.languages.english.written}}%</span></li>
-            <li>Traducción: <span class="badge badge-secondary">{{joboffer.languages.english.translation}}%</span></li>
-        </ul>
-    </div>
-</div>
+<ng-container *ngIf="joboffer | async as offer; else loading">
+  <div class="card" *ngIf="enterprise | async as ent; else loading">
+      <h5 class="card-header">{{ent.comercialName}}</h5>
+      <div class="card-body">
+          <h5 class="card-title"><strong>{{offer.position}}</strong></h5>
+          <p class="card-text">{{offer.description}}</p>
+          <p class="card-text"><strong>Número de vacantes:</strong> <span class="badge badge-secondary">{{offer.vacantNumber}}</span></p>
+          <p class="card-text"><strong>Años de Experiencia:</strong> <span class="badge badge-secondary"> {{offer.experience}}</span> </p>
+          <p class="card-text"><strong>Salario:</strong> <span class="badge badge-secondary"> {{offer.salary | currency}}</span> </p>
+          <p class="card-text"><strong>Aptitudes:</strong></p>
+          <ul class="card-text" *ngIf="offer.aptitudes">
+              <li *ngFor="let aptitud of offer.aptitudes">{{aptitud | titlecase}}</li>
+          </ul>
+          <p class="card-text"><strong> Licenciaturas buscadas:</strong></p>
+          <ul class="card-text">
+              <li *ngFor="let licenciatura of licenciaturas">{{licenciatura}}</li>
+          </ul>
+          <p class="card-text"><strong>Inglés</strong> </p>
+          <ul class="card-text">
+              <li>Hablado: <span class="badge badge-secondary">{{offer.languages.english.spoken}}%</span></li>
+              <li>Escrito: <span class="badge badge-secondary">{{offer.languages.english.written}}%</span></li>
+              <li>Traducción: <span class="badge badge-secondary">{{offer.languages.english.translation}}%</span></li>
+          </ul>
+      </div>
+  </div>
+</ng-container>
 <br>
 
 <div *ngIf="successoffer == false">
@@ -63,9 +65,6 @@
     <!-- </div> -->
     <!-- </div> -->
 </ng-template>
-
-
-
 
 <ng-template #loading>
     <div>
