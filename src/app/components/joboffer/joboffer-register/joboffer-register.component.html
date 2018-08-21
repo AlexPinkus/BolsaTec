@@ -181,12 +181,12 @@
 </div>
 
 
-<ng-template #modalGuardar let-c="close" let-d="dismiss">
+<ng-template #modalGuardar let-c="close()" let-d="dismiss()">
     <!-- <div class="modal fade "> -->
     <!-- <div class="modal-content"> -->
     <div class="modal-header">
         <h4 class="modal-title">Guardar cambios</h4>
-        <button type="button" class="close" (click)="d()" aria-hidden="true">&times;</button>
+        <button type="button" class="close" (click)="d" aria-hidden="true">&times;</button>
     </div>
     <div class="modal-body">
         <h6>{{mensaje_modal}}</h6>
@@ -194,8 +194,8 @@
     <div class="modal-footer">
         <!-- <a (click)="d()" class="btn btn-info" data-dismiss="modal">Cancelar</a> -->
         <!-- <a (click)="c()" class="btn btn-verde">Guardar</a> -->
-        <button type="button" class="btn btn-morado" (click)="d()">Cancelar</button>
-        <button type="button" class="btn btn-info" (click)="c()">Guardar</button>
+        <button type="button" class="btn btn-morado" (click)="d">Cancelar</button>
+        <button type="button" class="btn btn-info" (click)="c">Guardar</button>
     </div>
     <!-- </div> -->
     <!-- </div> -->

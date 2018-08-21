@@ -50,41 +50,42 @@ export class EnterpriseRegisterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute) {
-    this.formulario = this.formBuilder.group({
-      // Hay que agregrar verificación si existen usuarios:
-      email: ['', Validators.compose([Validators.required, Validators.email])],
-      email_confirm: ['', Validators.compose([Validators.required, this.match('email')])],
+      this.formulario = this.formBuilder.group({
+        // Hay que agregrar verificación si existen usuarios:
+        email: ['', Validators.compose([Validators.required, Validators.email])],
+        email_confirm: ['', Validators.compose([Validators.required, this.match('email')])],
 
-      password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/)])],
-      password_confirm: ['', Validators.compose([Validators.required,  this.match('password')])],
-      // Datos contacto
-      firstName:      ['', Validators.required],
-      lastName:       ['', Validators.required],
-      middleName:     ['', Validators.required],
-      job:            ['', Validators.required],
-      department:     ['', Validators.required],
-      contactPhone:   ['', Validators.required],
-      contactAddress: ['', Validators.required],
+        password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/)])],
+        password_confirm: ['', Validators.compose([Validators.required,  this.match('password')])],
+        // Datos contacto
+        firstName:      ['', Validators.required],
+        lastName:       ['', Validators.required],
+        middleName:     ['', Validators.required],
+        job:            ['', Validators.required],
+        department:     ['', Validators.required],
+        contactPhone:   ['', Validators.compose([Validators.required, Validators.pattern(/^[0-9]{8,10}/), Validators.max(9999999999)])],
+        contactAddress: ['', Validators.required],
 
-      // Datos de la empresa
-      comercialName:  ['', Validators.required],
-      bussinessName:  ['', Validators.required],
-      bussinessPhone: ['', Validators.required],
-      description:    ['', Validators.required],
-      bussinessTurn:  ['', Validators.required],
-      logo:           [''],
-      RFC: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z]{4}[0-9]{6}[a-zA-Z0-9]{3}/)])],
-      webURL: ['', Validators.compose([
-        Validators.pattern(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)])],
+        // Datos de la empresa
+        comercialName:  ['', Validators.required],
+        bussinessName:  ['', Validators.required],
+        bussinessPhone: ['', Validators.compose([Validators.required, Validators.pattern(/^[0-9]{8,10}/), Validators.max(9999999999)])],
+        description:    ['', Validators.required],
+        bussinessTurn:  ['', Validators.required],
+        logo:           [''],
+        // tslint:disable-next-line:max-line-length
+        RFC: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z]{4}[0-9]{6}[a-zA-Z0-9]{3}/)])],
+        webURL: ['', Validators.compose([
+          Validators.pattern(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)])],
 
-      // Dirección de la empresa
-      mainStreet:   ['', Validators.required],
-      crossings:    ['', Validators.required],
-      postalCode:   ['', Validators.compose([Validators.required, Validators.minLength(4)])],
-      city:         ['', Validators.required],
-      municipality: ['', Validators.required],
-      state:        ['', Validators.required],
-    });
+        // Dirección de la empresa
+        mainStreet:   ['', Validators.required],
+        crossings:    ['', Validators.required],
+        postalCode:   ['', Validators.compose([Validators.required, Validators.pattern(/^[0-9]{5}/), Validators.max(99999)])],
+        city:         ['', Validators.required],
+        municipality: ['', Validators.required],
+        state:        ['', Validators.required],
+      });
   }
 
   ngOnInit() {
@@ -104,7 +105,7 @@ export class EnterpriseRegisterComponent implements OnInit {
           const checkValue  = control.parent.controls[controlKey].value;
           if (control.value !== checkValue) {
             return {
-              match: false
+              match: true
             };
           }
         }
@@ -130,7 +131,12 @@ export class EnterpriseRegisterComponent implements OnInit {
     });
 
   }
-
+  resetForm() {
+    this.formulario.reset();
+    setTimeout(() => {
+      this.router.navigate(['index']);
+    }, 400);
+  }
   private assign(object: any, objectToCopy: any) {
     for (const key in object) {
       if (object.hasOwnProperty(key)) {

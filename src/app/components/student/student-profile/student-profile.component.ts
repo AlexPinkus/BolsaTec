@@ -79,31 +79,41 @@ export class StudentProfileComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder) {
       this.formulario = this.formBuilder.group({
+        // Datos de usuario
         email: ['', Validators.compose([Validators.required, Validators.email])],
         email_confirm: ['', Validators.compose([Validators.required, this.match('email')])],
         password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/),
-        this.match('password_confirm')])],
+          ])],
         password_confirm: ['', Validators.compose([Validators.required, this.match('password')])],
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
-        middleName: ['', Validators.required],
-        sex: ['', Validators.required],
-        age: ['', Validators.required],
+
+        // Información Personal
+        firstName:     ['', Validators.required],
+        middleName:    ['', Validators.required],
+        lastName:      ['', Validators.required],
+        sex:           ['', Validators.required],
+        age:           ['', Validators.required],
         maritalStatus: ['', Validators.required],
-        mainStreet: ['', Validators.required],
-        crossings: ['', Validators.required],
-        postalCode: ['', Validators.compose([Validators.required, Validators.minLength(4)])],
-        city: ['', Validators.required],
+
+        // Dirección
+        mainStreet:   ['', Validators.required],
+        crossings:    ['', Validators.required],
+        postalCode:   ['', Validators.compose([Validators.required, Validators.pattern(/^[0-9]{5}/), Validators.max(99999)])],
+        city:         ['', Validators.required],
         municipality: ['', Validators.required],
-        state: ['', Validators.required],
-        idStudent: ['', Validators.compose([Validators.required, Validators.pattern(/^E{1}[0-9]{7}/)])],
-        bachelor: ['', Validators.required],
+        state:        ['', Validators.required],
+
+        // Información académica
+        idStudent:  ['', Validators.compose([Validators.required, Validators.pattern(/^E{1}[0-9]{7}/), Validators.maxLength(9)])],
+        bachelor:   ['', Validators.required],
         speciality: ['', Validators.required],
-        master: ['', Validators.required],
-        phd: ['', Validators.required],
-        spoken: ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
-        written: ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
+        master:     ['', Validators.required],
+        phd:        ['', Validators.required],
+
+        // Inglés
+        spoken:      ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
+        written:     ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
         translation: ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
+
       });
       // Obtenemos los parámetros de las rutas...
       this.activatedRoute.params.subscribe(params => {

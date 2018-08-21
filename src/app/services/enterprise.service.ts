@@ -34,6 +34,7 @@ export class EnterpriseService {
     );
   }
 
+
   getEnterprise(id: string) {
     return this.afs.doc<Enterprise>(`users/${id}`);
   }

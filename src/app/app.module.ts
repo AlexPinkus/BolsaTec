@@ -56,7 +56,7 @@ import { JobofferListComponent } from './components/joboffer/joboffer-list/jobof
 import { JobofferRegisterComponent } from './components/joboffer/joboffer-register/joboffer-register.component';
 import { JobofferEditComponent } from './components/joboffer/joboffer-edit/joboffer-edit.component';
 import { JobofferViewComponent } from './components/joboffer/joboffer-view/joboffer-view.component';
-
+import { JobofferMainComponent } from './components/joboffer/joboffer-main/joboffer-main.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +79,8 @@ import { JobofferViewComponent } from './components/joboffer/joboffer-view/jobof
     JobofferEditComponent,
     JobofferViewComponent,
     LoaderComponent,
-    StudentsAdminComponent
+    StudentsAdminComponent,
+    JobofferMainComponent
   ],
   imports: [
     BrowserModule,

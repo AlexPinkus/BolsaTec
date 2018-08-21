@@ -114,7 +114,7 @@ export class StudentRegisterComponent implements OnInit {
         email: ['', Validators.compose([Validators.required, Validators.email])],
         email_confirm: ['', Validators.compose([Validators.required, this.match('email')])],
         password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/),
-          this.match('password_confirm')])],
+          ])],
         password_confirm: ['', Validators.compose([Validators.required, this.match('password')])],
 
         // Información Personal
@@ -128,13 +128,13 @@ export class StudentRegisterComponent implements OnInit {
         // Dirección
         mainStreet:   ['', Validators.required],
         crossings:    ['', Validators.required],
-        postalCode:   ['', Validators.compose([Validators.required, Validators.minLength(4)])],
+        postalCode:   ['', Validators.compose([Validators.required, Validators.pattern(/^[0-9]{5}/), Validators.max(99999)])],
         city:         ['', Validators.required],
         municipality: ['', Validators.required],
         state:        ['', Validators.required],
 
         // Información académica
-        idStudent:  ['', Validators.compose([Validators.required, Validators.pattern(/^E{1}[0-9]{7}/)])],
+        idStudent:  ['', Validators.compose([Validators.required, Validators.pattern(/^E{1}[0-9]{7}/), Validators.maxLength(9)])],
         bachelor:   ['', Validators.required],
         speciality: ['', Validators.required],
         master:     ['', Validators.required],
@@ -159,7 +159,7 @@ export class StudentRegisterComponent implements OnInit {
           const checkValue  = control.parent.controls[controlKey].value;
           if (control.value !== checkValue) {
             return {
-              match: false
+              match: true
             };
           }
         }

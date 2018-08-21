@@ -21,6 +21,7 @@ import { LoginComponent } from './components/login/login.component';
 
 import { StudentsAdminComponent } from './components/administrador/students-admin/students-admin.component';
 import { JobofferViewComponent } from './components/joboffer/joboffer-view/joboffer-view.component';
+import { JobofferMainComponent } from './components/joboffer/joboffer-main/joboffer-main.component';
 
 const routes: Routes = [
      { path: 'index', component: IndexComponent },
@@ -42,6 +43,7 @@ const routes: Routes = [
 
      { path: 'login', component: LoginComponent },
      { path: 'admin', component: StudentsAdminComponent },
+     { path: 'ofertas', component: JobofferMainComponent },
      { path: '**', pathMatch: 'full', redirectTo: 'index' },
 
     // { path: 'path/:routeParam', component: MyComponent },

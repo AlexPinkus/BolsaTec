@@ -1,7 +1,7 @@
 // Link del generador de  navbar
 // https://work.smarchal.com/twbscolor/4.0.0/scss/7e0827d19800fffffed7d7d71
 @import '../../../styles.scss';
-$bgDefault: #7e0827;
+$bgDefault: #223865;
 $bgHighlight: #d19800;
 $colDefault: #fffffe;
 $colHighlight: #d7d7d7;
@@ -69,13 +69,13 @@ $dropDown: true;
         border-color: $bgHighlight;
     }
     .navbar-toggler-icon {
-      color: $colDefault;
-      &:hover,
-      &:focus {
-          color: $colHighlight;
-      }
+        color: $colDefault;
+        &:hover,
+        &:focus {
+            color: $colHighlight;
+        }
     }
-    .navbar-collapse{}
+    .navbar-collapse {}
     .navbar-form {
         border-color: $colDefault;
     }
