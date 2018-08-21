@@ -1,0 +1,31 @@
+.card {
+    background-color: #fefefe;
+    margin-right: 10px;
+    margin-bottom: 20px;
+}
+
+
+/* Centre and crop an image with a fixed height */
+
+.crop {
+    position: relative;
+    /* provide a positioning context */
+    overflow: hidden;
+    height: 200px;
+    /* make space */
+}
+
+.crop img {
+    position: absolute;
+    left: -100%;
+    /* anchor the image corners outside the viewable area (increase for large images) */
+    right: -100%;
+    top: -100%;
+    bottom: -100%;
+    width: auto;
+    /* dynamic width based on viewable area */
+    height: 200px;
+    /* set height (swap these for variable height) */
+    margin: auto;
+    /* centre the image */
+}

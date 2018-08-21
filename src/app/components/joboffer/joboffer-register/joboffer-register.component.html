@@ -83,7 +83,7 @@
 
         <div class="form-row">
             <div class="col-md-12">
-                <button type="button" class="btn btn-rojo" (click)="agregaraptitud()"><i class="icon icon-visualizar ion-ios-add icon-medium p-2"> </i> Agregar aptitud al perfil</button>
+                <button type="button" class="btn btn-rojo" (click)="agregaraptitud()"><i class="icon icon-visualizar ion-ios-add p-2"> </i> Agregar aptitud al perfil</button>
 
             </div>
         </div>
@@ -95,7 +95,7 @@
                 <div formArrayName="aptitudes">
                     <div class="container-fluid d-flex" *ngFor="let aptitud of formulario.controls['aptitudes'].controls let i = index">
                         <div>
-                            <button class=" btn btn-danger " type="button " (click)="eliminaraptitud(i) " ngbTooltip="Eliminar Aptitud "><i class="icon icon-visualizar ion-ios-trash icon-medium p-2 "> </i></button>
+                            <button class=" btn btn-danger " type="button " (click)="eliminaraptitud(i) " ngbTooltip="Eliminar Aptitud "><i class="icon icon-visualizar ion-ios-trash p-2"> </i></button>
                         </div>
                         <div class=" ">
                             <input type="text " class="form-control" [formControlName]="i" [class.is-invalid]="!formulario.get( 'aptitudes').valid && formulario.get( 'aptitudes').dirty " [class.is-valid]="formulario.get( 'aptitudes').valid ">
@@ -110,7 +110,7 @@
         <br>
         <div class="form-row">
             <div class="col-md-12">
-                <button type="button" class="btn btn-rojo" (click)="agregarcarrera()"><i class="icon icon-visualizar ion-ios-add icon-medium p-2"> </i> Agregar carrera al perfil</button>
+                <button type="button" class="btn btn-rojo" (click)="agregarcarrera()"><i class="icon icon-visualizar ion-ios-add p-2"> </i> Agregar carrera al perfil</button>
 
             </div>
         </div>
@@ -122,7 +122,7 @@
                 <div formArrayName="bachelors">
                     <div class="container-fluid d-flex" *ngFor="let bachelors of formulario.controls['bachelors'].controls let i = index">
                         <div>
-                            <button class=" btn btn-danger " type="button " (click)="eliminarcarrera(i) " ngbTooltip="Eliminar licenciatura "><i class="icon icon-visualizar ion-ios-trash icon-medium p-2 "> </i></button>
+                            <button class=" btn btn-danger " type="button " (click)="eliminarcarrera(i) " ngbTooltip="Eliminar licenciatura "><i class="icon icon-visualizar ion-ios-trash p-2 "> </i></button>
                         </div>
                         <div class=" ">
                             <select class="custom-select select-tec mr-sm-2 " [formControlName]="i ">
@@ -153,12 +153,12 @@
 </div>
 
 
-<ng-template #modalGuardar let-c="close" let-d="dismiss">
+<ng-template #modalGuardar let-c="close()" let-d="dismiss()">
     <!-- <div class="modal fade "> -->
     <!-- <div class="modal-content"> -->
     <div class="modal-header">
         <h4 class="modal-title">Guardar cambios</h4>
-        <button type="button" class="close" (click)="d()" aria-hidden="true">&times;</button>
+        <button type="button" class="close" (click)="d" aria-hidden="true">&times;</button>
     </div>
     <div class="modal-body">
         <h6>{{mensaje_modal}}</h6>
@@ -166,8 +166,8 @@
     <div class="modal-footer">
         <!-- <a (click)="d()" class="btn btn-info" data-dismiss="modal">Cancelar</a> -->
         <!-- <a (click)="c()" class="btn btn-verde">Guardar</a> -->
-        <button type="button" class="btn btn-morado" (click)="d()">Cancelar</button>
-        <button type="button" class="btn btn-info" (click)="c()">Guardar</button>
+        <button type="button" class="btn btn-morado" (click)="d">Cancelar</button>
+        <button type="button" class="btn btn-info" (click)="c">Guardar</button>
     </div>
     <!-- </div> -->
     <!-- </div> -->

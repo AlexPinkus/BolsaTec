@@ -37,24 +37,25 @@ export class EnterpriseProfileComponent implements OnInit {
         middleName:     ['', Validators.required],
         job:            ['', Validators.required],
         department:     ['', Validators.required],
-        contactPhone:   ['', Validators.required],
+        contactPhone:   ['', Validators.compose([Validators.required, Validators.pattern(/^[0-9]{8,10}/), Validators.maxLength(10)])],
         contactAddress: ['', Validators.required],
 
         // Datos de la empresa
         comercialName:  ['', Validators.required],
         bussinessName:  ['', Validators.required],
-        bussinessPhone: ['', Validators.required],
+        bussinessPhone: ['', [Validators.required, Validators.pattern(/^[0-9]{8,10}/), Validators.maxLength(10)]],
         description:    ['', Validators.required],
         bussinessTurn:  ['', Validators.required],
         logo:           [''],
-        RFC: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z]{4}[0-9]{6}[a-zA-Z0-9]{3}/)])],
+        // tslint:disable-next-line:max-line-length
+        RFC: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z]{4}[0-9]{6}[a-zA-Z0-9]{3}/), Validators.maxLength(13)])],
         webURL: ['', Validators.compose([
           Validators.pattern(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)])],
 
         // Dirección de la empresa
         mainStreet:   ['', Validators.required],
         crossings:    ['', Validators.required],
-        postalCode:   ['', Validators.compose([Validators.required, Validators.minLength(4)])],
+        postalCode:   ['', Validators.compose([Validators.required, Validators.pattern(/^[0-9]{5}/)])],
         city:         ['', Validators.required],
         municipality: ['', Validators.required],
         state:        ['', Validators.required],
