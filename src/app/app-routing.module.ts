@@ -36,6 +36,8 @@ const routes: Routes = [
     // Ruta para listar las ofertas de trabajo de la empresa id.
     // { path: 'list/joboffer/:id', component: JobofferListComponent, canActivate: [ProfileGuard] }
      { path: 'list/joboffer/:id', component: JobofferListComponent, canActivate: [ProfileGuard]},
+     { path: 'joboffer/:id',  component: JobofferViewComponent, canActivate: [AuthGuard]  },
+     { path: 'jobofferView',  component: JobofferViewComponent},
      { path: 'list/joboffer', component: JobofferListComponent, canActivate: [StudentGuard] },
 
      { path: 'login', component: LoginComponent },
