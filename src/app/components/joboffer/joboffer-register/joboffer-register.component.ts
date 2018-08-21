@@ -99,14 +99,13 @@ export class JobofferRegisterComponent implements OnInit {
       aptitudes:    new FormArray([
         new FormControl('', Validators.required)
       ]),
-      experience:   ['', Validators.required],
       bachelors:  new FormArray([
         new FormControl('', Validators.required)
       ]),
-      written:   [''],
-      spoken:   [''],
-      translation:   [''],
-
+      experience:   ['', Validators.required],
+      written:      [''],
+      spoken:       [''],
+      translation:  [''],
     });
   }
 
