@@ -1,15 +1,15 @@
-<ng-container *ngIf="joboffer | async as offer; else loading">
-  <div class="card" *ngIf="enterprise | async as ent; else loading">
-      <h5 class="card-header">{{ent.comercialName}}</h5>
+<ng-container *ngIf="joboffer$ | async as joboffer; else loading">
+  <div class="card" *ngIf="enterprise$ | async as enterprise; else loading">
+      <h5 class="card-header">{{enterprise.comercialName}}</h5>
       <div class="card-body">
-          <h5 class="card-title"><strong>{{offer.position}}</strong></h5>
-          <p class="card-text">{{offer.description}}</p>
-          <p class="card-text"><strong>Número de vacantes:</strong> <span class="badge badge-secondary">{{offer.vacantNumber}}</span></p>
-          <p class="card-text"><strong>Años de Experiencia:</strong> <span class="badge badge-secondary"> {{offer.experience}}</span> </p>
-          <p class="card-text"><strong>Salario:</strong> <span class="badge badge-secondary"> {{offer.salary | currency}}</span> </p>
+          <h5 class="card-title"><strong>{{joboffer.position}}</strong></h5>
+          <p class="card-text">{{joboffer.description}}</p>
+          <p class="card-text"><strong>Número de vacantes:</strong> <span class="badge badge-secondary">{{joboffer.vacantNumber}}</span></p>
+          <p class="card-text"><strong>Años de Experiencia:</strong> <span class="badge badge-secondary"> {{joboffer.experience}}</span> </p>
+          <p class="card-text"><strong>Salario:</strong> <span class="badge badge-secondary"> {{joboffer.salary | currency}}</span> </p>
           <p class="card-text"><strong>Aptitudes:</strong></p>
-          <ul class="card-text" *ngIf="offer.aptitudes">
-              <li *ngFor="let aptitud of offer.aptitudes">{{aptitud | titlecase}}</li>
+          <ul class="card-text" *ngIf="joboffer.aptitudes">
+              <li *ngFor="let aptitud of joboffer.aptitudes">{{aptitud | titlecase}}</li>
           </ul>
           <p class="card-text"><strong> Licenciaturas buscadas:</strong></p>
           <ul class="card-text">
@@ -17,34 +17,68 @@
           </ul>
           <p class="card-text"><strong>Inglés</strong> </p>
           <ul class="card-text">
-              <li>Hablado: <span class="badge badge-secondary">{{offer.languages.english.spoken}}%</span></li>
-              <li>Escrito: <span class="badge badge-secondary">{{offer.languages.english.written}}%</span></li>
-              <li>Traducción: <span class="badge badge-secondary">{{offer.languages.english.translation}}%</span></li>
+              <li>Hablado: <span class="badge badge-secondary">{{joboffer.languages.english.spoken}}%</span></li>
+              <li>Escrito: <span class="badge badge-secondary">{{joboffer.languages.english.written}}%</span></li>
+              <li>Traducción: <span class="badge badge-secondary">{{joboffer.languages.english.translation}}%</span></li>
           </ul>
       </div>
   </div>
 </ng-container>
 <br>
 
-<div *ngIf="successoffer == false">
-    <form [formGroup]="formulario" (ngSubmit)="postularse(modalGuardar)">
-        <div class="form-row">
+<ng-container *ngIf="userRole$ | async as userRole; else loading">
+  <div [ngSwitch]="userRole">
+    <div *ngSwitchCase="'enterprise'">
+      <div *ngIf="students$ | async as students; else loading">
+        <!-- Si es enterprise mostramos la gente en  -->
+        <h3>Estudiantes postulados : </h3>
+        <ngx-datatable class="material" [rows]="students" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5">
+          <ngx-datatable-column name="Nombre" prop="firstName">
+            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row">
+              {{row.firstName}} {{row.middleName}} {{row.lastName}}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Carrera" prop="degree.bachelor"></ngx-datatable-column>
+          <ngx-datatable-column name="Correo Electrónico" prop="email"></ngx-datatable-column>
+          <ngx-datatable-column name="Teléfono" prop="phone"></ngx-datatable-column>
+          <ngx-datatable-column name="Acciones" prop="id">
+            <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row" let-group="group" let-rowHeight="rowHeight">
+              <a class="" (click)="downloadCV(row)" ngbTooltip="Descargar curriculum">
+                  <i class="icon icon-visualizar ion-ios-eye icon-x-small p-2"> </i>
+              </a>
+              <!-- <a class="" (click)="verModal(value)" ngbTooltip="Aprobar estudiante">
+                  <i class="icon icon-aprobar ion-ios-checkmark-circle icon-medium p-2"> </i>
+              </a>
+              <a class="" (click)="remove(value)" ngbTooltip="Eliminar solicitud">
+                  <i class="icon icon-eliminar ion-ios-trash icon-medium p-2"> </i>
+              </a> -->
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+    </div>
+    <div *ngSwitchCase="'student'">
+      <!-- Si es student mostramos para postularse  -->
+      <div *ngIf="successoffer == false">
+        <form [formGroup]="formulario" (ngSubmit)="postularse(modalGuardar)">
+          <div class="form-row">
             <div class="form-group col-md-12">
-                <!-- <label for="">Postularme a esta oferta</label> -->
-                <textarea class="form-control" formControlName="postulación" aria-label="With textarea" placeholder="Escribe un mensaje de postulación para que la empresa te conozca..."></textarea>
+              <!-- <label for="">Postularme a esta oferta</label> -->
+              <textarea class="form-control" formControlName="postulación" aria-label="With textarea"
+              placeholder="Escribe un mensaje de postulación para que la empresa te conozca..."></textarea>
             </div>
-        </div>
-        <div class="form-row">
+          </div>
+          <div class="form-row">
             <button class="btn btn-info ml-auto" type="submit">Postularme</button>
-        </div>
-    </form>
-</div>
+          </div>
+        </form>
+      </div>
+      <ngb-alert *ngIf="successoffer" type="success" [dismissible]="false">¡Tu oferta fue enviada exitosamente!</ngb-alert>
+    </div>
+    <div *ngSwitchDefault>Error</div>
+  </div>
+</ng-container>
 
-<ngb-alert *ngIf="successoffer" type="success" [dismissible]="false">¡Tu oferta fue enviada exitosamente!</ngb-alert>
-
-<!-- <div>
-    {{joboffer2 | async | json}}
-</div> -->
 
 <ng-template #modalGuardar let-c="close()" let-d="dismiss()">
     <!-- <div class="modal fade "> -->
@@ -66,6 +100,7 @@
     <!-- </div> -->
 </ng-template>
 
+<!-- Animación de cargando  -->
 <ng-template #loading>
     <div>
         Cargando...

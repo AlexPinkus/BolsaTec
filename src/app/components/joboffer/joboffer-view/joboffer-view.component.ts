@@ -3,6 +3,8 @@ import { Joboffer } from "../../../interfaces/joboffer.interface";
 import { Enterprise } from "../../../interfaces/enterprise.interface";
 import { JobofferService } from "../../../services/joboffer.service";
 import { EnterpriseService } from "../../../services/enterprise.service";
+import { StudentService } from "../../../services/student.service";
+import { AuthService } from "../../../services/auth.service";
 
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
 import { FormBuilder, Validators, FormGroup } from "@angular/forms";
@@ -28,15 +30,21 @@ export class JobofferViewComponent {
   mensaje_modal: string;
   licenciaturas: string[] = [];
   role: string;
-  students: any;
-  public joboffer: Observable<Joboffer>;
-  public enterprise: Observable<Enterprise>;
+
+  public joboffer$: Observable<Joboffer>;
+  public enterprise$: Observable<Enterprise>;
+  public students$: Observable<any[]>;
+  public userRole$: Observable<any>;
+
+  public variable: any;
 
   constructor(
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private jobofferService: JobofferService,
     private enterpriseService: EnterpriseService,
+    private studentService: StudentService,
+    private authService: AuthService,
     private modalService: NgbModal
   ) {
     // Primero se crea el formulario
@@ -45,20 +53,27 @@ export class JobofferViewComponent {
     let id_oferta: string;
     this.activatedRoute.params.subscribe(params => {
       id_oferta = params["id"];
-      this.joboffer = this.jobofferService.getJoboffer(id_oferta).valueChanges().pipe(
+      this.joboffer$ = this.jobofferService.getJoboffer(id_oferta).valueChanges().pipe(
         take(1),
         tap(joboffer => {
-          // Aqui podemos haccer un filtro si el id fue válido
+          // Filtramos para ver si el id fue válido
           if (!!joboffer) {
-            this.licenciaturas = this.getCarreraName(joboffer.bachelors);
-            this.enterprise = this.enterpriseService.getEnterprise(joboffer.idEnterprise).valueChanges().pipe(
+            this.userRole$ = this.authService.user.pipe(
               take(1),
-              tap(isthere => {
-                this.exists = !!isthere;
-                console.log('exists :', this.exists);
-              })
+              map(user => user.role)
             );
+            this.students$ = this.studentService.getStudentsInArray(joboffer.applicants);
+            this.licenciaturas = this.getCarreraName(joboffer.bachelors);
+            this.enterprise$ = this.enterpriseService.getEnterprise(joboffer.idEnterprise).valueChanges();
+            // .pipe(
+            //   take(1),
+            //   tap(isthere => {
+            //     this.exists = !!isthere;
+            //     console.log('exists :', this.exists);
+            //   })
+            // );
           } else {
+            // Regresa página 404 not found
             console.log('No existe');
           }
         })
@@ -143,4 +158,9 @@ export class JobofferViewComponent {
       reason => {}
     );
   }
+
+  downloadCV(value) {
+    console.log('value :', value);
+  }
+
 }
