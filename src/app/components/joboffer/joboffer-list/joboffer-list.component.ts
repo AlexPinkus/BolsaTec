@@ -1,42 +1,31 @@
 import { Component, OnInit } from '@angular/core';
+import { Joboffer } from '../../../interfaces/joboffer.interface';
 import { JobofferService } from '../../../services/joboffer.service';
-import { StudentService } from '../../../services/student.service';
 import { Observable } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
-import { map, switchMap, startWith, tap, filter } from 'rxjs/operators';
-import { Joboffer } from '../../../interfaces/joboffer.interface';
+
 @Component({
   selector: 'app-joboffer-list',
   templateUrl: './joboffer-list.component.html',
   styleUrls: ['./joboffer-list.component.scss']
 })
 export class JobofferListComponent implements OnInit {
-  rows = [];
   selected = [];
-  jobOffers: Observable<any[]>;
-  students: Observable<any[]>;
-  estudiantes = ['FzMQ0Xn59n0aEQkzGzSm', 'YmB0SIb9sKhELNsd2RbE', 'vtV4JEZRanhUVaLAbAIibSQZSSI3'];
+  jobOffers$: Observable<Joboffer[]>;
 
   constructor( private jobofferService: JobofferService,
-    private studentService: StudentService,
     private activatedRoute: ActivatedRoute,
     private router: Router ) {
     this.activatedRoute.params.subscribe(params => {
-      if ( params['id'] !== 'nuevo') {
-        // this.enterpriseO = this.enterpriseService.getEnterprise(params['id']).valueChanges();
-        this.jobOffers = this.jobofferService.getData(params['id']).pipe(
-          tap(jobs => {
-            this.rows = jobs;
-            console.log('jobs :', jobs);
-          })
-        );
-      }
+      // Siempre va a haber el id, no hace falta comprobación ...
+      this.jobOffers$ = this.jobofferService.getData(params['id']);
+      // if ( params['id'] !== 'nuevo') {
+      //   // this.enterpriseO = this.enterpriseService.getEnterprise(params['id']).valueChanges();
+      // }
     });
   }
 
   ngOnInit() {
-    // this.jobOffers = this.jobofferService.getData();
-    this.students = this.studentService.getStudentsInArray(this.estudiantes);
   }
 
   onSelect({ selected }) {
@@ -47,7 +36,7 @@ export class JobofferListComponent implements OnInit {
   }
 
   onActivate(event) {
-    console.log('Activate Event', event);
+    // console.log('Activate Event', event);
   }
 
   add() {
@@ -65,10 +54,7 @@ export class JobofferListComponent implements OnInit {
     console.log('removido el elemento');
   }
 
-  verModal(id: any) {
-    // console.log('row', row);
-    // this.students = this.studentService.getStudentsInArray(row.applicants);
-    console.log('id', id);
+  goToOffer(id: string) {
     this.router.navigate(['/joboffer', id]);
   }
 
