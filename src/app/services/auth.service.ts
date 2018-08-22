@@ -20,6 +20,7 @@ interface User {
 export class AuthService {
   public user: Observable<User | null>;
   public userDoc: any;
+  public isLogged: boolean;
 
   constructor(
     private afs: AngularFirestore,
@@ -30,9 +31,11 @@ export class AuthService {
         switchMap(user => {
           if (user) {
             // Si el usuario está logeado devolvemos su documento en la base de datos.
+            this.isLogged = true;
             return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
           } else {
             // Si el usuario no está logeado ...
+            this.isLogged = false;
             return of(null);
           }
         }),
@@ -40,7 +43,8 @@ export class AuthService {
         tap(user => {
           this.userDoc = user;
           // if (!user) { this.userStatus = 'loaded'; }
-          console.log('this.userDoc :', this.userDoc);
+          console.log('llamada a la db');
+          // console.log('this.userDoc :', this.userDoc);
         }),
         // startWith(JSON.parse(localStorage.getItem('user')))
       );
@@ -53,14 +57,13 @@ export class AuthService {
 
       // Se crea un usuario a partir de un email y contraseña
       this.afAuth.auth.createUserWithEmailAndPassword(email, password).then(credential => {
-        // Notificamos de la creación del usuario en google Firebase
-        alert('Nuevo usuario creado');
         // Se envía el correo de verificación antes de continuar
         credential.user.sendEmailVerification().then(() => {
           // El correo de verificación se envió correctamente
           console.log('correo enviado');
+
+          // Sacamos al usuario (el create lo logea automáticamente)
           this.logout().then(() => {
-            // Sacamos al usuario (el create lo logea automáticamente)
             resolve (credential);
           }).catch((error) => {
             // Hubo error al sacar al usuario
@@ -71,6 +74,7 @@ export class AuthService {
           reject(error);
         });
       }).catch(error => {
+        reject(error);
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -94,7 +98,7 @@ export class AuthService {
             break;
         }
         // Cambiar la alerta por un manejo más amigable de error para el usuario.
-        alert(errorMessage);
+        // alert(errorMessage);
 
         // Para debuggear...
         console.log('errorCode :', errorCode);
@@ -111,11 +115,11 @@ export class AuthService {
       if (!credential.user.emailVerified) {
         this.logout().then(() => {
         // Aqui necesitamos un modal que le pregunte al usuario si quiere que le enviemos el correo
-        alert('Por favor verifique su correo antes de logearse...');
-          credential.user.sendEmailVerification();
+        // alert('Por favor verifique su correo antes de logearse...');
+        credential.user.sendEmailVerification();
         });
       } else {
-        alert('Bienvenido' + credential.user.displayName);
+        // alert('Bienvenido' + credential.user.displayName);
         return credential;
       }
       // return this.updateUserData(credential.user);
@@ -134,7 +138,7 @@ export class AuthService {
           break;
         case 'auth/user-not-found':
         // Thrown if there is no user corresponding to the given email.
-        alert('El usuario no exise');
+        // alert('El usuario no exise');
           break;
         case 'auth/wrong-password':
         // Thrown if the password is invalid for the given email, or the account corresponding to the email does not have a password set.
@@ -143,7 +147,7 @@ export class AuthService {
           break;
       }
       // Cambiar la alerta por un manejo más amigable de error para el usuario.
-      alert(errorMessage);
+      // alert(errorMessage);
 
       // Para debuggear...
       console.log('errorCode :', errorCode);
@@ -156,7 +160,7 @@ export class AuthService {
     // this.fsuser = {};
     return this.afAuth.auth.signOut().then(function() {
       // Sign-out successful.
-      alert('Adios');
+      // alert('Adios');
     }).catch(function(error) {
       // An error happened.
       const errorCode = error.code;
@@ -198,7 +202,7 @@ export class AuthService {
                 break;
             }
             // Cambiar la alerta por un manejo más amigable de error para el usuario.
-            alert(errorMessage);
+            // alert(errorMessage);
             // Para debuggear...
             console.log('errorCode :', errorCode);
             console.log('errorMessage :', errorMessage);
