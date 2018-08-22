@@ -6,6 +6,8 @@ import { StudentService } from '../../../services/student.service';
 import { AuthService } from '../../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from 'rxjs';
+
 declare var $: any;
 @Component({
   selector: 'app-studentregister',
@@ -13,9 +15,9 @@ declare var $: any;
   styleUrls: ['./student-register.component.scss']
 })
 export class StudentRegisterComponent implements OnInit {
-
-  public valid_form: boolean;
+  public success: boolean;
   public formulario: FormGroup;
+
   public genders = ['Hombre', 'Mujer'];
   public maritalStatuses = ['Soltero(a)', 'Casado(a)'];
   public bachelors = [
@@ -34,14 +36,7 @@ export class StudentRegisterComponent implements OnInit {
     'Licenciatura en Administración en Educación a Distancia'
   ];
 
-
-  password: string;
-  nuevo = false;
-  id: string;
-  closeResult: string;
-  mensaje_modal: string;
-  flag_exitModal = false;
-  successregister = false;
+  public modalMessage: string;
 
   private student: Student = {
     idStudent:  'Matricula',
@@ -83,6 +78,13 @@ export class StudentRegisterComponent implements OnInit {
     role: 'student'
   };
 
+    // Main task
+    task: AngularFireUploadTask;
+
+    // Download URL
+    downloadURL$: Observable<string>;
+
+
   // Posibles errores de validación...
   formErrors = {
     'email': '',
@@ -103,9 +105,9 @@ export class StudentRegisterComponent implements OnInit {
   };
 
   constructor(private studentService: StudentService,
+    private storage: AngularFireStorage,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private modalService: NgbModal) {
       // Aquí se colocan todos los elementos del formulario
@@ -144,12 +146,10 @@ export class StudentRegisterComponent implements OnInit {
         spoken:      ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
         written:     ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
         translation: ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
-
       });
     }
 
   ngOnInit() {
-
   }
 
   match(controlKey: string) {
@@ -167,59 +167,44 @@ export class StudentRegisterComponent implements OnInit {
     };
   }
 
-  register( ) {
-    this.assign(this.student, this.formulario.value);
-    this.student.createdOn = Date.now();
-    console.log(this.student);
+  register(registerModal) {
+    this.modalMessage = '¿Deseas registrarte?';
+    // El modal se invoca con una promesa que se resuelve si el modal es aceptado o se reachaza si es cerrado
+    this.modalService.open(registerModal).result.then(() => {
+      // Aquí se incluye la lógica cuando el modal ha sido aceptado
 
-    this.authService.signup(this.student.email, 'password').then(credential => {
-      this.student.uid = credential.user.uid;
-      this.studentService.createStudent(this.student).then(smt => {
-        this.successregister = true;
-        console.log('smt :', smt);
-        console.log('Registrado');
-            setTimeout(() => {
-              this.router.navigate(['/index']);
-            }, 3000);
+      // Crear usuario en firebase auth.
+      this.authService.signup(this.formulario.value.email, this.formulario.value.password).then(credential => {
+        // Se asignan los valores del formulario al objeto student.
+        this.assign(this.student, this.formulario.value);
+
+        // Propiedades adicionales a incluir.
+        this.student.createdOn = Date.now();
+        this.student.uid = credential.user.uid;
+
+        // Crear student en la base de datos
+        this.studentService.createStudent(this.student).then(smt => {
+          this.success = true;
+          setTimeout(() => {
+            this.router.navigate(['/index']);
+          }, 3000);
+        }).catch((err) => {
+          this.success = false;
         });
+      })
+      .catch((err) => {
+        this.success = false;
+      });
+    }, (reason) => {
+      // Si el usuario oprime cancelar
     });
   }
+
 
   cancelar( ) {
     this.formulario.reset();
     // this.router.navigate(['/index']);
   }
-
-// --------------------------------------------------------------
-// Programador: Félix Ehuan
-// Fecha: 18/07/2018
-// Función open: Abre un nuevo modal, recibe cómo parámetro un template de angular
-// tiene una promesa con resolve si el modal se cierra con la función close (guardar datos)
-// tiene una promesa con reject  si el modal se cierra con la función dismiss (cancelar)
-  open(modalConfirmacion) {
-    this.mensaje_modal = '¿Deseas registrarte?';
-
-    this.modalService.open(modalConfirmacion).result.then(() => {
-      // $.bigBox({
-      //   title: 'Solicitud enviada',
-      //   content: 'Tu perfil será revisado por el administrador de esta página,' +
-      //   'se te notificará por correo electrónico cuando tu solicitud sea aprobada',
-      //   fa: 'fa-save fa-lg',
-      //   tabicon: false,
-      //   sound: false,
-      //   color: '#82ce34',
-      //   timeout: 4000,
-      //   delay: 0,
-      //   });
-      this.register();
-      // this.studentService.leerJSONStudents();
-
-      //  const notificacion = this.modalService.open(modalNotificacion);
-    }, (reason) => {
-
-    });
-  }
-// --------------------------------------------------------------
 
 
   private getDismissReason(reason: any): string {

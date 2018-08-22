@@ -12,6 +12,7 @@ declare var $: any;
   styleUrls: ['./joboffer-register.component.scss']
 })
 export class JobofferRegisterComponent implements OnInit {
+  public success: boolean;
   public valid_form: boolean;
   public formulario: FormGroup;
   public joboffer: Joboffer = {
@@ -78,7 +79,6 @@ export class JobofferRegisterComponent implements OnInit {
   };
   carreras_selected: any[];
   mensaje_modal: string;
-  // @Input() ruta: string;
 
   constructor( private jobofferService: JobofferService,
     public authService: AuthService,
@@ -121,54 +121,22 @@ export class JobofferRegisterComponent implements OnInit {
   }
 
   register(userId, modalConfirmacion) {
-    // Esta es la primera forma en la que se puede hacer...
-    // es más rápida y elegante pero podría ser propensa a errores
-
-    // Borramos los valores que no sirven de nada ...
-    // delete this.formulario.value.email;
-    // this.student = this.formulario.value as Enterprise;
-
-    // Está es la segunda y es a prueba de fallas:
-
-    // for (const key in this.student) {
-    //   if (this.student.hasOwnProperty(key)) {
-    //       this.student[key] = this.formulario.value[key];
-    //   }
-    // }
-    // this.student.createdOn = Date.now();
-    // this.student.isActive = false;
-
-    console.log( this.formulario.value );
     // insertando
     this.mensaje_modal = '¿Deseas publicar esta oferta de trabajo?';
     // El modal se invoca con una promesa que se resuelve si el modal es aceptado o se reachaza si es cerrado
     this.modalService.open(modalConfirmacion).result.then(() => {
       // Aquí se incluye la lógica cuando el modal ha sido aceptado
+      this.assign(this.joboffer, this.formulario.value);
       this.joboffer.idEnterprise = userId;
       this.joboffer.state = 'active';
       this.jobofferService.createJoboffer(this.joboffer).then(result => {
-        // Cuando la oferta se ha realizado se lanza el plugin de notificaciones
-        $.bigBox({
-          title: 'Oferta realizada',
-          content: 'Tu oferta ha sido realizada, ' +
-          'esta oferta ya está disponible para que los egresados puedan consultarla',
-          fa: 'fa-save fa-lg',
-          tabicon: false,
-          sound: false,
-          color: '#82ce34',
-          timeout: 4000,
-          delay: 0.5,
-          });
-        console.log('result :', result);
-        console.log('Creado');
+        this.success = true;
+      }).catch(err => {
+        this.success = false;
       });
-
-      //  const notificacion = this.modalService.open(modalNotificacion);
-
     }, (reason) => {
-
+      // Si el usuario oprime cancelar
     });
-
   }
 
   cancel( ) {
@@ -217,13 +185,16 @@ export class JobofferRegisterComponent implements OnInit {
 
     });
   }
-//   function buscar_item_por_id(id){
 
-//     return items.find(function(item){
-//         return item.id === id;
-//     });
-
-// }
-
-
+  private assign(object: any, objectToCopy: any) {
+    for (const key in object) {
+      if (object.hasOwnProperty(key)) {
+        if ( typeof object[key] === 'object') {
+          this.assign(object[key], objectToCopy);
+        } else if (objectToCopy.hasOwnProperty(key)) {
+          object[key] = objectToCopy[key];
+        }
+      }
+    }
+  }
 }

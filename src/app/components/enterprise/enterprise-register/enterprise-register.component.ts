@@ -4,6 +4,7 @@ import { Enterprise } from '../../../interfaces/enterprise.interface';
 import { EnterpriseService } from '../../../services/enterprise.service';
 import { AuthService } from '../../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-enterpriseregister',
@@ -11,6 +12,9 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./enterprise-register.component.scss']
 })
 export class EnterpriseRegisterComponent implements OnInit {
+  public success: boolean;
+  public modalMessage: string;
+
 
   public read_flag: boolean;
   public valid_form: boolean;
@@ -49,7 +53,8 @@ export class EnterpriseRegisterComponent implements OnInit {
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute: ActivatedRoute,
+    private modalService: NgbModal) {
       this.formulario = this.formBuilder.group({
         // Hay que agregrar verificación si existen usuarios:
         email: ['', Validators.compose([Validators.required, Validators.email])],
@@ -113,30 +118,45 @@ export class EnterpriseRegisterComponent implements OnInit {
     };
   }
 
-  register() {
-    this.assign(this.enterprise, this.formulario.value);
-    this.enterprise.createdOn = Date.now();
-    this.enterprise.isActive = true;
-    console.log(this.enterprise);
-    // insertando
-    this.authService.signup(this.enterprise.email, 'password').then(credential => {
-      alert('Usuario registrado :');
-      this.enterprise.uid = credential.user.uid;
-      // const newStudent :
-      this.enterpriseService.createEnterprise(this.enterprise).then(smt => {
-        console.log('smt :', smt);
-        console.log('Registrado');
-        this.router.navigate(['/index']);
-      });
-    });
+  register(registerModal) {
+    this.modalMessage = '¿Deseas registrarte?';
+    // El modal se invoca con una promesa que se resuelve si el modal es aceptado o se reachaza si es cerrado
+    this.modalService.open(registerModal).result.then(() => {
+      // Aquí se incluye la lógica cuando el modal ha sido aceptado
 
+
+      this.authService.signup(this.formulario.value.email, this.formulario.value.password).then(credential => {
+        // Se asignan los valores del formulario al objeto student.
+        this.assign(this.enterprise, this.formulario.value);
+
+        // Propiedades adicionales a incluir.
+        this.enterprise.createdOn = Date.now();
+        this.enterprise.isActive = true;
+        this.enterprise.uid = credential.user.uid;
+
+        this.enterpriseService.createEnterprise(this.enterprise).then(smt => {
+          this.success = true;
+          setTimeout(() => {
+            this.router.navigate(['/index']);
+          }, 3000);
+        }).catch((err) => {
+          this.success = false;
+        });
+      }).catch((err) => {
+        this.success = false;
+      });
+    }, (reason) => {
+      // Si el usuario oprime cancelar
+    });
   }
+
   resetForm() {
     this.formulario.reset();
     setTimeout(() => {
       this.router.navigate(['index']);
     }, 400);
   }
+
   private assign(object: any, objectToCopy: any) {
     for (const key in object) {
       if (object.hasOwnProperty(key)) {
