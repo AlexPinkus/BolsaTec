@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AngularFireAuth } from 'angularfire2/auth';
 import { AuthService } from '../../services/auth.service';
-import { User } from 'firebase';
+import { Observable } from "rxjs";
 
+import { map, take, tap, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -28,12 +28,29 @@ export class LoginComponent implements OnInit {
     // console.log( 'Usuario a logear:', this.user );
     this.authService.login(this.user.email, this.user.password).then((credential) => {
       // Logeo Exitoso:
-      // Hay que decidir a donde enviar al usuario...
-      this.router.navigate(['/inicio']);
+      // Obtenemos los datos del usuario para redirigirlo.
+      this.authService.user.pipe(
+        take(1)
+      ).toPromise()
+      .then((user) => {
+        // Se redirige al usuario dependiendo de su rol.
+        switch (user.role) {
+          case 'student':
+            this.router.navigate(['/list/joboffers']);
+            break;
+          case 'enterprise':
+            this.router.navigate(['/list/joboffers', user.uid]);
+            break;
+          default:
+            this.router.navigate(['/inicio']);
+            break;
+        }
+      }).catch((err) => {
+        console.log('err :', err);
+      });
     }).catch((err) => {
       console.log('Error al Logearse');
     });
-    // console.log('Usuario Loggeado:', this.authService.userDoc);
   }
 
   resetPassword() {
