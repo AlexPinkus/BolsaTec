@@ -36,10 +36,9 @@ const routes: Routes = [
      { path: 'profile/enterprise/:id', component: EnterpriseProfileComponent, canActivate: [ProfileGuard] },
     // Ruta para listar las ofertas de trabajo de la empresa id.
     // { path: 'list/joboffer/:id', component: JobofferListComponent, canActivate: [ProfileGuard] }
-     { path: 'list/joboffer/:id', component: JobofferListComponent, canActivate: [ProfileGuard]},
+     { path: 'list/joboffers/:id', component: JobofferListComponent, canActivate: [ProfileGuard]},
+     { path: 'list/joboffers', component: JobofferMainComponent, canActivate: [StudentGuard] },
      { path: 'joboffer/:id',  component: JobofferViewComponent, canActivate: [AuthGuard]  },
-     { path: 'jobofferView',  component: JobofferViewComponent},
-     { path: 'list/joboffer', component: JobofferListComponent, canActivate: [StudentGuard] },
 
      { path: 'login', component: LoginComponent },
      { path: 'admin', component: StudentsAdminComponent },
