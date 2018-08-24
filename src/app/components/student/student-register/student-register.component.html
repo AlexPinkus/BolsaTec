@@ -15,6 +15,9 @@
         <div class="invalid-feedback" *ngIf="formulario.get('email').hasError('email') && formulario.get('email').dirty">
           *Verifica que el correo electrónico esté bien escrito
         </div>
+        <div class="invalid-feedback" *ngIf="formulario.get('email').hasError('emailAvailable') && formulario.get('email').dirty">
+          *El correo electrónico ya está registrado.
+        </div>
       </div>
       <div class="form-group col-md-6">
         <label for="password">Contraseña</label>
@@ -31,24 +34,24 @@
       <div class="form-group col-md-6">
         <label for="email_confirm">Confirma tu correo electrónico</label>
         <input type="email" class="form-control student" id="email_confirm" formControlName="email_confirm" placeholder="Confirmar Correo"
-        [class.is-invalid]="!formulario.get('email_confirm').valid && formulario.get('email_confirm').dirty"
-        [class.is-valid]="formulario.get('email_confirm').valid">
+        [class.is-invalid]="(formulario.hasError('matchEmail') || !formulario.get('email_confirm').valid) && formulario.get('email_confirm').dirty"
+        [class.is-valid]="formulario.get('email_confirm').valid && !formulario.hasError('matchEmail')">
         <div class="invalid-feedback" *ngIf="formulario.get('email_confirm').hasError('required') && formulario.get('email_confirm').dirty">
           *Campo requerido
         </div>
-        <div class="invalid-feedback" *ngIf="formulario.get('email_confirm').hasError('match') && formulario.get('email_confirm').dirty">
+        <div class="invalid-feedback" *ngIf="formulario.hasError('matchEmail')">
           *Los campos de correo electrónico no coinciden
         </div>
       </div>
       <div class="form-group col-md-6">
         <label for="password_confirm">Repetir contraseña</label>
         <input type="password" class="form-control" id="password_confirm" formControlName="password_confirm" placeholder="Repetir Contraseña"
-        [class.is-invalid]="!formulario.get('password_confirm').valid && formulario.get('password_confirm').dirty"
-        [class.is-valid]="formulario.get('password_confirm').valid">
+        [class.is-invalid]="(formulario.hasError('matchPassword') || !formulario.get('password_confirm').valid) && formulario.get('password_confirm').dirty"
+        [class.is-valid]="formulario.get('password_confirm').valid && !formulario.hasError('matchPassword')">
         <div class="invalid-feedback" *ngIf="formulario.get('password_confirm').hasError('required') && formulario.get('password_confirm').dirty">
           *Campo requerido
         </div>
-        <div class="invalid-feedback" *ngIf="formulario.get('password_confirm').hasError('match') && formulario.get('password_confirm').dirty">
+        <div class="invalid-feedback" *ngIf="formulario.hasError('matchPassword')">
           *Los campos de contraseña no coinciden
         </div>
       </div>

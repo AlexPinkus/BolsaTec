@@ -7,6 +7,9 @@ import { AuthService } from '../../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
+import { EmailAvailableValidator } from "../../../validators/email-available.directive";
+import { matchEmailValidator } from "../../../validators/match-email.directive";
+import { matchPasswordValidator } from "../../../validators/match-password.directive";
 
 declare var $: any;
 @Component({
@@ -104,20 +107,26 @@ export class StudentRegisterComponent implements OnInit {
     }
   };
 
-  constructor(private studentService: StudentService,
+  constructor(
+    private studentService: StudentService,
     private storage: AngularFireStorage,
     private authService: AuthService,
     private router: Router,
     private formBuilder: FormBuilder,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    private emailAvailable: EmailAvailableValidator) {
       // Aquí se colocan todos los elementos del formulario
       this.formulario = this.formBuilder.group({
         // Datos de usuario
-        email: ['', Validators.compose([Validators.required, Validators.email])],
-        email_confirm: ['', Validators.compose([Validators.required, this.match('email')])],
+        email: ['', {
+          updateOn: 'blur',
+          validators: Validators.compose([Validators.required, Validators.email]),
+          asyncValidators : this.emailAvailable.validate.bind(this.emailAvailable)
+        }],
+        email_confirm: ['', Validators.required],
         password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/),
           ])],
-        password_confirm: ['', Validators.compose([Validators.required, this.match('password')])],
+        password_confirm: ['', Validators.required],
 
         // Información Personal
         firstName:     ['', Validators.required],
@@ -146,25 +155,11 @@ export class StudentRegisterComponent implements OnInit {
         spoken:      ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
         written:     ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
         translation: ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
-      });
+      }, { validator: Validators.compose([matchEmailValidator, matchPasswordValidator]) });
     }
 
   ngOnInit() {
-  }
 
-  match(controlKey: string) {
-    return (control: FormControl): { [s: string]: boolean } => {
-        // control.parent es el FormGroup
-        if (control.parent) { // en las primeras llamadas control.parent es undefined
-          const checkValue  = control.parent.controls[controlKey].value;
-          if (control.value !== checkValue) {
-            return {
-              match: true
-            };
-          }
-        }
-        return null;
-    };
   }
 
   register(registerModal) {

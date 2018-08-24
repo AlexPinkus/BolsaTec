@@ -26,7 +26,7 @@ export class JobofferRegisterComponent implements OnInit {
     applicants: ['vtV4JEZRanhUVaLAbAIibSQZSSI3'],
 
     // Perfil deseado
-    aptitudes:    [
+    aptitudes: [
       'Limpieza',
       'orden',
       'puntualidad',
@@ -150,9 +150,10 @@ export class JobofferRegisterComponent implements OnInit {
     );
   }
 
-  eliminarcarrera(index:   number) {
+  eliminarcarrera(index: number) {
     (<FormArray>this.formulario.controls['bachelors']).removeAt(index);
   }
+
   agregaraptitud() {
     (<FormArray>this.formulario.controls['aptitudes']).push(
       new FormControl('', Validators.required)
@@ -163,36 +164,16 @@ export class JobofferRegisterComponent implements OnInit {
     (<FormArray>this.formulario.controls['aptitudes']).removeAt(index);
   }
 
-  open(modalConfirmacion, modalNotificacion) {
-    this.mensaje_modal = '¿Deseas realizar esta oferta de trabajo?';
-
-    this.modalService.open(modalConfirmacion).result.then(() => {
-
-
-      //  const notificacion = this.modalService.open(modalNotificacion);
-      $.bigBox({
-        title: 'Solicitud enviada',
-        content: 'Tu perfil será revisado por el administrador de esta página,' +
-        'se te notificará por correo electrónico cuando tu solicitud sea aprobada',
-        fa: 'fa-save fa-lg',
-        tabicon: false,
-        sound: false,
-        color: '#82ce34',
-        timeout: 4000,
-        delay: 0.5,
-        });
-    }, (reason) => {
-
-    });
-  }
-
   private assign(object: any, objectToCopy: any) {
     for (const key in object) {
       if (object.hasOwnProperty(key)) {
-        if ( typeof object[key] === 'object') {
+        if ( typeof object[key] === 'object' && !Array.isArray(object[key])) {
           this.assign(object[key], objectToCopy);
         } else if (objectToCopy.hasOwnProperty(key)) {
           object[key] = objectToCopy[key];
+          // if (key === 'aptitudes') {
+          //   console.log('object[key] :', object[key]);
+          // }
         }
       }
     }

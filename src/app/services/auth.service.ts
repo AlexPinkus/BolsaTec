@@ -29,7 +29,7 @@ export class AuthService {
       // Esto sucede cada vez que el usuario cambia su estado...
       this.user = this.afAuth.authState.pipe(
         switchMap(user => {
-          if (user) {
+          if (user && user.emailVerified) {
             // Si el usuario está logeado devolvemos su documento en la base de datos.
             this.isLogged = true;
             return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
@@ -113,11 +113,7 @@ export class AuthService {
     // Hacemos el login con correo y contraseña
     return this.afAuth.auth.signInWithEmailAndPassword(email, password).then(credential => {
       if (!credential.user.emailVerified) {
-        this.logout().then(() => {
-        // Aqui necesitamos un modal que le pregunte al usuario si quiere que le enviemos el correo
-        // alert('Por favor verifique su correo antes de logearse...');
         credential.user.sendEmailVerification();
-        });
       } else {
         // alert('Bienvenido' + credential.user.displayName);
         return credential;
@@ -161,6 +157,7 @@ export class AuthService {
     return this.afAuth.auth.signOut().then(function() {
       // Sign-out successful.
       // alert('Adios');
+      console.log('deslogeo exitoso');
     }).catch(function(error) {
       // An error happened.
       const errorCode = error.code;
@@ -211,6 +208,9 @@ export class AuthService {
     });
   }
 
+  verifyEmail(email: string) {
+    return this.afAuth.auth.fetchSignInMethodsForEmail(email);
+  }
     // Sets user data to firestore after succesful login
   private updateUserData(user: User) {
     console.log('Actualizando usuario...');

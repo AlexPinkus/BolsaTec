@@ -212,42 +212,9 @@ export class StudentProfileComponent implements OnInit {
   }
 
   guardar() {
-    // Aquí hay que verificar que los datos del usuario sean los correctos antes de registrarlo.
 
-    // console.log( this.student );
-
-      // actualizando
-    //   this._studentService.updateStudent(this.student, this.id).subscribe(data => {
-    //     console.log(data);
-    //   }, error => {
-    //     console.error(error);
-    //   });
-    // }
   }
 
-  // guardar() {
-  //   // Aquí hay que verificar que los datos del usuario sean los correctos antes de registrarlo.
-
-  //   console.log( this.student );
-  //   if (this.id === 'nuevo') {
-  //     // insertando
-  //     this._studentService.createStudent(this.student).subscribe(data => {
-  //       this.successMessage = 'Estudiante Registrado Exitosamente';
-  //       this.successMessagebool = true;
-  //       this.router.navigate(['/student', data.name]);
-  //       this._auths.signup(this.student.email, 'password');
-  //     }, error => {
-  //       console.error(error);
-  //     });
-  //   } else {
-  //     // actualizando
-  //     this._studentService.updateStudent(this.student, this.id).subscribe(data => {
-  //       console.log(data);
-  //     }, error => {
-  //       console.error(error);
-  //     });
-  //   }
-  // }
 
   agregarNuevo( forma: NgForm ) {
     this.router.navigate(['/student', 'nuevo']);

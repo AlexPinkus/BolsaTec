@@ -27,7 +27,7 @@ export class JobofferService {
     // ['added', 'modified', 'removed']
     if (idEnterprise) {
       return this.afs.collection('joboffers',
-      (ref) => ref.where('state', '==', 'active'))
+      (ref) => ref.where('state', '==', 'active').where('idEnterprise', '==', idEnterprise))
       .snapshotChanges()
       .pipe(
         map((actions) => {

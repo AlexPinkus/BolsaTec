@@ -33,17 +33,19 @@ export class LoginComponent implements OnInit {
         take(1)
       ).toPromise()
       .then((user) => {
-        // Se redirige al usuario dependiendo de su rol.
-        switch (user.role) {
-          case 'student':
-            this.router.navigate(['/list/joboffers']);
-            break;
-          case 'enterprise':
-            this.router.navigate(['/list/joboffers', user.uid]);
-            break;
-          default:
-            this.router.navigate(['/inicio']);
-            break;
+        if (user) {
+          // Se redirige al usuario dependiendo de su rol.
+          switch (user.role) {
+            case 'student':
+              this.router.navigate(['/list/joboffers']);
+              break;
+            case 'enterprise':
+              this.router.navigate(['/list/joboffers', user.uid]);
+              break;
+            default:
+              this.router.navigate(['/inicio']);
+              break;
+          }
         }
       }).catch((err) => {
         console.log('err :', err);

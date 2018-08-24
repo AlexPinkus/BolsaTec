@@ -23,11 +23,15 @@ export class JobofferMainComponent implements OnInit {
   ];
 
   public item = [
-    
+
   ]
   constructor() { }
 
   ngOnInit() {
+  }
+
+  updateFilter(event) {
+
   }
 
 }

@@ -1,10 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl, AbstractControl } from '@angular/forms';
+import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
 import { Enterprise } from '../../../interfaces/enterprise.interface';
 import { EnterpriseService } from '../../../services/enterprise.service';
 import { AuthService } from '../../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { EmailAvailableValidator } from "../../../validators/email-available.directive";
+import { matchEmailValidator } from "../../../validators/match-email.directive";
+import { matchPasswordValidator } from "../../../validators/match-password.directive";
+
+import { Observable } from 'rxjs';
+import { map, take, tap, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-enterpriseregister',
@@ -15,9 +22,6 @@ export class EnterpriseRegisterComponent implements OnInit {
   public success: boolean;
   public modalMessage: string;
 
-
-  public read_flag: boolean;
-  public valid_form: boolean;
   public formulario: FormGroup;
   // Definimos un objeto empresa con los valores default.
   public enterprise: Enterprise = {
@@ -48,20 +52,37 @@ export class EnterpriseRegisterComponent implements OnInit {
     }
   };
 
+  public file: File;
+  public fileError = {
+    'unsupported' : false,
+    'size' : false,
+  };
+    // Main task
+    task: AngularFireUploadTask;
+
+    // Download URL
+    downloadURL: Observable<string>;
+
 
   constructor(private enterpriseService: EnterpriseService,
+    private storage: AngularFireStorage,
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    private emailAvailable: EmailAvailableValidator) {
       this.formulario = this.formBuilder.group({
         // Hay que agregrar verificación si existen usuarios:
-        email: ['', Validators.compose([Validators.required, Validators.email])],
-        email_confirm: ['', Validators.compose([Validators.required, this.match('email')])],
+        email: ['', {
+          updateOn: 'blur',
+          validators: Validators.compose([Validators.required, Validators.email]),
+          asyncValidators : this.emailAvailable.validate.bind(this.emailAvailable)
+        }],
+        email_confirm: ['', Validators.required],
 
         password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/)])],
-        password_confirm: ['', Validators.compose([Validators.required,  this.match('password')])],
+        password_confirm: ['', Validators.required],
         // Datos contacto
         firstName:      ['', Validators.required],
         lastName:       ['', Validators.required],
@@ -90,32 +111,10 @@ export class EnterpriseRegisterComponent implements OnInit {
         city:         ['', Validators.required],
         municipality: ['', Validators.required],
         state:        ['', Validators.required],
-      });
+      }, { validator: Validators.compose([matchEmailValidator, matchPasswordValidator]) });
   }
 
   ngOnInit() {
-    console.log(this.router.url);
-    console.log();
-    if (this.router.url === '/register/employeer') {
-     this.read_flag = false;
-    } else {
-      this.read_flag = true;
-    }
-  }
-
-  match(controlKey: string) {
-    return (control: FormControl): { [s: string]: boolean } => {
-        // control.parent es el FormGroup
-        if (control.parent) { // en las primeras llamadas control.parent es undefined
-          const checkValue  = control.parent.controls[controlKey].value;
-          if (control.value !== checkValue) {
-            return {
-              match: true
-            };
-          }
-        }
-        return null;
-    };
   }
 
   register(registerModal) {
@@ -123,22 +122,25 @@ export class EnterpriseRegisterComponent implements OnInit {
     // El modal se invoca con una promesa que se resuelve si el modal es aceptado o se reachaza si es cerrado
     this.modalService.open(registerModal).result.then(() => {
       // Aquí se incluye la lógica cuando el modal ha sido aceptado
-
-
       this.authService.signup(this.formulario.value.email, this.formulario.value.password).then(credential => {
-        // Se asignan los valores del formulario al objeto student.
-        this.assign(this.enterprise, this.formulario.value);
+        this.uploadFile(this.file, credential.user.uid)
+        .then((url) => {
+          // Se asignan los valores del formulario al objeto student.
+          this.assign(this.enterprise, this.formulario.value);
 
-        // Propiedades adicionales a incluir.
-        this.enterprise.createdOn = Date.now();
-        this.enterprise.isActive = true;
-        this.enterprise.uid = credential.user.uid;
-
-        this.enterpriseService.createEnterprise(this.enterprise).then(smt => {
-          this.success = true;
-          setTimeout(() => {
-            this.router.navigate(['/index']);
-          }, 3000);
+          // Propiedades adicionales a incluir.
+          this.enterprise.createdOn = Date.now();
+          this.enterprise.isActive = true;
+          this.enterprise.uid = credential.user.uid;
+          this.enterprise.logo = url;
+          this.enterpriseService.createEnterprise(this.enterprise).then(smt => {
+            this.success = true;
+            setTimeout(() => {
+              this.router.navigate(['/index']);
+            }, 3000);
+          }).catch((err) => {
+            this.success = false;
+          });
         }).catch((err) => {
           this.success = false;
         });
@@ -155,6 +157,73 @@ export class EnterpriseRegisterComponent implements OnInit {
     setTimeout(() => {
       this.router.navigate(['index']);
     }, 400);
+  }
+
+  onFileChange(event: FileList) {
+    if (event.length === 0) { return; }
+    this.file = null;
+    // Client-side validation example
+    if (event.item(0).type.split('/')[0] !== 'image') {
+      console.error('unsupported file type :( ');
+      this.fileError.unsupported = true;
+      return;
+    }
+
+    if (event.item(0).size >= (1 * 1024 * 1024)) {
+      console.error('file too large ');
+      this.fileError.size = true;
+      return;
+    }
+
+    this.file = event.item(0);
+  }
+
+  newsubmit(file: File, id: string) {
+    this.uploadFile(file, id).then((url) => {
+      console.log('url :', url);
+      console.log('typeof url :', typeof url);
+    }).catch((err) => {
+      console.log('err :', err);
+    });
+  }
+
+  uploadFile(file: File, id: string) {
+
+    // The storage path
+    const path = `enterprise/${id}_${file.name}`;
+
+    // Totally optional metadata
+    const customMetadata = { app: 'My AngularFire-powered PWA!' };
+
+    // The main task
+    this.task = this.storage.upload(path, file, { customMetadata });
+
+    const fileRef = this.storage.ref(path);
+
+    // The file's download URL
+    // this.task.snapshotChanges().pipe(
+    //   finalize(() => this.downloadURL = fileRef.getDownloadURL() )
+    // ).subscribe();
+
+    // The file's download URL
+    return new Promise<string>((resolve, reject) => {
+      this.task.snapshotChanges().pipe(
+      finalize(() => this.downloadURL = fileRef.getDownloadURL() )
+      ).toPromise()
+      .then(() => {
+        this.downloadURL = fileRef.getDownloadURL();
+        this.downloadURL.toPromise()
+        .then((url) => {
+          resolve(url);
+        }).catch((err) => {
+          reject(err);
+        });
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+
+
   }
 
   private assign(object: any, objectToCopy: any) {

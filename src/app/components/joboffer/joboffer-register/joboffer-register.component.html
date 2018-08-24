@@ -36,7 +36,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text">$</span>
               </div>
-              <input type="number" class="form-control" min="1000" max="99999" id="salary" formControlName="salary" placeholder="1000"
+              <input type="number" class="form-control" min="1000" max="99999" id="salary" formControlName="salary" placeholder="Cantidad"
               [class.is-invalid]="!formulario.get('salary').valid && formulario.get('salary').dirty"
               [class.is-valid]="formulario.get('salary').valid">
               <!-- <div class="input-group-append">
@@ -46,7 +46,7 @@
       </div>
       <div class="form-group col-md-4">
           <label for="weeklyHours">Horas a la semana</label>
-          <input type="number" class="form-control" min="10" max="48" id="weeklyHours" formControlName="weeklyHours" placeholder="10"
+          <input type="number" class="form-control" min="10" max="48" id="weeklyHours" formControlName="weeklyHours" placeholder="Horas a la semana"
           [class.is-invalid]="!formulario.get('weeklyHours').valid && formulario.get('weeklyHours').dirty"
           [class.is-valid]="formulario.get('weeklyHours').valid">
       </div>
@@ -54,13 +54,13 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="experience">Años de experiencia</label>
-        <input type="number" class="form-control" min="0" max="10" id="experience" formControlName="experience" placeholder="0"
+        <input type="number" class="form-control" min="0" max="10" id="experience" formControlName="experience" placeholder="Años de experiencia"
         [class.is-invalid]="!formulario.get('experience').valid && formulario.get('experience').dirty"
         [class.is-valid]="formulario.get('experience').valid">
       </div>
       <div class="form-group col-md-6">
           <label for="vacantNumber">Número de vacantes</label>
-          <input type="number" class="form-control" min="1" max="10" id="vacantNumber" formControlName="vacantNumber" placeholder="1"
+          <input type="number" class="form-control" min="1" max="10" id="vacantNumber" formControlName="vacantNumber" placeholder="Número de vacantes"
           [class.is-invalid]="!formulario.get('vacantNumber').valid && formulario.get('vacantNumber').dirty"
           [class.is-valid]="formulario.get('vacantNumber').valid">
       </div>
@@ -137,7 +137,7 @@
                 </button>
               </div>
               <!-- <input type="text" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1"> -->
-              <input type="text" class="form-control" [formControlName]="i"
+              <input type="text" class="form-control" [formControlName]="i" placeholder="Aptitud"
               [class.is-invalid]="!formulario.get('aptitudes').valid && formulario.get('aptitudes').dirty"
               [class.is-valid]="formulario.get('aptitudes').valid">
             </div>

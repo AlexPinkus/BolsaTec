@@ -57,6 +57,9 @@ import { JobofferRegisterComponent } from './components/joboffer/joboffer-regist
 import { JobofferEditComponent } from './components/joboffer/joboffer-edit/joboffer-edit.component';
 import { JobofferViewComponent } from './components/joboffer/joboffer-view/joboffer-view.component';
 import { JobofferMainComponent } from './components/joboffer/joboffer-main/joboffer-main.component';
+import { EmailAvailableDirective } from './validators/email-available.directive';
+import { MatchEmailValidatorDirective } from './validators/match-email.directive';
+import { MatchPasswordValidatorDirective } from './validators/match-password.directive';
 
 @NgModule({
   declarations: [
@@ -80,7 +83,10 @@ import { JobofferMainComponent } from './components/joboffer/joboffer-main/jobof
     JobofferViewComponent,
     LoaderComponent,
     StudentsAdminComponent,
-    JobofferMainComponent
+    JobofferMainComponent,
+    EmailAvailableDirective,
+    MatchEmailValidatorDirective,
+    MatchPasswordValidatorDirective
   ],
   imports: [
     BrowserModule,

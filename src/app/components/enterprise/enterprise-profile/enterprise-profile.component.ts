@@ -4,6 +4,7 @@ import { Enterprise } from '../../../interfaces/enterprise.interface';
 import { EnterpriseService } from '../../../services/enterprise.service';
 import { AuthService } from '../../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 import { Observable } from 'rxjs';
 
@@ -14,7 +15,10 @@ import { Observable } from 'rxjs';
 })
 export class EnterpriseProfileComponent implements OnInit {
 
-  public enterpriseO: Observable<Enterprise>;
+  public enterprise$: Observable<Enterprise>;
+  public success: boolean;
+  public modalMessage: string;
+
   public read_flag = true;
   public valid_form: boolean;
   public formulario: FormGroup;
@@ -22,6 +26,7 @@ export class EnterpriseProfileComponent implements OnInit {
   constructor(private enterpriseService: EnterpriseService,
     private authService: AuthService,
     private formBuilder: FormBuilder,
+    private modalService: NgbModal,
     private rutaURL: Router,
     private activatedRoute: ActivatedRoute) {
       this.formulario = this.formBuilder.group({
@@ -63,7 +68,7 @@ export class EnterpriseProfileComponent implements OnInit {
       // Obtenemos los parámetros de las rutas...
       this.activatedRoute.params.subscribe(params => {
         if ( params['id'] !== 'nuevo') {
-          this.enterpriseO = this.enterpriseService.getEnterprise(params['id']).valueChanges();
+          this.enterprise$ = this.enterpriseService.getEnterprise(params['id']).valueChanges();
         }
       });
   }
@@ -86,12 +91,48 @@ export class EnterpriseProfileComponent implements OnInit {
     };
   }
 
-  agregar() {
-    console.log(this.formulario);
+  update(enterprise, registerModal) {
+    this.modalMessage = '¿Deseas actualizar sus datos?';
+    // El modal se invoca con una promesa que se resuelve si el modal es aceptado o se reachaza si es cerrado
+    console.log('this.formulario.value :', this.formulario.value);
+    this.assign(enterprise, this.formulario.value);
+    console.log('enterprise :', enterprise);
+
+    this.modalService.open(registerModal).result.then(() => {
+      // Aquí se incluye la lógica cuando el modal ha sido aceptado
+
+      // Se asignan los valores del formulario al objeto enterprise.
+      this.assign(enterprise, this.formulario.value);
+      this.enterpriseService.updateEnterprise(enterprise.uid, enterprise)
+      .then((result) => {
+        this.success = true;
+      }).catch((err) => {
+        this.success = false;
+        console.log('err :', err);
+      });
+    }, (reason) => {
+      // Si el usuario oprime cancelar
+    });
   }
 
-  actualizar() {
+  actualizar(enterprise) {
     this.read_flag = !this.read_flag;
+    // this.assign(this.formulario.value, enterprise);
+    // console.log('this.formulario.value :', this.formulario.value);
+    // this.formulario.setValue(this.formulario.value);
+  }
+
+
+  private assign(object: any, objectToCopy: any) {
+    for (const key in object) {
+      if (object.hasOwnProperty(key)) {
+        if ( typeof object[key] === 'object') {
+          this.assign(object[key], objectToCopy);
+        } else if (objectToCopy.hasOwnProperty(key) && objectToCopy[key]) {
+          object[key] = objectToCopy[key];
+        }
+      }
+    }
   }
 
 }
