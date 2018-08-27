@@ -25,31 +25,39 @@ export class EnterpriseRegisterComponent implements OnInit {
   public formulario: FormGroup;
   // Definimos un objeto empresa con los valores default.
   public enterprise: Enterprise = {
-    email:      'alexpinkus@hotmail.com',
-    firstName:  'José',
-    lastName:   'Castillo Pinkus',
-    middleName: 'Alejandro',
-    job:        'Gerente',
-    department: 'Ventas',
-    contactPhone: 99999999999,
-    contactAddress: 'Avenida escalofriante #666',
+    // Información DB
+    role: 'enterprise',
+    isActive: true,
+    // Datos de contacto
+    firstName:  '',
+    lastName:   '',
+    middleName: '',
+    job:        '',
+    department: '',
+    email:      '',
+    contactPhone: 0,
+    contactAddress: '',
+
     // Datos empresa
-    comercialName:  'Monsters Inc.',
-    bussinessName:  'S.A. de C.V.',
-    bussinessPhone: '9999999',
-    bussinessTurn:  'Enegería Eléctrica',
-    description:    'Sustos que dan gusto',
-    RFC:            'CAAA9901019Y0',
+    comercialName:  '',
+    bussinessName:  '',
+    bussinessPhone: '',
+    bussinessTurn:  '',
+    description:    '',
+    RFC:            '',
     logo: '',
-    webURL: 'www.google.com',
+    webURL: '',
+
+    // Dirección
     address: {
-      mainStreet: 'Avenida siempre viva',
-      crossings:  '20 y 21',
-      postalCode:  97101,
-      state:      'Yucatán',
-      municipality: 'Mérida',
-      city: 'Mérida'
+      mainStreet: '',
+      crossings:  '',
+      postalCode:  0,
+      state:      '',
+      municipality: '',
+      city: ''
     }
+
   };
 
   public file: File;
@@ -57,11 +65,12 @@ export class EnterpriseRegisterComponent implements OnInit {
     'unsupported' : false,
     'size' : false,
   };
-    // Main task
-    task: AngularFireUploadTask;
+
+  // Main task
+  private task: AngularFireUploadTask;
 
     // Download URL
-    downloadURL: Observable<string>;
+  private downloadURL: Observable<string>;
 
 
   constructor(private enterpriseService: EnterpriseService,
@@ -130,7 +139,6 @@ export class EnterpriseRegisterComponent implements OnInit {
 
           // Propiedades adicionales a incluir.
           this.enterprise.createdOn = Date.now();
-          this.enterprise.isActive = true;
           this.enterprise.uid = credential.user.uid;
           this.enterprise.logo = url;
           this.enterpriseService.createEnterprise(this.enterprise).then(smt => {
@@ -190,10 +198,10 @@ export class EnterpriseRegisterComponent implements OnInit {
   private uploadFile(file: File, id: string) {
 
     // The storage path
-    const path = `enterprise/${id}_${file.name}`;
+    const path = `enterprise/${id}.png`;
 
     // Totally optional metadata
-    const customMetadata = { app: 'My AngularFire-powered PWA!' };
+    const customMetadata = { uid: id };
 
     // The main task
     this.task = this.storage.upload(path, file, { customMetadata });
@@ -227,11 +235,20 @@ export class EnterpriseRegisterComponent implements OnInit {
   }
 
   private assign(object: any, objectToCopy: any) {
+    // Si el objeto a copiar tiene subobjetos, regresamos a la función..
+    for (const key in objectToCopy) {
+      if (objectToCopy.hasOwnProperty(key)) {
+        if ( typeof objectToCopy[key] === 'object' && !Array.isArray(objectToCopy[key])) {
+          this.assign(object, objectToCopy[key]);
+        }
+      }
+    }
+    // Cuando se llega aquí objectToCopy ya no tiene subobjetos
     for (const key in object) {
       if (object.hasOwnProperty(key)) {
-        if ( typeof object[key] === 'object') {
+        if ( typeof object[key] === 'object' && !Array.isArray(object[key])) {
           this.assign(object[key], objectToCopy);
-        } else if (objectToCopy.hasOwnProperty(key)) {
+        } else if ( objectToCopy[key]) {
           object[key] = objectToCopy[key];
         }
       }

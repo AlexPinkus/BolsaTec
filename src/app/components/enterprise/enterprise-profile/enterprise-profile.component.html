@@ -239,6 +239,12 @@
                   <label class="custom-file-label" for="customFile"><i class="fa fa-upload"></i> Elija el logotipo</label>
                 </ng-template>
             </div>
+            <div *ngIf="fileError.unsupported">
+                *Seleccione una imagen por favor
+            </div>
+            <div *ngIf="fileError.size">
+                *El tamaño de la imagen debe ser menor a 1mb.
+            </div>
           </ng-container>
           <ng-template #showLogo>
             <img [src]="enterprise.logo" class="img-fluid" alt="Responsive image">

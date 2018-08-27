@@ -60,7 +60,7 @@
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="firstName">Nombre(s)</label>
-        <input type="text" class="form-control" id="firstName" formControlName="firstName"
+        <input type="text" class="form-control" id="firstName" formControlName="firstName" placeholder="Nombre(s)"
         [class.is-invalid]="!formulario.get('firstName').valid && formulario.get('firstName').dirty"
         [class.is-valid]="formulario.get('firstName').valid">
         <div class="invalid-feedback" *ngIf="!formulario.get('firstName').valid && formulario.get('firstName').dirty">
@@ -69,7 +69,7 @@
       </div>
       <div class="form-group col-md-4">
         <label for="middleName">Apellido paterno</label>
-        <input type="text" class="form-control" id="lastName" formControlName="lastName"
+        <input type="text" class="form-control" id="lastName" formControlName="lastName" placeholder="Apellido paterno"
         [class.is-invalid]="!formulario.get('lastName').valid && formulario.get('lastName').dirty"
         [class.is-valid]="formulario.get('lastName').valid">
         <div class="invalid-feedback" *ngIf="!formulario.get('lastName').valid && formulario.get('lastName').dirty">
@@ -78,7 +78,7 @@
       </div>
       <div class="form-group col-md-4">
         <label for="lastName">Apellido materno</label>
-        <input type="text" class="form-control" id="middleName" formControlName="middleName"
+        <input type="text" class="form-control" id="middleName" formControlName="middleName" placeholder="Apellido materno"
         [class.is-invalid]="!formulario.get('middleName').valid && formulario.get('middleName').dirty"
         [class.is-valid]="formulario.get('middleName').valid">
         <div class="invalid-feedback" *ngIf="!formulario.get('middleName').valid && formulario.get('middleName').dirty">
@@ -89,7 +89,7 @@
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="job">Puesto</label>
-        <input type="text" class="form-control" id="job" formControlName="job"
+        <input type="text" class="form-control" id="job" formControlName="job" placeholder="Puesto"
         [class.is-invalid]="!formulario.get('job').valid && formulario.get('job').dirty"
         [class.is-valid]="formulario.get('job').valid">
         <div class="invalid-feedback" *ngIf="!formulario.get('job').valid && formulario.get('job').dirty">
@@ -98,7 +98,7 @@
       </div>
       <div class="form-group col-md-4">
         <label for="department">Departamento</label>
-        <input type="text" class="form-control" id="department" formControlName="department"
+        <input type="text" class="form-control" id="department" formControlName="department" placeholder="Departamento"
         [class.is-invalid]="!formulario.get('department').valid && formulario.get('department').dirty"
         [class.is-valid]="formulario.get('department').valid">
         <div class="invalid-feedback" *ngIf="!formulario.get('department').valid && formulario.get('department').dirty">
@@ -106,8 +106,8 @@
         </div>
       </div>
       <div class="form-group col-md-4">
-        <label for="contactPhone">Telefono de contacto</label>
-        <input type="number" class="form-control" formControlName="contactPhone"
+        <label for="contactPhone">Teléfono de contacto</label>
+        <input type="number" class="form-control" formControlName="contactPhone" placeholder="Teléfono"
         [class.is-invalid]="!formulario.get('contactPhone').valid && formulario.get('contactPhone').dirty"
         [class.is-valid]="formulario.get('contactPhone').valid">
         <div class="invalid-feedback" *ngIf="formulario.get('contactPhone').hasError('required') && formulario.get('contactPhone').dirty">
@@ -124,7 +124,7 @@
     <div class="form-row">
       <div class="form-group col-md-12">
         <label for="contactAddress">Dirección del contacto</label>
-        <input type="text" class="form-control" formControlName="contactAddress"
+        <input type="text" class="form-control" formControlName="contactAddress" placeholder="Dirección"
         [class.is-invalid]="!formulario.get('contactAddress').valid && formulario.get('contactAddress').dirty"
         [class.is-valid]="formulario.get('contactAddress').valid">
         <div class="invalid-feedback" *ngIf="!formulario.get('contactAddress').valid && formulario.get('contactAddress').dirty">
@@ -139,7 +139,7 @@
     <div class="form-row">
       <div class="form-group col-md-12">
         <label for="comercialName">Nombre comercial</label>
-        <input type="text" class="form-control" formControlName="comercialName"
+        <input type="text" class="form-control" formControlName="comercialName" placeholder="Nombre comercial"
         [class.is-invalid]="!formulario.get('comercialName').valid && formulario.get('comercialName').dirty"
         [class.is-valid]="formulario.get('comercialName').valid">
         <div class="invalid-feedback" *ngIf="formulario.get('comercialName').hasError('required') && formulario.get('comercialName').dirty">
@@ -148,7 +148,7 @@
       </div>
       <div class="form-group col-md-12">
         <label for="bussinessName">Razón social</label>
-        <input type="text" class="form-control" id="bussinessName" formControlName="bussinessName"
+        <input type="text" class="form-control" id="bussinessName" formControlName="bussinessName" placeholder="Razón social"
         [class.is-invalid]="!formulario.get('bussinessName').valid && formulario.get('bussinessName').dirty"
         [class.is-valid]="formulario.get('bussinessName').valid">
         <div class="invalid-feedback" *ngIf="formulario.get('bussinessName').hasError('required') && formulario.get('bussinessName').dirty">
@@ -159,7 +159,7 @@
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="RFC">RFC</label>
-        <input type="text" class="form-control" id="RFC" formControlName="RFC"
+        <input type="text" class="form-control" id="RFC" formControlName="RFC" placeholder="RFC"
         [class.is-invalid]="!formulario.get('RFC').valid && formulario.get('RFC').dirty"
         [class.is-valid]="formulario.get('RFC').valid" maxlength="13">
         <div class="invalid-feedback" *ngIf="formulario.get('RFC').hasError('required') && formulario.get('RFC').dirty">
@@ -174,7 +174,7 @@
       </div>
       <div class="form-group col-md-4">
         <label for="bussinessPhone">Teléfono de la empresa</label>
-        <input type="number" class="form-control" id="bussinessPhone" formControlName="bussinessPhone"
+        <input type="number" class="form-control" id="bussinessPhone" formControlName="bussinessPhone" placeholder="Teléfono"
         [class.is-invalid]="!formulario.get('bussinessPhone').valid && formulario.get('bussinessPhone').dirty"
         [class.is-valid]="formulario.get('bussinessPhone').valid">
         <div class="invalid-feedback" *ngIf="formulario.get('bussinessPhone').hasError('required') && formulario.get('bussinessPhone').dirty">
@@ -189,7 +189,7 @@
       </div>
       <div class="form-group col-md-4">
         <label for="webURL">Sitio web</label>
-        <input type="text" class="form-control" id="webURL" formControlName="webURL"
+        <input type="text" class="form-control" id="webURL" formControlName="webURL" placeholder="Sitio web"
         [class.is-invalid]="!formulario.get('webURL').valid && formulario.get('webURL').dirty"
         [class.is-valid]="formulario.get('webURL').valid && formulario.get('webURL').dirty">
         <div class="invalid-feedback" *ngIf="!formulario.get('webURL').valid && formulario.get('webURL').dirty">
@@ -201,7 +201,7 @@
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="mainStreet">Calle principal y número</label>
-        <input type="text" class="form-control" formControlName="mainStreet"
+        <input type="text" class="form-control" formControlName="mainStreet" placeholder="Calle principal y número"
         [class.is-invalid]="!formulario.get('mainStreet').valid && formulario.get('mainStreet').dirty"
         [class.is-valid]="formulario.get('mainStreet').valid">
         <div class="invalid-feedback" *ngIf="!formulario.get('mainStreet').valid && formulario.get('mainStreet').dirty">
@@ -210,7 +210,7 @@
       </div>
       <div class="form-group col-md-4">
         <label for="crossings">Cruzamientos</label>
-        <input type="text" class="form-control" formControlName="crossings"
+        <input type="text" class="form-control" formControlName="crossings" placeholder="Cruzamientos"
         [class.is-invalid]="!formulario.get('crossings').valid && formulario.get('crossings').dirty"
         [class.is-valid]="formulario.get('crossings').valid">
         <div class="invalid-feedback" *ngIf="!formulario.get('crossings').valid && formulario.get('crossings').dirty">
@@ -219,7 +219,7 @@
       </div>
       <div class="form-group col-md-4">
         <label for="postalCode">Código Postal</label>
-        <input type="number" class="form-control" formControlName="postalCode"
+        <input type="number" class="form-control" formControlName="postalCode" placeholder="Código Postal"
         [class.is-invalid]="!formulario.get('postalCode').valid && formulario.get('postalCode').dirty"
         [class.is-valid]="formulario.get('postalCode').valid">
         <div class="invalid-feedback" *ngIf="formulario.get('postalCode').hasError('required') && formulario.get('postalCode').dirty">
@@ -233,7 +233,7 @@
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="city">Ciudad</label>
-        <input type="text" class="form-control" id="city" formControlName="city"
+        <input type="text" class="form-control" id="city" formControlName="city" placeholder="Ciudad"
         [class.is-invalid]="!formulario.get('city').valid && formulario.get('city').dirty"
         [class.is-valid]="formulario.get('city').valid">
         <div class="invalid-feedback" *ngIf="!formulario.get('city').valid && formulario.get('city').dirty">
@@ -242,7 +242,7 @@
       </div>
       <div class="form-group col-md-4">
         <label for="municipality">Municipio</label>
-        <input type="text" class="form-control" id="municipality" formControlName="municipality"
+        <input type="text" class="form-control" id="municipality" formControlName="municipality" placeholder="Municipio"
         [class.is-invalid]="!formulario.get('municipality').valid && formulario.get('municipality').dirty"
         [class.is-valid]="formulario.get('municipality').valid">
         <div class="invalid-feedback" *ngIf="!formulario.get('municipality').valid && formulario.get('municipality').dirty">
@@ -251,7 +251,7 @@
       </div>
       <div class="form-group col-md-4">
         <label for="state">Estado</label>
-        <input type="text" class="form-control" id="state" formControlName="state"
+        <input type="text" class="form-control" id="state" formControlName="state" placeholder="Estado"
         [class.is-invalid]="!formulario.get('state').valid && formulario.get('state').dirty"
         [class.is-valid]="formulario.get('state').valid">
         <div class="invalid-feedback" *ngIf="!formulario.get('state').valid && formulario.get('state').dirty">
@@ -263,7 +263,7 @@
       <div class="form-group col-md-12">
         <label for="description">Descripción</label>
         <textarea class="form-control" formControlName="description"
-        [class.is-valid]="formulario.get('description').valid"
+        [class.is-valid]="formulario.get('description').valid" placeholder="Breve descripción de la empresa."
         [class.is-invalid]="!formulario.get('description').valid && formulario.get('bussinessTurn').dirty"></textarea>
         <div class="invalid-feedback" *ngIf="!formulario.get('description').valid && formulario.get('description').dirty">
             *Campo requerido
@@ -273,7 +273,7 @@
     <div class="form-row">
       <div class="form-group col-md-12">
         <label for="bussinessTurn">Giro del negocio</label>
-        <input type="text" class="form-control" id="bussinessTurn" formControlName="bussinessTurn"
+        <input type="text" class="form-control" id="bussinessTurn" formControlName="bussinessTurn" placeholder="Giro del negocio"
         [class.is-invalid]="!formulario.get('bussinessTurn').valid && formulario.get('bussinessTurn').dirty"
         [class.is-valid]="formulario.get('bussinessTurn').valid">
         <div class="invalid-feedback" *ngIf="!formulario.get('bussinessTurn').valid && formulario.get('bussinessTurn').dirty">

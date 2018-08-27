@@ -1,14 +1,20 @@
 export interface Enterprise {
-  uid?:      any;
-  email:     string;
+  // Información DB
+  uid?:       any;
+  createdOn?: number;
+  isActive:   boolean;
+  role:       string;
+
   // Datos contacto
   firstName:    string;
-  lastName:     string;
   middleName:   string;
+  lastName:     string;
   job:          string;
   department:   string;
+  email:        string;
   contactPhone:   number;
   contactAddress: string;
+
   // Datos empresa
   comercialName:  string;
   bussinessName:  string;
@@ -18,6 +24,8 @@ export interface Enterprise {
   RFC:            string;
   logo:           string;
   webURL?:        string;
+
+  // Dirección
   address: {
     mainStreet:     string;
     crossings:      string;
@@ -26,7 +34,5 @@ export interface Enterprise {
     municipality?:  string;
     state:          string;
   };
-  createdOn?: number;
-  isActive?:  boolean;
-  role?:      string;
+
 }

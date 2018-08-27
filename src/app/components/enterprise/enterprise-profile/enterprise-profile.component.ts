@@ -28,11 +28,12 @@ export class EnterpriseProfileComponent implements OnInit {
     'unsupported' : false,
     'size' : false,
   };
-    // Main task
-    task: AngularFireUploadTask;
 
-    // Download URL
-    downloadURL: Observable<string>;
+  // Main task
+  private task: AngularFireUploadTask;
+
+  // Download URL
+  private downloadURL: Observable<string>;
 
   constructor(private enterpriseService: EnterpriseService,
     private storage: AngularFireStorage,
@@ -77,7 +78,7 @@ export class EnterpriseProfileComponent implements OnInit {
       });
       // Obtenemos los parámetros de las rutas...
       this.activatedRoute.params.subscribe(params => {
-        if ( params['id'] !== 'nuevo') {
+        if ( params['id'] ) {
           this.enterprise$ = this.enterpriseService.getEnterprise(params['id']).valueChanges();
         }
       });
@@ -129,7 +130,7 @@ export class EnterpriseProfileComponent implements OnInit {
     // Además de actualizar resetear los valores del formulario al momento de cancelar.
     // Esto resetea el valor del formulario
     this.assign(this.formulario.value, enterprise);
-    this.formulario.setValue(this.formulario.value);
+    this.formulario.reset(this.formulario.value);
   }
 
   onFileChange(event: FileList) {

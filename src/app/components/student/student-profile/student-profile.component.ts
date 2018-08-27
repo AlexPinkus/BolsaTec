@@ -5,6 +5,7 @@ import { NgForm } from '@angular/forms';
 import { Student } from '../../../interfaces/student.interface';
 import { StudentService } from '../../../services/student.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 import { Observable } from 'rxjs';
 import { map, take, tap, finalize } from 'rxjs/operators';
@@ -17,7 +18,18 @@ import { map, take, tap, finalize } from 'rxjs/operators';
 })
 export class StudentProfileComponent implements OnInit {
 
-  public studentO: Observable<Student>;
+  public student$: Observable<Student>;
+  public success: boolean;
+  public modalMessage: string;
+  public isreadonly = true;
+
+  public file: File;
+  public fileError = {
+    'unsupported' : false,
+    'size' : false,
+  };
+
+
   public formulario: FormGroup;
   public genders = ['Hombre', 'Mujer'];
   public maritalStatuses = ['Soltero(a)', 'Casado(a)'];
@@ -35,7 +47,7 @@ export class StudentProfileComponent implements OnInit {
     'Licenciatura en Sistemas Computacionales',
     'Licenciatura en Administración',
     'Licenciatura en Administración en Educación a Distancia'];
-  public read_flag = true;
+
 
   nuevo = false;
   id: string;
@@ -60,31 +72,24 @@ export class StudentProfileComponent implements OnInit {
   };
 
   // Main task
-  task: AngularFireUploadTask;
+  private task: AngularFireUploadTask;
 
-  // Progress monitoring
-  percentage: Observable<number>;
-
-  snapshot: Observable<any>;
 
   // Download URL
-  downloadURL: Observable<string>;
+  private downloadURL: Observable<string>;
 
-  // State for dropzone CSS toggling
-  isHovering: boolean;
 
   constructor(private studentService: StudentService,
     private router: Router,
+    private modalService: NgbModal,
     private storage: AngularFireStorage,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder) {
       this.formulario = this.formBuilder.group({
         // Datos de usuario
-        email: ['', Validators.compose([Validators.required, Validators.email])],
-        email_confirm: ['', Validators.compose([Validators.required, this.match('email')])],
-        password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/),
-          ])],
-        password_confirm: ['', Validators.compose([Validators.required, this.match('password')])],
+        // password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/),
+        //   ])],
+        // password_confirm: ['', Validators.compose([Validators.required])],
 
         // Información Personal
         firstName:     ['', Validators.required],
@@ -117,26 +122,8 @@ export class StudentProfileComponent implements OnInit {
       });
       // Obtenemos los parámetros de las rutas...
       this.activatedRoute.params.subscribe(params => {
-        console.log(params);
-        this.id = params['id'];
-        if ( this.id !== 'nuevo') {
-          this.studentO = this.studentService.getStudent(this.id).valueChanges().pipe(
-            take(1),
-            map(user => {
-            console.log('123123user :', user);
-            return user;
-            }),
-            tap(smt => {
-              console.log('object :', smt);
-            })
-          );
-          console.log('studentO :', this.studentO);
-          // this._studentService.studentDocument
-          // this._studentService.getStudent(this.id)
-          // this._studentService.getStudent(this.id).subscribe(student => {
-          //   console.log('student :', student);
-          //   this.student = student;
-          // });
+        if ( params['id'] ) {
+          this.student$ = this.studentService.getStudent(params['id']).valueChanges();
         }
       });
   }
@@ -145,80 +132,133 @@ export class StudentProfileComponent implements OnInit {
 
   }
 
-  toggleHover(event: boolean) {
-    this.isHovering = event;
-    console.log('isHovering :', this.isHovering);
+  update(student, registerModal) {
+    this.modalMessage = '¿Deseas actualizar sus datos?';
+    // El modal se invoca con una promesa que se resuelve si el modal es aceptado o se reachaza si es cerrado
+    console.log('this.formulario.value :', this.formulario.value);
+    this.modalService.open(registerModal).result.then(() => {
+      // Aquí se incluye la lógica cuando el modal ha sido aceptado
+
+      // Si hay archivo se sube y luego actualizamos
+      if (this.file) {
+        this.uploadFile(this.file, student.uid).then((url) => {
+          // Se asignan los valores del formulario al objeto student.
+          this.assign(student, this.formulario.value);
+          student.logo = url;
+          this.studentService.updateStudent(student.uid, student)
+          .then((result) => {
+            this.success = true;
+          }).catch((err) => {
+            this.success = false;
+          });
+        }).catch((err) => {
+          this.success = false;
+        });
+      } else {
+        // Se asignan los valores del formulario al objeto student.
+        this.assign(student, this.formulario.value);
+        this.studentService.updateStudent(student.uid, student)
+        .then((result) => {
+          this.success = true;
+        }).catch((err) => {
+          this.success = false;
+        });
+      }
+    }, (reason) => {
+      // Si el usuario oprime cancelar
+    });
   }
 
+  actualizar(student) {
+    this.isreadonly = !this.isreadonly;
+    // Esto hace que los validators funcionen correctamente.
+    // Además de actualizar resetear los valores del formulario al momento de cancelar.
+    // Esto resetea el valor del formulario
+    this.assign(this.formulario.value, student);
+    this.formulario.reset(this.formulario.value);
+  }
 
-  startUpload(event: FileList) {
-    // The File object
-    const file = event.item(0);
-
+  onFileChange(event: FileList) {
+    if (event.length === 0) { return; }
+    this.file = null;
     // Client-side validation example
-    if (file.type.split('/')[0] !== 'image') {
+    if (event.item(0).type.split('/')[0] !== 'image') {
       console.error('unsupported file type :( ');
+      this.fileError.unsupported = true;
       return;
     }
 
+    if (event.item(0).size >= (1 * 1024 * 1024)) {
+      console.error('file too large ');
+      this.fileError.size = true;
+      return;
+    }
+
+    this.file = event.item(0);
+    console.log('this.file :', this.file);
+  }
+
+
+  private uploadFile(file: File, id: string) {
+
     // The storage path
-    const path = `test/${new Date().getTime()}_${file.name}`;
+    // el tipo de archivo ${file.type.split('/')[1]}
+    // Por el momento todo se guardará como png
+    const path = `enterprise/${id}.png`;
 
     // Totally optional metadata
-    const customMetadata = { app: 'My AngularFire-powered PWA!' };
+    const customMetadata = { uid: id };
 
     // The main task
     this.task = this.storage.upload(path, file, { customMetadata });
 
-    // Progress monitoring
-    this.percentage = this.task.percentageChanges();
-    this.snapshot   = this.task.snapshotChanges();
-
     const fileRef = this.storage.ref(path);
 
     // The file's download URL
-    this.task.snapshotChanges().pipe(
+    // this.task.snapshotChanges().pipe(
+    //   finalize(() => this.downloadURL = fileRef.getDownloadURL() )
+    // ).subscribe();
+
+    // The file's download URL
+    return new Promise<string>((resolve, reject) => {
+      this.task.snapshotChanges().pipe(
       finalize(() => this.downloadURL = fileRef.getDownloadURL() )
-    ).subscribe();
+      ).toPromise()
+      .then(() => {
+        this.downloadURL = fileRef.getDownloadURL();
+        this.downloadURL.toPromise()
+        .then((url) => {
+          resolve(url);
+        }).catch((err) => {
+          reject(err);
+        });
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+
 
   }
 
-  // Determines if the upload task is active
-  isActive(snapshot) {
-    return snapshot.state === 'running' && snapshot.bytesTransferred < snapshot.totalBytes;
-  }
-
-  match(controlKey: string) {
-    return (control: FormControl): { [s: string]: boolean } => {
-        // control.parent es el FormGroup
-        if (control.parent) { // en las primeras llamadas control.parent es undefined
-          const checkValue  = control.parent.controls[controlKey].value;
-          if (control.value !== checkValue) {
-            return {
-              match: false
-            };
-          }
+  private assign(object: any, objectToCopy: any) {
+    // Si el objeto a copiar tiene subobjetos, regresamos a la función..
+    for (const key in objectToCopy) {
+      if (objectToCopy.hasOwnProperty(key)) {
+        if ( typeof objectToCopy[key] === 'object' && !Array.isArray(objectToCopy[key])) {
+          this.assign(object, objectToCopy[key]);
         }
-        return null;
-    };
-  }
-
-  agregar() {
-    console.log(this.formulario);
-  }
-
-  actualizar() {
-    this.read_flag = !this.read_flag;
-  }
-
-  guardar() {
-
-  }
-
-
-  agregarNuevo( forma: NgForm ) {
-    this.router.navigate(['/student', 'nuevo']);
-    // forma.reset({casa: 'Marvel'});
+      }
+    }
+    // Cuando se llega aquí objectToCopy ya no tiene subobjetos
+    for (const key in object) {
+      if (object.hasOwnProperty(key)) {
+        if ( typeof object[key] === 'object' && !Array.isArray(object[key])) {
+          this.assign(object[key], objectToCopy);
+        } else if ( objectToCopy[key] ) {
+          object[key] = objectToCopy[key];
+        }
+      }
+    }
   }
 
 }
