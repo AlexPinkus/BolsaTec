@@ -187,7 +187,7 @@ export class EnterpriseRegisterComponent implements OnInit {
     });
   }
 
-  uploadFile(file: File, id: string) {
+  private uploadFile(file: File, id: string) {
 
     // The storage path
     const path = `enterprise/${id}_${file.name}`;

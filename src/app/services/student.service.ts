@@ -75,7 +75,7 @@ export class StudentService {
       console.log(data);
     });
   }
-
+}
 
   //#region Implementación FireBase
   /*
@@ -142,4 +142,3 @@ export class StudentService {
   }
   */
   //#endregion
-}

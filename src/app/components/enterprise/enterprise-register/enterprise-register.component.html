@@ -285,12 +285,12 @@
       <div class="form-group col-md-12">
         <label for="logo">Logotipo</label>
         <div class="custom-file">
-          <input type="file" accept="image/*" class="custom-file-input" lang="es" formControlName="logo" (change)="onFileChange($event.target.files)">
+          <input type="file" accept="image/*" class="custom-file-input" formControlName="logo" (change)="onFileChange($event.target.files)">
           <ng-container *ngIf="file; else noFile">
             <label class="custom-file-label" for="customFile">{{file.name}}</label>
           </ng-container>
           <ng-template #noFile>
-            <label class="custom-file-label" for="customFileLang"><i class="fa fa-upload"></i> Elija el logotipo</label>
+            <label class="custom-file-label" for="customFile"><i class="fa fa-upload"></i> Elija el logotipo</label>
           </ng-template>
         </div>
         <!-- class="invalid-feedback" -->
