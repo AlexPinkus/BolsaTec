@@ -44,12 +44,11 @@ import { StudentsAdminComponent } from './components/administrador/students-admi
 // Students:
 import { StudentProfileComponent } from './components/student/student-profile/student-profile.component';
 import { StudentRegisterComponent } from './components/student/student-register/student-register.component';
-import { StudentFormComponent } from './components/student/student-form/student-form.component';
 import { StudentsComponent } from './components/students/students.component';
+
 // Enterprises:
 import { EnterpriseProfileComponent } from './components/enterprise/enterprise-profile/enterprise-profile.component';
 import { EnterpriseRegisterComponent } from './components/enterprise/enterprise-register/enterprise-register.component';
-import { EnterpriseFormComponent } from './components/enterprise/enterprise-form/enterprise-form.component';
 
 // JobOffers:
 import { JobofferListComponent } from './components/joboffer/joboffer-list/joboffer-list.component';
@@ -73,10 +72,8 @@ import { MatchPasswordValidatorDirective } from './validators/match-password.dir
     FileSizePipe,
     StudentRegisterComponent,
     StudentProfileComponent,
-    StudentFormComponent,
     EnterpriseProfileComponent,
     EnterpriseRegisterComponent,
-    EnterpriseFormComponent,
     JobofferListComponent,
     JobofferRegisterComponent,
     JobofferEditComponent,
