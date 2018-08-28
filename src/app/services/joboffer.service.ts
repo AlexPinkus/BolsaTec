@@ -15,7 +15,7 @@ export class JobofferService {
   jobofferDocument:   AngularFirestoreDocument<any>;
 
   constructor( private afs: AngularFirestore ) {
-        // Obten la colección con todos los jobOffers
+        // Obten la colección con todos los joboffers
     this.joboffersCollection = this.afs.collection('joboffers');
     // (ref) => ref.where('state', '==', 'inactive'));
     // , (ref) => ref.orderBy('time', 'desc')

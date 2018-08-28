@@ -1,6 +1,6 @@
-<div *ngIf="jobOffers$ | async as jobOffers; else loading">
+<div *ngIf="joboffers$ | async as joboffers; else loading">
   <h1>Ofertas Registradas: </h1>
-  <ngx-datatable class="material" [rows]="jobOffers" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5" [selected]="selected" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false" [displayCheck]="displayCheck"
+  <ngx-datatable class="material" [rows]="joboffers" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5" [selected]="selected" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false" [displayCheck]="displayCheck"
   (activate)="onActivate($event)" (select)='onSelect($event)'>
     <ngx-datatable-column class="material" [width]="30" [sortable]="true" [canAutoResize]="false" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
     </ngx-datatable-column>
