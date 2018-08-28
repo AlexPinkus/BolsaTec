@@ -7,7 +7,7 @@ import { StudentService } from "../../../services/student.service";
 import { AuthService } from "../../../services/auth.service";
 
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
-import { FormBuilder, Validators, FormGroup } from "@angular/forms";
+import { FormBuilder, Validators, FormGroup, FormArrayName } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Observable } from "rxjs";
 
@@ -24,7 +24,7 @@ export class JobofferViewComponent {
   // public joboffer: Joboffer;
   public formulario: FormGroup;
   public success: boolean;
-
+  public postMessage: string;
   mensaje_modal: string;
   licenciaturas: string[] = [];
 
@@ -33,7 +33,7 @@ export class JobofferViewComponent {
   public students$: Observable<any[]>;
   public user$: Observable<any>;
 
-  public is_Postulated: boolean;
+  public isPostulated: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -53,12 +53,12 @@ export class JobofferViewComponent {
           // Filtramos para ver si el id fue válido
           if (!!joboffer) {
             this.user$ = this.authService.user.pipe(
-              //take(1),
+              // take(1),
               tap(user => {
-                this.is_Postulated = joboffer.applicants.includes(user.uid);
+                this.isPostulated = joboffer.applicants.map(applicant => applicant.uid).includes(user.uid);
               })
             );
-            this.students$ = this.studentService.getStudentsInArray(joboffer.applicants);
+            this.students$ = this.studentService.getStudentsInArray(joboffer.applicants.map(applicant => applicant.uid));
             this.licenciaturas = this.getCarreraName(joboffer.bachelors);
             this.enterprise$ = this.enterpriseService.getEnterprise(joboffer.idEnterprise).valueChanges();
           } else {
@@ -128,13 +128,12 @@ export class JobofferViewComponent {
 
   postulate(joboffer: Joboffer, studentId, modalConfirmacion) {
     this.mensaje_modal = "¿Deseas postularte para esta oferta de trabajo?";
-
+    const message = this.formulario.value.postulación;
     this.modalService.open(modalConfirmacion).result.then(() => {
         // El estudiante se postula.
         // Ya se ha postulado antes (sólo por protección)
-        if (joboffer.applicants.includes(studentId)) { return; }
-        joboffer.applicants.push(studentId);
-        console.log('joboffer :', joboffer);
+        if (joboffer.applicants.map(applicant => applicant.uid).includes(studentId)) { return; }
+        joboffer.applicants.push({uid: studentId, message: message});
         this.jobofferService.updateJoboffer(joboffer.uid, joboffer)
         .then((result) => {
           this.success = true;
@@ -147,13 +146,18 @@ export class JobofferViewComponent {
     );
   }
 
-  isPostulated(joboffer: Joboffer, studentId): boolean {
-    console.log('joboffer.applicants :', joboffer.applicants);
-    return joboffer.applicants.includes(studentId);
-  }
-
   downloadCV(value) {
     console.log('value :', value);
+  }
+
+  viewMessage(joboffer: Joboffer, studentId, modalMessage) {
+    this.postMessage = joboffer.applicants.find(applicant => applicant.uid === studentId).message;
+    this.modalService.open(modalMessage).result.then(() => {
+      // Vemos el mensaje...
+    },
+    reason => {}
+    );
+
   }
 
 }
