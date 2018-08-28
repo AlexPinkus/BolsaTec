@@ -11,14 +11,14 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class JobofferListComponent implements OnInit {
   selected = [];
-  jobOffers$: Observable<Joboffer[]>;
+  joboffers$: Observable<Joboffer[]>;
 
   constructor( private jobofferService: JobofferService,
     private activatedRoute: ActivatedRoute,
     private router: Router ) {
     this.activatedRoute.params.subscribe(params => {
       // Siempre va a haber el id, no hace falta comprobación ...
-      this.jobOffers$ = this.jobofferService.getData(params['id']);
+      this.joboffers$ = this.jobofferService.getData(params['id']);
       // if ( params['id'] !== 'nuevo') {
       //   // this.enterpriseO = this.enterpriseService.getEnterprise(params['id']).valueChanges();
       // }

@@ -17,32 +17,23 @@ export class JobofferRegisterComponent implements OnInit {
   public formulario: FormGroup;
   public joboffer: Joboffer = {
     // Datos del puesto
-    position:     'Asistente de ventas',
-    description:  'Aquí tienen que poner todo',
-    salary:       10000,
-    vacantNumber: 4,
-    weeklyHours:  48,
+    position:     '',
+    description:  '',
+    salary:       0,
+    vacantNumber: 0,
+    weeklyHours:  0,
 
-    applicants: ['vtV4JEZRanhUVaLAbAIibSQZSSI3'],
+    applicants: [],
 
     // Perfil deseado
-    aptitudes: [
-      'Limpieza',
-      'orden',
-      'puntualidad',
-      'trabajo duro'
-    ],
-    experience:   1,
-    bachelors: [
-      'industrial',
-      'bioquimica',
-      'ambiental'
-    ],
+    aptitudes: [],
+    experience:   0,
+    bachelors: [],
     languages: {
       english: {
-        written:  '80',
-        spoken:   '70',
-        translation: '80'
+        written:  '',
+        spoken:   '',
+        translation: ''
       }
     }
   };

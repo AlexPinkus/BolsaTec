@@ -44,6 +44,7 @@ export class StudentService {
 
 
   getStudentsInArray(studentIds: Array<string>) {
+    if (studentIds.length === 0) { return of([]); }
     const studentsDocs = studentIds.map(id => this.afs.doc<Student>(`users/${id}`).valueChanges());
     return combineLatest<any[]>(studentsDocs);
     // Lo siguiente es cuando se require combinar colecciones:
