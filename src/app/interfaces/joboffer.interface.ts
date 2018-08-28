@@ -2,7 +2,10 @@ export interface Joboffer {
   uid?:          any;
   idEnterprise?: any;
   createdOn?:    Date;
-  applicants:    Array<any>;
+  applicants:    Array<{
+    uid: string,
+    message: string,
+  }>;
 
   // Posibles datos de la empresa:
   enterpriseName?: string;
