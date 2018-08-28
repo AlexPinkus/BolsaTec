@@ -9,7 +9,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {NgxPaginationModule} from 'ngx-pagination';
 // Routing
 import { AppRoutingModule } from './app-routing.module';
 
@@ -101,6 +102,7 @@ import { LoadingComponent } from './components/shared/loading/loading.component'
     AppRoutingModule,
     NgxDatatableModule,
     MatFormFieldModule,
+    NgxPaginationModule,
     MatInputModule
   ],
   providers: [
