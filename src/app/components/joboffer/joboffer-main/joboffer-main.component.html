@@ -18,22 +18,24 @@
 </form>
 <br>
 <div class="d-flex flex-wrap justify-content-around">
-  <!-- <div} *ngFor="let item of bachelors"> -->
-  <div class="card shadow col-lg-3" *ngFor="let jobOffer of jobOffers$ | async as jobOffers">
-    <ng-container *ngIf="filter(jobOffer.bachelors) && updateFilter(jobOffer); else loading">
-      <img class="card-img-top p-2 " [src]="jobOffer.enterpriseLogo" alt="Card image cap">
-      <div class="card-body">
-        <h5 class="card-title"><strong> {{ jobOffer.position }}</strong></h5>
-        <p class="card-text"><strong>{{jobOffer.enterpriseName}}</strong></p>
-        <a [routerLink]="['/joboffer', jobOffer.uid]" class=""> <small> Ver oferta</small> <i class="icon ion-ios-eye"> </i></a>
+  <ng-container *ngIf="joboffers$ | async as joboffers; else loading">
+    <ng-container *ngIf="filter(joboffers) as filtered; else noResults">
+      <div class="card shadow col-lg-3" *ngFor="let joboffer of filtered">
+        <img class="card-img-top p-2 " [src]="joboffer.enterpriseLogo" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title"><strong> {{ joboffer.position }}</strong></h5>
+          <p class="card-text"><strong>{{joboffer.enterpriseName}}</strong></p>
+          <a [routerLink]="['/joboffer', joboffer.id]" class=""> <small> Ver oferta</small> <i class="icon ion-ios-eye"> </i></a>
+        </div>
       </div>
     </ng-container>
-    <ng-template #loading>
-      Cargando ...
+    <ng-template #noResults>
+        No se encontraron resultados a su búsqueda ...
     </ng-template>
-
-
-  </div>
+  </ng-container>
+  <ng-template #loading>
+    Cargando ...
+  </ng-template>
 </div>
 
 

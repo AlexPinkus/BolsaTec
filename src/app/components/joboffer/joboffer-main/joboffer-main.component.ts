@@ -14,7 +14,7 @@ import { combineLatest } from 'rxjs/observable/combineLatest';
 })
 export class JobofferMainComponent implements OnInit {
 
-  public jobOffers$: Observable<any>;
+  public joboffers$: Observable<Joboffer[]>;
 
   public bachelors = [
     'Licenciatura en Ingeniería Industrial',
@@ -35,19 +35,13 @@ export class JobofferMainComponent implements OnInit {
   public selectedBachelor: string;
   public searchFilter: string;
 
-  public item = [
-
-  ]
-
-
-
   constructor(private jobofferService: JobofferService,
   private enterpriseService: EnterpriseService) {
-    this.jobOffers$ = this.jobofferService.joboffersCollection.valueChanges().pipe(
-      map(jobOffers => {
-        return jobOffers.map(jobOffer => {
-          return this.enterpriseService.getEnterprise(jobOffer.idEnterprise).valueChanges().pipe(
-            map(enterprise => Object.assign({}, {enterpriseLogo: enterprise.logo, enterpriseName: enterprise.comercialName, ...jobOffer}))
+    this.joboffers$ = this.jobofferService.getData().pipe(
+      map(joboffers => {
+        return joboffers.map(joboffer => {
+          return this.enterpriseService.getEnterprise(joboffer.idEnterprise).valueChanges().pipe(
+            map(enterprise => Object.assign({}, {enterpriseLogo: enterprise.logo, enterpriseName: enterprise.comercialName, ...joboffer}))
           );
         });
       }),
@@ -58,24 +52,34 @@ export class JobofferMainComponent implements OnInit {
   ngOnInit() {
   }
 
-  updateFilter(jobOffer) {
-    // console.log('event :', event);
-    // console.log('searchFilter :', this.searchFilter);
-    if (this.searchFilter) {
-      return ( jobOffer.enterpriseName.includes(this.searchFilter) ||
-      jobOffer.position.includes(this.searchFilter))
-    } else {
-      return true;
-    }
+  filter(joboffers: Joboffer[]): Joboffer[] {
+    return this.filterSearch(this.filterBachelor(joboffers));
   }
 
-  filter(bachelors: string[]) {
-    if (this.selectedBachelor) {
-      console.log('selectedBachelor :', this.selectedBachelor);
-      return bachelors.includes(this.selectedBachelor);
-    } else {
-      return true;
-    }
+  // Filtro para el input de búsqueda.
+  private filterSearch(joboffers: Joboffer[] | null): Joboffer[] | null {
+    if ( joboffers === null) { return null; }
+    if (!this.searchFilter) { return joboffers; }
+    const filtered = [];
+    joboffers.forEach(joboffer => {
+      if (joboffer.enterpriseName.toLowerCase().includes(this.searchFilter.toLowerCase()) ||
+      joboffer.position.toLowerCase().includes(this.searchFilter.toLowerCase())) {
+        filtered.push(joboffer);
+      }
+    });
+    return (filtered.length > 0) ? filtered : null;
+  }
 
+  // Filtro para la carrera de egreso.
+  private filterBachelor(joboffers: Joboffer[] | null): Joboffer[] | null {
+    if ( joboffers === null) { return null; }
+    if (!this.selectedBachelor) { return joboffers; }
+    const filtered = [];
+    joboffers.forEach(joboffer => {
+      if (joboffer.bachelors.includes(this.selectedBachelor)) {
+        filtered.push(joboffer);
+      }
+    });
+    return (filtered.length > 0) ? filtered : null;
   }
 }
