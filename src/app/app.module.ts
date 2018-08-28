@@ -60,6 +60,7 @@ import { JobofferMainComponent } from './components/joboffer/joboffer-main/jobof
 import { EmailAvailableDirective } from './validators/email-available.directive';
 import { MatchEmailValidatorDirective } from './validators/match-email.directive';
 import { MatchPasswordValidatorDirective } from './validators/match-password.directive';
+import { LoadingComponent } from './components/shared/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +87,8 @@ import { MatchPasswordValidatorDirective } from './validators/match-password.dir
     JobofferMainComponent,
     EmailAvailableDirective,
     MatchEmailValidatorDirective,
-    MatchPasswordValidatorDirective
+    MatchPasswordValidatorDirective,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,
