@@ -5,7 +5,8 @@ import { JobofferService } from '../../../services/joboffer.service';
 import { AuthService } from '../../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-declare var $: any;
+import { TextsService } from '../../../services/texts.service';
+
 @Component({
   selector: 'app-joboffer-register',
   templateUrl: './joboffer-register.component.html',
@@ -13,7 +14,6 @@ declare var $: any;
 })
 export class JobofferRegisterComponent implements OnInit {
   public success: boolean;
-  public valid_form: boolean;
   public formulario: FormGroup;
   public joboffer: Joboffer = {
     // Datos del puesto
@@ -37,41 +37,10 @@ export class JobofferRegisterComponent implements OnInit {
       }
     }
   };
-  read_flag: boolean;
-  carreras: any[] = [
-   { value: 'industrial', name: 'Licenciatura en Ingeniería Industrial'},
-   { value: 'bioquimica', name: 'Licenciatura en Ingeniería Bioquímica'},
-   { value: 'ambiental', name: 'Licenciatura en Ingeniería Ambiental'},
-   { value: 'biomedica', name: 'Licenciatura en Ingeniería Biomédica'},
-   { value: 'gestion', name: 'Licenciatura en Ingeniería en Gestión Empresarial'},
-   { value: 'quimica', name: 'Licenciatura en Ingeniería Química'},
-   { value: 'electrica', name: 'Licenciatura en Ingeniería Eléctrica'},
-   { value: 'electronica', name: 'Licenciatura en Ingeniería Electrónica'},
-   { value: 'mecanica', name: 'Licenciatura en Ingeniería Mecánica'},
-   { value: 'civil', name: 'Licenciatura en Ingeniería Civil'},
-   { value: 'sistemas', name: 'Licenciatura en Sistemas Computacionales'},
-   { value: 'administracion', name: 'Licenciatura en Administración'},
-   { value: 'administracion_distancia', name: 'Licenciatura en Administración en Educación a Distancia'}
-  ];
-  carreras2 = {
-   industrial: 'Ingeniería Industrial',
-   bioquimica: 'Ingeniería Bioquímica',
-   ambiental: 'Ingeniería Ambiental',
-   biomedica: 'Ingeniería Biomédica',
-   gestion: 'Ingeniería en Gestión Empresarial',
-   quimica: 'Ingeniería Química',
-   electrica: 'Ingeniería Eléctrica',
-   electronica: 'Ingeniería Electrónica',
-   mecanica: 'Ingeniería Mecánica',
-   civil: 'Ingeniería Civil',
-   sistemas: 'Sistemas Computacionales',
-   administracion: 'Administración',
-   administracion_distancia: 'Administración en Educación a Distancia'
-  };
-  carreras_selected: any[];
   mensaje_modal: string;
 
   constructor( private jobofferService: JobofferService,
+    public texts: TextsService,
     public authService: AuthService,
     private formBuilder: FormBuilder,
     private rutaURL: Router,
@@ -101,14 +70,7 @@ export class JobofferRegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    // console.log(this.rutaURL.url);
-    // console.log();
-    // if (this.rutaURL.url === '/register/employeer') {
-    //  this.read_flag = false;
-    // } else {
-    //   this.read_flag = true;
-    // }
-    this.read_flag = false;
+
   }
 
   register(userId, modalConfirmacion) {

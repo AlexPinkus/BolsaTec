@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Joboffer } from '../../../interfaces/joboffer.interface';
 import { JobofferService } from '../../../services/joboffer.service';
 import { EnterpriseService } from '../../../services/enterprise.service';
+import { TextsService } from '../../../services/texts.service';
 
 import { Observable } from 'rxjs';
 import { map, take, tap, finalize, switchMap, flatMap } from 'rxjs/operators';
@@ -15,27 +16,12 @@ import { combineLatest } from 'rxjs/observable/combineLatest';
 export class JobofferMainComponent implements OnInit {
 
   public joboffers$: Observable<Joboffer[]>;
-
-  public bachelors = [
-    'Licenciatura en Ingeniería Industrial',
-    'Licenciatura en Ingeniería Bioquímica',
-    'Licenciatura en Ingeniería Ambiental',
-    'Licenciatura en Ingeniería Biomédica',
-    'Licenciatura en Ingeniería en Gestión Empresarial',
-    'Licenciatura en Ingeniería Química',
-    'Licenciatura en Ingeniería Eléctrica',
-    'Licenciatura en Ingeniería Electrónica',
-    'Licenciatura en Ingeniería Mecánica',
-    'Licenciatura en Ingeniería Civil',
-    'Licenciatura en Sistemas Computacionales',
-    'Licenciatura en Administración',
-    'Licenciatura en Administración en Educación a Distancia'
-  ];
-
   public selectedBachelor: string;
   public searchFilter: string;
 
-  constructor(private jobofferService: JobofferService,
+  constructor(
+  public texts: TextsService,
+  private jobofferService: JobofferService,
   private enterpriseService: EnterpriseService) {
     this.joboffers$ = this.jobofferService.getData().pipe(
       map(joboffers => {

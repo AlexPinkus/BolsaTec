@@ -6,6 +6,7 @@ import { Student } from '../../../interfaces/student.interface';
 import { StudentService } from '../../../services/student.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { TextsService } from '../../../services/texts.service';
 
 import { Observable } from 'rxjs';
 import { map, take, tap, finalize } from 'rxjs/operators';
@@ -31,26 +32,6 @@ export class StudentProfileComponent implements OnInit {
 
 
   public formulario: FormGroup;
-  public genders = ['Hombre', 'Mujer'];
-  public maritalStatuses = ['Soltero(a)', 'Casado(a)'];
-  public bachelors = [
-    'Licenciatura en Ingeniería Industrial',
-    'Licenciatura en Ingeniería Bioquímica',
-    'Licenciatura en Ingeniería Ambiental',
-    'Licenciatura en Ingeniería Biomédica',
-    'Licenciatura en Ingeniería en Gestión Empresarial',
-    'Licenciatura en Ingeniería Química',
-    'Licenciatura en Ingeniería Eléctrica',
-    'Licenciatura en Ingeniería Electrónica',
-    'Licenciatura en Ingeniería Mecánica',
-    'Licenciatura en Ingeniería Civil',
-    'Licenciatura en Sistemas Computacionales',
-    'Licenciatura en Administración',
-    'Licenciatura en Administración en Educación a Distancia'];
-
-
-  nuevo = false;
-  id: string;
 
   // Posibles errores de validación...
   formErrors = {
@@ -79,7 +60,9 @@ export class StudentProfileComponent implements OnInit {
   private downloadURL: Observable<string>;
 
 
-  constructor(private studentService: StudentService,
+  constructor(
+    public texts: TextsService,
+    private studentService: StudentService,
     private router: Router,
     private modalService: NgbModal,
     private storage: AngularFireStorage,
