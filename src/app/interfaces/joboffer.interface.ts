@@ -4,6 +4,10 @@ export interface Joboffer {
   createdOn?:    Date;
   applicants:    Array<any>;
 
+  // Posibles datos de la empresa:
+  enterpriseName?: string;
+  enterpriseLogo?: string;
+
   // Datos del puesto
   position:     string;
   description:  string;
