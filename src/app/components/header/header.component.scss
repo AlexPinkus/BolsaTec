@@ -69,13 +69,21 @@ $dropDown: true;
         border-color: $bgHighlight;
     }
     .navbar-toggler-icon {
-        color: $colDefault;
+        color: #ffffff!important;
         &:hover,
         &:focus {
-            color: $colHighlight;
+            color: $colHighlight!important;
         }
     }
-    .navbar-collapse {}
+    .navbar-collapse {
+        .navbar-toggler-icon {
+            color: #ffffff!important;
+            &:hover,
+            &:focus {
+                color: $colHighlight!important;
+            }
+        }
+    }
     .navbar-form {
         border-color: $colDefault;
     }
@@ -163,4 +171,8 @@ $dropDown: true;
         color: $colHighlight;
         background-color: $bgHighlight;
     }
+}
+
+.icon {
+    color: #ffffff;
 }

@@ -38,6 +38,39 @@ export class JobofferMainComponent implements OnInit {
   ngOnInit() {
   }
 
+  // loadPage(page = 1) {
+  //   let joboffersPagination: any;
+  //     console.log(this.latestDoc);
+  //   if (page == 1) {
+  //      joboffersPagination = this.jobofferService.pagination(this.Itemspage, page, true);
+  //   } else {
+  //      joboffersPagination = this.jobofferService.pagination(this.Itemspage, page, false, this.latestDoc);
+  //   }
+  //   if (page !== this.previousPage) {
+  //     this.previousPage = page;
+  //     this.jobOffers$ = joboffersPagination.valueChanges().pipe(
+  //       map(jobOffers => {
+  //        this.latestDoc = jobOffers[jobOffers.length - 1];
+  //         return jobOffers.map(jobOffer => {
+  //           return this.enterpriseService.getEnterprise(jobOffer.idEnterprise).valueChanges().pipe(
+  //             map(enterprise => Object.assign({}, {enterpriseLogo: enterprise.logo, enterpriseName: enterprise.comercialName, ...jobOffer}))
+  //           );
+  //         });
+  //       }),
+  //       flatMap(observables => combineLatest(observables))
+  //     );
+  //   }
+  // }
+
+  updateFilter(jobOffer) {
+    // console.log('event :', event);
+    // console.log('searchFilter :', this.searchFilter);
+    if (this.searchFilter) {
+      return ( jobOffer.enterpriseName.includes(this.searchFilter) ||
+      jobOffer.position.includes(this.searchFilter));
+    } else {
+      return true;
+    }
   filter(joboffers: Joboffer[]): Joboffer[] {
     return this.filterSearch(this.filterBachelor(joboffers));
   }

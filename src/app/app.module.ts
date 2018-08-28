@@ -9,7 +9,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {NgxPaginationModule} from 'ngx-pagination';
 // Routing
 import { AppRoutingModule } from './app-routing.module';
 
@@ -59,6 +60,7 @@ import { JobofferMainComponent } from './components/joboffer/joboffer-main/jobof
 import { EmailAvailableDirective } from './validators/email-available.directive';
 import { MatchEmailValidatorDirective } from './validators/match-email.directive';
 import { MatchPasswordValidatorDirective } from './validators/match-password.directive';
+import { LoadingComponent } from './components/shared/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +85,8 @@ import { MatchPasswordValidatorDirective } from './validators/match-password.dir
     JobofferMainComponent,
     EmailAvailableDirective,
     MatchEmailValidatorDirective,
-    MatchPasswordValidatorDirective
+    MatchPasswordValidatorDirective,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,
@@ -99,6 +102,7 @@ import { MatchPasswordValidatorDirective } from './validators/match-password.dir
     AppRoutingModule,
     NgxDatatableModule,
     MatFormFieldModule,
+    NgxPaginationModule,
     MatInputModule
   ],
   providers: [

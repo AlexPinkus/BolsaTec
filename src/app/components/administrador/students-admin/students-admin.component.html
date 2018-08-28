@@ -15,10 +15,10 @@
                     <label for="">Acciones para selección</label>
                     <div class="actions" style="margin-bottom: 0px;">
                         <button type="button" (click)="verModal(selectedInactivos,'aprobarBatch', AprobarEstudiantesBatch, 'Inactivos')" class="btn btn-success">
-                                        <i class="icon ion-ios-checkmark-circle icon-medium p-2"> </i> Aprobar estudiantes
+                                        <i class="icon ion-ios-checkmark-circle p-2"> </i> Aprobar estudiantes
                                     </button>
                         <button type="button" (click)="verModal(selectedInactivos,'eliminarBatch', EliminarEstudiantesBatch, 'Inactivos')" class="btn btn-danger">
-                                        <i class="icon ion-ios-trash icon-medium p-2"> </i> Eliminar estudiantes
+                                        <i class="icon ion-ios-trash p-2"> </i> Eliminar estudiantes
                                     </button>
                     </div>
                 </div>
@@ -39,13 +39,13 @@
                 <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row" let-group="group" let-rowHeight="rowHeight">
                     <div class="actions" *ngIf="selectedInactivos.length < 2">
                         <button type="button" (click)="verModal(value,'ver', VerEstudiante, 'Inactivos')" ngbTooltip="Ver estudiante" class="btn btn-info">
-                                    <i class="icon ion-ios-eye icon-medium p-2"> </i>
+                                    <i class="icon ion-ios-eye p-2"> </i>
                                 </button>
                         <button type="button" (click)="verModal(value,'aprobar', AprobarEstudiante, 'Inactivos')" ngbTooltip="Aprobar estudiante" class="btn btn-success">
-                                    <i class="icon ion-ios-checkmark-circle icon-medium p-2"> </i>
+                                    <i class="icon ion-ios-checkmark-circle p-2"> </i>
                                 </button>
                         <button type="button" (click)="verModal(value,'eliminar', EliminarEstudiante, 'Inactivos')" ngbTooltip="Eliminar estudiante" class="btn btn-danger">
-                                    <i class="icon ion-ios-trash icon-medium p-2"> </i>
+                                    <i class="icon ion-ios-trash p-2"> </i>
                                 </button>
                     </div>
                 </ng-template>
@@ -82,10 +82,10 @@
                 <label for="">Acciones para selección</label>
                 <div class="actions" style="margin-bottom: 0px;">
                     <button type="button" (click)="verModal(selectedActivos,'aprobarBatch', AprobarEstudiantesBatch,'Activos')" class="btn btn-success">
-                                        <i class="icon ion-ios-alert icon-medium p-2"> </i> Aprobar estudiantes
+                                        <i class="icon ion-ios-alert  p-2"> </i> Aprobar estudiantes
                                     </button>
                     <button type="button" (click)="verModal(selectedActivos,'eliminarBatch', EliminarEstudiantesBatch,'Activos')" class="btn btn-danger">
-                                        <i class="icon ion-ios-trash icon-medium p-2"> </i> Eliminar estudiantes
+                                        <i class="icon ion-ios-trash p-2"> </i> Eliminar estudiantes
                                     </button>
                 </div>
             </div>
@@ -106,13 +106,13 @@
                 </a> -->
                 <div class="actions" *ngIf="selectedActivos.length < 2">
                     <button type="button" (click)="verModal(value,'ver', VerEstudiante, 'Activos')" ngbTooltip="Ver estudiante" class="btn btn-info">
-                                <i class="icon ion-ios-eye icon-medium p-2"> </i>
+                                <i class="icon ion-ios-eye p-2"> </i>
                             </button>
                     <button type="button" (click)="verModal(value,'aprobar', AprobarEstudiante, 'Activos')" ngbTooltip="Suspender estudiante" class="btn btn-warning">
-                                <i class="icon ion-ios-alert icon-medium p-2"> </i>
+                                <i class="icon ion-ios-alert p-2"> </i>
                             </button>
                     <button type="button" (click)="verModal(value,'eliminar', EliminarEstudiante, 'Activos')" ngbTooltip="Eliminar estudiante" class="btn btn-danger">
-                                <i class="icon ion-ios-trash icon-medium p-2"> </i>
+                                <i class="icon ion-ios-trash p-2"> </i>
                             </button>
                 </div>
             </ng-template>

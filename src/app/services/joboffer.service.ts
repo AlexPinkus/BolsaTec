@@ -13,12 +13,22 @@ export class JobofferService {
   // Esta es la colección con todos los documentos...
   joboffersCollection: AngularFirestoreCollection<any>;
   jobofferDocument:   AngularFirestoreDocument<any>;
-
+  count_offers: AngularFirestoreDocument<number>;
   constructor( private afs: AngularFirestore ) {
         // Obten la colección con todos los joboffers
     this.joboffersCollection = this.afs.collection('joboffers');
+    this.count_offers = this.afs.doc('variables/count_joboffer');
     // (ref) => ref.where('state', '==', 'inactive'));
     // , (ref) => ref.orderBy('time', 'desc')
+  }
+
+  pagination(ItemsPerPage: number, first: boolean, latestDoc?: any) {
+    console.log(ItemsPerPage);
+    if (first == true) {
+      return this.afs.collection('joboffers', (ref) => ref.limit(ItemsPerPage));
+    } else {
+      return this.afs.collection('joboffers', (ref) => ref.limit(ItemsPerPage).startAfter(latestDoc));
+    }
   }
 
   getData(idEnterprise?: string): Observable<any[]> {
