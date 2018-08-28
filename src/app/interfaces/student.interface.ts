@@ -1,16 +1,22 @@
 
 export interface Student {
+  // Información DB
   uid?:      any;
-  // Matrícula
-  idStudent?: any;
+  role:        string;
+  createdOn?:   number;
+  isActive:    boolean;
+
+  // Datos personales
   firstName:  string;
   middleName: string;
   lastName:   string;
-  age:        Date;
+  age:        string;
   sex:        string;
   email:      string;
   phone:      number;
+  maritalStatus: string;
 
+  // Dirección
   address: {
     mainStreet:    string;
     crossings:     string;
@@ -20,6 +26,10 @@ export interface Student {
     municipality?: string;
     city?:         string;
   };
+
+  // Matrícula
+  idStudent?: any;
+  // Idiomas
   languages?: {
     english: {
       written:     string;
@@ -27,18 +37,14 @@ export interface Student {
       translation: string;
     }
   };
+
+  // Grados académicos
   degree?: {
     bachelor:   string;
     speciality: string;
     master:     string;
     phd:        string;
   };
-  experience?:    string;
-  resumeURL?:     string;
-  speciality?:    string;
-  maritalStatus?: string;
+  resumeURL:     string;
   isGraduated?: boolean;
-  createdOn?: number;
-  isActive?:  boolean;
-  role?:      string;
 }

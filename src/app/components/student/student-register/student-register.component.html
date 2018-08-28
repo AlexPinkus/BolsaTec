@@ -71,19 +71,19 @@
           </div>
       </div>
       <div class="form-group col-md-4">
-          <label for="middleName">Apellido paterno</label>
-          <input type="text" class="form-control" id="lastName" formControlName="lastName" placeholder="Apellido Paterno"
-          [class.is-invalid]="!formulario.get('lastName').valid && formulario.get('lastName').dirty"
-          [class.is-valid]="formulario.get('lastName').valid">
-          <div class="invalid-feedback" *ngIf="!formulario.get('lastName').valid && formulario.get('lastName').dirty">
-            *Campo requerido
-          </div>
+        <label for="middleName">Apellido paterno</label>
+        <input type="text" class="form-control" id="lastName" formControlName="lastName" placeholder="Apellido Paterno"
+        [class.is-invalid]="!formulario.get('lastName').valid && formulario.get('lastName').dirty"
+        [class.is-valid]="formulario.get('lastName').valid">
+        <div class="invalid-feedback" *ngIf="!formulario.get('lastName').valid && formulario.get('lastName').dirty">
+          *Campo requerido
+        </div>
       </div>
       <div class="form-group col-md-4">
           <label for="lastName">Apellido materno</label>
           <input type="text" class="form-control" id="middleName" formControlName="middleName" placeholder="Apellido Materno"
-
-          [class.is-invalid]="!formulario.get('middleName').valid && formulario.get('middleName').dirty" [class.is-valid]="formulario.get('middleName').valid">
+          [class.is-invalid]="!formulario.get('middleName').valid && formulario.get('middleName').dirty"
+          [class.is-valid]="formulario.get('middleName').valid">
           <div class="invalid-feedback" *ngIf="!formulario.get('middleName').valid && formulario.get('middleName').dirty">
             *Campo requerido
           </div>
@@ -93,7 +93,6 @@
       <div class="form-group col-md-4">
         <label class="mr-sm-2" for="sex">Sexo</label>
         <select class="custom-select select-tec mr-sm-2" formControlName="sex" id="sex">
-          <!-- <option value="" selected disabled hidden>Elige una opción...</option> -->
           <option value="" selected disabled hidden>Elige una opción...</option>
           <option *ngFor="let gender of genders" [ngValue]="gender">{{gender}}</option>
         </select>
@@ -101,7 +100,6 @@
       <div class="form-group col-md-4">
           <label for="age">Fecha de nacimiento</label>
           <input type="date" class="form-control" formControlName="age" id="age"
-
           [class.is-invalid]="!formulario.get('age').valid && formulario.get('age').dirty" [class.is-valid]="formulario.get('age').valid">
           <div class="invalid-feedback" *ngIf="!formulario.get('age').valid && formulario.get('age').dirty">
             *Campo requerido
@@ -110,7 +108,6 @@
       <div class="form-group col-md-4">
         <label class="mr-sm-2" for="maritalStatus">Estado civil</label>
         <select class="custom-select select-tec mr-sm-2" formControlName="maritalStatus" id="maritalStatus">
-        <!-- <option value="" selected>Elige una opción...</option> -->
         <option value="" selected disabled hidden>Elige una opción...</option>
         <option *ngFor="let maritalStatus of maritalStatuses" [ngValue]="maritalStatus">{{maritalStatus}}</option>
         </select>
@@ -159,8 +156,8 @@
       <div class="form-group col-md-4">
         <label for="city666">Ciudad</label>
         <input type="text" class="form-control" formControlName="city" id="city" placeholder="Ciudad"
-
-        [class.is-invalid]="!formulario.get('city').valid && formulario.get('city').dirty" [class.is-valid]="formulario.get('city').valid">
+        [class.is-invalid]="!formulario.get('city').valid && formulario.get('city').dirty"
+        [class.is-valid]="formulario.get('city').valid">
         <div class="invalid-feedback" *ngIf="!formulario.get('city').valid && formulario.get('city').dirty">
           *Campo requerido
         </div>
@@ -191,19 +188,19 @@
     <br>
     <div class="form-row">
       <div class="form-group col-md-3">
-          <label for="idStudent">Matrícula</label>
-          <input type="text" class="form-control" formControlName="idStudent" id="idStudent" placeholder="Matrícula"
-          [class.is-invalid]="!formulario.get('idStudent').valid && formulario.get('idStudent').dirty"
-          [class.is-valid]="formulario.get('idStudent').valid">
-          <div class="invalid-feedback" *ngIf="formulario.get('idStudent').hasError('required') && formulario.get('idStudent').dirty">
-            *Campo requerido
-          </div>
-          <div class="invalid-feedback" *ngIf="formulario.get('idStudent').hasError('pattern') && formulario.get('idStudent').dirty">
-              *Verifica que la matrícula esté bien escrita
-          </div>
-          <div class="invalid-feedback" *ngIf="formulario.get('idStudent').hasError('maxlength') && formulario.get('idStudent').dirty">
-              *Verifica que la matrícula esté bien escrita
-          </div>
+        <label for="idStudent">Matrícula</label>
+        <input type="text" class="form-control" formControlName="idStudent" id="idStudent" placeholder="Matrícula"
+        [class.is-invalid]="!formulario.get('idStudent').valid && formulario.get('idStudent').dirty"
+        [class.is-valid]="formulario.get('idStudent').valid">
+        <div class="invalid-feedback" *ngIf="formulario.get('idStudent').hasError('required') && formulario.get('idStudent').dirty">
+          *Campo requerido
+        </div>
+        <div class="invalid-feedback" *ngIf="formulario.get('idStudent').hasError('pattern') && formulario.get('idStudent').dirty">
+            *Verifica que la matrícula esté bien escrita
+        </div>
+        <div class="invalid-feedback" *ngIf="formulario.get('idStudent').hasError('maxlength') && formulario.get('idStudent').dirty">
+            *Verifique la longitud de la matrícula.
+        </div>
       </div>
       <div class="form-group col-md-4">
         <label class="mr-sm-2" for="bachelor">Carrera de egreso</label>
@@ -280,8 +277,8 @@
       <div class="form-group col-md-4">
         <label for="translation">Traducción</label>
         <input type="number" class="form-control" min="0" max="100" formControlName="translation" id="translation" placeholder="Traducción"
-
-        [class.is-invalid]="!formulario.get('translation').valid && formulario.get('translation').dirty" [class.is-valid]="formulario.get('translation').valid">
+        [class.is-invalid]="!formulario.get('translation').valid && formulario.get('translation').dirty"
+        [class.is-valid]="formulario.get('translation').valid">
         <div class="invalid-feedback" *ngIf="formulario.get('translation').hasError('required') && formulario.get('translation').dirty">
           *Campo requerido
         </div>
@@ -297,9 +294,19 @@
       <div class="form-group col-md-12">
         <label for="">Curriculum</label>
         <div class="custom-file">
-          <!-- (change)="startUpload($event.target.files)" -->
-          <input type="file" accept="application/pdf" class="custom-file-input">
-          <label class="custom-file-label" for="customFile"><i class="fa fa-upload"></i> Choose file</label>
+            <input type="file" accept="application/pdf" class="custom-file-input" (change)="onFileChange($event.target.files)">
+            <ng-container *ngIf="file; else noFile">
+              <label class="custom-file-label" for="customFile">{{file.name}}</label>
+            </ng-container>
+            <ng-template #noFile>
+              <label class="custom-file-label" for="customFile"><i class="fa fa-upload"></i> Elija su CV</label>
+            </ng-template>
+        </div>
+        <div *ngIf="fileError.unsupported">
+            *Seleccione un archivo pdf por favor.
+        </div>
+        <div *ngIf="fileError.size">
+            *El tamaño del archivo debe ser menor a 1mb.
         </div>
       </div>
     </div>

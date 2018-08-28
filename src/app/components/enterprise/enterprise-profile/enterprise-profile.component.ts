@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl, AbstractControl } from '@angular/forms';
 import { Enterprise } from '../../../interfaces/enterprise.interface';
 import { EnterpriseService } from '../../../services/enterprise.service';
-import { AuthService } from '../../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
 
 import { Observable } from 'rxjs';
+import { map, take, tap, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-enterpriseprofile',
@@ -19,23 +20,33 @@ export class EnterpriseProfileComponent implements OnInit {
   public success: boolean;
   public modalMessage: string;
 
-  public read_flag = true;
-  public valid_form: boolean;
+  public isreadonly = true;
   public formulario: FormGroup;
 
+  public file: File;
+  public fileError = {
+    'unsupported' : false,
+    'size' : false,
+  };
+
+  // Main task
+  private task: AngularFireUploadTask;
+
+  // Download URL
+  private downloadURL: Observable<string>;
+
   constructor(private enterpriseService: EnterpriseService,
-    private authService: AuthService,
+    private storage: AngularFireStorage,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private rutaURL: Router,
     private activatedRoute: ActivatedRoute) {
       this.formulario = this.formBuilder.group({
         // Hay que agregrar verificación si existen usuarios:
-        email: ['', Validators.compose([Validators.required, Validators.email])],
-        email_confirm: ['', Validators.compose([Validators.required, this.match('email')])],
 
-        password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/)])],
-        password_confirm: ['', Validators.compose([Validators.required,  this.match('password')])],
+        // password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/)])],
+        // password_confirm: ['', Validators.compose([Validators.required])],
+
         // Datos contacto
         firstName:      ['', Validators.required],
         lastName:       ['', Validators.required],
@@ -67,7 +78,7 @@ export class EnterpriseProfileComponent implements OnInit {
       });
       // Obtenemos los parámetros de las rutas...
       this.activatedRoute.params.subscribe(params => {
-        if ( params['id'] !== 'nuevo') {
+        if ( params['id'] ) {
           this.enterprise$ = this.enterpriseService.getEnterprise(params['id']).valueChanges();
         }
       });
@@ -76,59 +87,130 @@ export class EnterpriseProfileComponent implements OnInit {
   ngOnInit() {
   }
 
-  match(controlKey: string) {
-    return (control: FormControl): { [s: string]: boolean } => {
-        // control.parent es el FormGroup
-        if (control.parent) { // en las primeras llamadas control.parent es undefined
-          const checkValue  = control.parent.controls[controlKey].value;
-          if (control.value !== checkValue) {
-            return {
-              match: false
-            };
-          }
-        }
-        return null;
-    };
-  }
-
   update(enterprise, registerModal) {
     this.modalMessage = '¿Deseas actualizar sus datos?';
     // El modal se invoca con una promesa que se resuelve si el modal es aceptado o se reachaza si es cerrado
-    console.log('this.formulario.value :', this.formulario.value);
-    this.assign(enterprise, this.formulario.value);
-    console.log('enterprise :', enterprise);
 
     this.modalService.open(registerModal).result.then(() => {
       // Aquí se incluye la lógica cuando el modal ha sido aceptado
 
-      // Se asignan los valores del formulario al objeto enterprise.
-      this.assign(enterprise, this.formulario.value);
-      this.enterpriseService.updateEnterprise(enterprise.uid, enterprise)
-      .then((result) => {
-        this.success = true;
-      }).catch((err) => {
-        this.success = false;
-        console.log('err :', err);
-      });
+      // Si hay archivo se sube y luego actualizamos
+      if (this.file) {
+        this.uploadFile(this.file, enterprise.uid).then((url) => {
+          // Se asignan los valores del formulario al objeto enterprise.
+          this.assign(enterprise, this.formulario.value);
+          enterprise.logo = url;
+          this.enterpriseService.updateEnterprise(enterprise.uid, enterprise)
+          .then((result) => {
+            this.success = true;
+          }).catch((err) => {
+            this.success = false;
+          });
+        }).catch((err) => {
+          this.success = false;
+        });
+      } else {
+        // Se asignan los valores del formulario al objeto enterprise.
+        this.assign(enterprise, this.formulario.value);
+        this.enterpriseService.updateEnterprise(enterprise.uid, enterprise)
+        .then((result) => {
+          this.success = true;
+        }).catch((err) => {
+          this.success = false;
+        });
+      }
     }, (reason) => {
       // Si el usuario oprime cancelar
     });
   }
 
   actualizar(enterprise) {
-    this.read_flag = !this.read_flag;
-    // this.assign(this.formulario.value, enterprise);
-    // console.log('this.formulario.value :', this.formulario.value);
-    // this.formulario.setValue(this.formulario.value);
+    this.isreadonly = !this.isreadonly;
+    // Esto hace que los validators funcionen correctamente.
+    // Además de actualizar resetear los valores del formulario al momento de cancelar.
+    // Esto resetea el valor del formulario
+    this.assign(this.formulario.value, enterprise);
+    this.formulario.reset(this.formulario.value);
+  }
+
+  onFileChange(event: FileList) {
+    if (event.length === 0) { return; }
+    this.file = null;
+    // Client-side validation example
+    if (event.item(0).type.split('/')[0] !== 'image') {
+      console.error('unsupported file type :( ');
+      this.fileError.unsupported = true;
+      return;
+    }
+
+    if (event.item(0).size >= (1 * 1024 * 1024)) {
+      console.error('file too large ');
+      this.fileError.size = true;
+      return;
+    }
+
+    this.file = event.item(0);
+    console.log('this.file :', this.file);
+  }
+
+
+  private uploadFile(file: File, id: string) {
+
+    // The storage path
+    // el tipo de archivo ${file.type.split('/')[1]}
+    // Por el momento todo se guardará como png
+    const path = `enterprise/${id}.png`;
+
+    // Totally optional metadata
+    const customMetadata = { uid: id };
+
+    // The main task
+    this.task = this.storage.upload(path, file, { customMetadata });
+
+    const fileRef = this.storage.ref(path);
+
+    // The file's download URL
+    // this.task.snapshotChanges().pipe(
+    //   finalize(() => this.downloadURL = fileRef.getDownloadURL() )
+    // ).subscribe();
+
+    // The file's download URL
+    return new Promise<string>((resolve, reject) => {
+      this.task.snapshotChanges().pipe(
+      finalize(() => this.downloadURL = fileRef.getDownloadURL() )
+      ).toPromise()
+      .then(() => {
+        this.downloadURL = fileRef.getDownloadURL();
+        this.downloadURL.toPromise()
+        .then((url) => {
+          resolve(url);
+        }).catch((err) => {
+          reject(err);
+        });
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+
+
   }
 
 
   private assign(object: any, objectToCopy: any) {
+    // Si el objeto a copiar tiene subobjetos, regresamos a la función..
+    for (const key in objectToCopy) {
+      if (objectToCopy.hasOwnProperty(key)) {
+        if ( typeof objectToCopy[key] === 'object' && !Array.isArray(objectToCopy[key])) {
+          this.assign(object, objectToCopy[key]);
+        }
+      }
+    }
+    // Cuando se llega aquí objectToCopy ya no tiene subobjetos
     for (const key in object) {
       if (object.hasOwnProperty(key)) {
-        if ( typeof object[key] === 'object') {
+        if ( typeof object[key] === 'object' && !Array.isArray(object[key])) {
           this.assign(object[key], objectToCopy);
-        } else if (objectToCopy.hasOwnProperty(key) && objectToCopy[key]) {
+        } else if ( objectToCopy[key]) {
           object[key] = objectToCopy[key];
         }
       }

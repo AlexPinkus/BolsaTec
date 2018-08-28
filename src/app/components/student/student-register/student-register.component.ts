@@ -6,10 +6,12 @@ import { StudentService } from '../../../services/student.service';
 import { AuthService } from '../../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs';
 import { EmailAvailableValidator } from "../../../validators/email-available.directive";
 import { matchEmailValidator } from "../../../validators/match-email.directive";
 import { matchPasswordValidator } from "../../../validators/match-password.directive";
+
+import { Observable } from 'rxjs';
+import { map, take, tap, finalize } from 'rxjs/operators';
 
 declare var $: any;
 @Component({
@@ -19,6 +21,8 @@ declare var $: any;
 })
 export class StudentRegisterComponent implements OnInit {
   public success: boolean;
+  public modalMessage: string;
+
   public formulario: FormGroup;
 
   public genders = ['Hombre', 'Mujer'];
@@ -39,54 +43,65 @@ export class StudentRegisterComponent implements OnInit {
     'Licenciatura en Administración en Educación a Distancia'
   ];
 
-  public modalMessage: string;
+  public file: File;
+  public fileError = {
+    'unsupported' : false,
+    'size' : false,
+  };
 
+  // Main task
+  private task: AngularFireUploadTask;
+
+  // Download URL
+  private downloadURL: Observable<string>;
+
+  // Se crea un objeto vacío de default
   private student: Student = {
-    idStudent:  'Matricula',
-    firstName:  'Jaime',
-    lastName:   'Pérez Mendicuti',
-    middleName: 'Enrique',
-    age:         new Date(),
-    sex:        'Hombre',
-    email:      'Alexpinkus.64@gmail.com',
-    phone:      9999999999,
+    // Datos personales
+    firstName:  '',
+    lastName:   '',
+    middleName: '',
+    age:        '',
+    sex:        '',
+    email:      '',
+    phone:      0,
+    maritalStatus: '',
+    // Matrícula
+    idStudent:  '',
+
+    // Dirección
     address: {
-      mainStreet: 'Calle 21',
-      crossings:  '17 y 29',
-      postalCode: 99999,
-      state:      'Yucatán',
-      neighborhood: 'Colonia',
-      municipality: 'Mérida',
-      city: 'Mérida'
+      mainStreet: '',
+      crossings:  '',
+      postalCode: 0,
+      state:      '',
+      neighborhood: '',
+      municipality: '',
+      city: ''
     },
+
+    // Idiomas
     languages: {
       english: {
-        written:  '100',
-        spoken:   '100',
-        translation: '100',
+        written:  '',
+        spoken:   '',
+        translation: '',
       }
     },
+
+    // Grados académicos
     degree: {
-      bachelor: 'Licenciatura en Ingeniería Civil',
-      speciality: 'Construcción',
-      master: 'Ninguna',
-      phd: 'Ninguna',
+      bachelor: '',
+      speciality: '',
+      master: '',
+      phd: '',
     },
-    experience: 'Ninguna',
-    resumeURL:  'url del doc',
-    speciality: 'algo',
-    maritalStatus: 'Soltero(a)',
+    resumeURL:  '',
     isGraduated: true,
+
     isActive: true,
     role: 'student'
   };
-
-    // Main task
-    task: AngularFireUploadTask;
-
-    // Download URL
-    downloadURL$: Observable<string>;
-
 
   // Posibles errores de validación...
   formErrors = {
@@ -170,19 +185,22 @@ export class StudentRegisterComponent implements OnInit {
 
       // Crear usuario en firebase auth.
       this.authService.signup(this.formulario.value.email, this.formulario.value.password).then(credential => {
-        // Se asignan los valores del formulario al objeto student.
-        this.assign(this.student, this.formulario.value);
+        this.uploadFile(this.file, credential.user.uid).then((url) => {
+          // Se asignan los valores del formulario al objeto student.
+          this.assign(this.student, this.formulario.value);
 
-        // Propiedades adicionales a incluir.
-        this.student.createdOn = Date.now();
-        this.student.uid = credential.user.uid;
-
-        // Crear student en la base de datos
-        this.studentService.createStudent(this.student).then(smt => {
-          this.success = true;
-          setTimeout(() => {
-            this.router.navigate(['/index']);
-          }, 3000);
+          // Propiedades adicionales a incluir.
+          this.student.createdOn = Date.now();
+          this.student.uid = credential.user.uid;
+          this.student.resumeURL = url;
+          this.studentService.createStudent(this.student).then(smt => {
+            this.success = true;
+            setTimeout(() => {
+              this.router.navigate(['/index']);
+            }, 3000);
+          }).catch((err) => {
+            this.success = false;
+          });
         }).catch((err) => {
           this.success = false;
         });
@@ -201,6 +219,67 @@ export class StudentRegisterComponent implements OnInit {
     // this.router.navigate(['/index']);
   }
 
+  onFileChange(event: FileList) {
+    if (event.length === 0) { return; }
+    this.file = null;
+    // Se resetean los errores.
+    this.fileError.unsupported = false;
+    this.fileError.size = false;
+
+    // Client-side validation example
+    if (event.item(0).type.split('/')[1] !== 'pdf') {
+      console.error('unsupported file type :( ');
+      this.fileError.unsupported = true;
+      return;
+    }
+
+    if (event.item(0).size >= (1 * 1024 * 1024)) {
+      console.error('file too large ');
+      this.fileError.size = true;
+      return;
+    }
+
+    this.file = event.item(0);
+  }
+
+  private uploadFile(file: File, id: string) {
+
+    // The storage path
+    const path = `student/${id}.pdf`;
+
+    // Totally optional metadata
+    const customMetadata = { uid: id };
+
+    // The main task
+    this.task = this.storage.upload(path, file, { customMetadata });
+
+    const fileRef = this.storage.ref(path);
+
+    // The file's download URL
+    // this.task.snapshotChanges().pipe(
+    //   finalize(() => this.downloadURL = fileRef.getDownloadURL() )
+    // ).subscribe();
+
+    // The file's download URL
+    return new Promise<string>((resolve, reject) => {
+      this.task.snapshotChanges().pipe(
+      finalize(() => this.downloadURL = fileRef.getDownloadURL() )
+      ).toPromise()
+      .then(() => {
+        this.downloadURL = fileRef.getDownloadURL();
+        this.downloadURL.toPromise()
+        .then((url) => {
+          resolve(url);
+        }).catch((err) => {
+          reject(err);
+        });
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+
+
+  }
 
   private getDismissReason(reason: any): string {
 
@@ -214,11 +293,20 @@ export class StudentRegisterComponent implements OnInit {
   }
 
   private assign(object: any, objectToCopy: any) {
+    // Si el objeto a copiar tiene subobjetos, regresamos a la función..
+    for (const key in objectToCopy) {
+      if (objectToCopy.hasOwnProperty(key)) {
+        if ( typeof objectToCopy[key] === 'object' && !Array.isArray(objectToCopy[key])) {
+          this.assign(object, objectToCopy[key]);
+        }
+      }
+    }
+    // Cuando se llega aquí objectToCopy ya no tiene subobjetos
     for (const key in object) {
       if (object.hasOwnProperty(key)) {
-        if ( typeof object[key] === 'object') {
+        if ( typeof object[key] === 'object' && !Array.isArray(object[key])) {
           this.assign(object[key], objectToCopy);
-        } else if (objectToCopy.hasOwnProperty(key)) {
+        } else if ( objectToCopy[key]) {
           object[key] = objectToCopy[key];
         }
       }

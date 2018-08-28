@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
-import { Http, Headers } from '@angular/http';
 import { Joboffer } from '../interfaces/joboffer.interface';
 import { Observable, of } from 'rxjs';
 import { map, switchMap, startWith, tap, filter } from 'rxjs/operators';
@@ -15,9 +14,8 @@ export class JobofferService {
   joboffersCollection: AngularFirestoreCollection<any>;
   jobofferDocument:   AngularFirestoreDocument<any>;
 
-  constructor( private http: Http, private afs: AngularFirestore ) {
-        // Obten la colección con todos los estudiantes:
-    // Hay que obtener esto a partir del rol.
+  constructor( private afs: AngularFirestore ) {
+        // Obten la colección con todos los jobOffers
     this.joboffersCollection = this.afs.collection('joboffers');
     // (ref) => ref.where('state', '==', 'inactive'));
     // , (ref) => ref.orderBy('time', 'desc')
@@ -57,7 +55,11 @@ export class JobofferService {
 
   createJoboffer(joboffer: Joboffer) {
     joboffer.createdOn = new Date();
-    return this.joboffersCollection.add(joboffer);
+    return this.joboffersCollection.add(joboffer).then(ref => {
+      console.log('Added document with ID: ', ref.id);
+      joboffer.uid = ref.id;
+      return this.updateJoboffer(ref.id, joboffer);
+    });
     // return this.joboffersCollection.doc(joboffer.uid).set(joboffer);
   }
 
