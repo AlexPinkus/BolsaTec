@@ -4,7 +4,7 @@ import { JobofferService } from '../../../services/joboffer.service';
 import { EnterpriseService } from '../../../services/enterprise.service';
 import { TextsService } from '../../../services/texts.service';
 
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { map, take, tap, finalize, switchMap, flatMap } from "rxjs/operators";
 import { combineLatest } from "rxjs/observable/combineLatest";
 
@@ -25,23 +25,13 @@ export class JobofferMainComponent implements OnInit {
   private enterpriseService: EnterpriseService) {
     this.joboffers$ = this.jobofferService.getData().pipe(
       map(joboffers => {
-        return joboffers.map(joboffer => {
-          return this.enterpriseService
-            .getEnterprise(joboffer.idEnterprise)
-            .valueChanges()
-            .pipe(
-              map(enterprise =>
-                Object.assign(
-                  {},
-                  {
-                    enterpriseLogo: enterprise.logo,
-                    enterpriseName: enterprise.comercialName,
-                    ...joboffer
-                  }
-                )
-              )
+        if (joboffers.length !== 0) {
+          return joboffers.map(joboffer => {
+            return this.enterpriseService.getEnterprise(joboffer.idEnterprise).valueChanges().pipe(
+              map(enterprise => Object.assign({}, {enterpriseLogo: enterprise.logo, enterpriseName: enterprise.comercialName, ...joboffer}))
             );
-        });
+          });
+        } else { return of(null); }
       }),
       flatMap(observables => combineLatest(observables))
     );
@@ -74,23 +64,13 @@ export class JobofferMainComponent implements OnInit {
   //   }
   // }
 
-  updateFilter(joboffer) {
-    // console.log('event :', event);
-    // console.log('searchFilter :', this.searchFilter);
-    if (this.searchFilter) {
-      return ( joboffer.enterpriseName.includes(this.searchFilter) ||
-      joboffer.position.includes(this.searchFilter));
-    } else {
-      return true;
-    }
-  }
   filter(joboffers: Joboffer[]): Joboffer[] {
     return this.filterSearch(this.filterBachelor(joboffers));
   }
 
   // Filtro para el input de búsqueda.
   private filterSearch(joboffers: Joboffer[] | null): Joboffer[] | null {
-    if (joboffers === null) {
+    if (joboffers === null || joboffers[0] === null) {
       return null;
     }
     if (!this.searchFilter) {
@@ -114,7 +94,7 @@ export class JobofferMainComponent implements OnInit {
 
   // Filtro para la carrera de egreso.
   private filterBachelor(joboffers: Joboffer[] | null): Joboffer[] | null {
-    if (joboffers === null) {
+    if (joboffers === null || joboffers[0] === null) {
       return null;
     }
     if (!this.selectedBachelor) {
