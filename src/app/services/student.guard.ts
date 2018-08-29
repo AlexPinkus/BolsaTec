@@ -20,7 +20,7 @@ export class StudentGuard implements CanActivate {
         map(user => {
           // Primero se verifica que el usuario esté loggeado,
           // Luego se verifica que el role sea de student.
-          return !!user ? (user.role === 'student') : false;
+          return !!user ? ((user.role === 'student') || (user.role === 'admin')) : false;
         }),
         tap(loggedIn => {
           if (!loggedIn) {
@@ -52,7 +52,7 @@ export class NotStudentGuard implements CanActivate {
         }),
         tap(loggedAndNotStuden => {
           if (!loggedAndNotStuden) {
-            console.log('access denied');
+            // console.log('access denied');
             // this.notify.update('You must be logged in!', 'error');
             this.router.navigate(['/index']);
           }

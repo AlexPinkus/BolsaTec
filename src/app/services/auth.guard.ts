@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
         map(user => !!user),
         tap(loggedIn => {
           if (!loggedIn) {
-            console.log('access denied');
+            // console.log('access denied');
             // this.notify.update('You must be logged in!', 'error');
             this.router.navigate(['/login']);
           }
@@ -39,13 +39,13 @@ export class NotAuthGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-      // Esto sólo verifica que el usuario esté logeado...
+      // Esto sólo verifica que el usuario no esté logeado...
       return this.auth.user.pipe(
         take(1),
         map(user => !!!user),
         tap(notLoggedIn => {
           if (!notLoggedIn) {
-            console.log('access denied');
+            // console.log('access denied');
             // this.notify.update('You must be logged in!', 'error');
             this.router.navigate(['/index']);
           }
