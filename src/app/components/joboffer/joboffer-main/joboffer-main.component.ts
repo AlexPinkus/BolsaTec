@@ -4,17 +4,16 @@ import { JobofferService } from '../../../services/joboffer.service';
 import { EnterpriseService } from '../../../services/enterprise.service';
 import { TextsService } from '../../../services/texts.service';
 
-import { Observable } from 'rxjs';
-import { map, take, tap, finalize, switchMap, flatMap } from 'rxjs/operators';
-import { combineLatest } from 'rxjs/observable/combineLatest';
+import { Observable } from "rxjs";
+import { map, take, tap, finalize, switchMap, flatMap } from "rxjs/operators";
+import { combineLatest } from "rxjs/observable/combineLatest";
 
 @Component({
-  selector: 'app-joboffer-main',
-  templateUrl: './joboffer-main.component.html',
-  styleUrls: ['./joboffer-main.component.scss']
+  selector: "app-joboffer-main",
+  templateUrl: "./joboffer-main.component.html",
+  styleUrls: ["./joboffer-main.component.scss"]
 })
 export class JobofferMainComponent implements OnInit {
-
   public joboffers$: Observable<Joboffer[]>;
   public selectedBachelor: string;
   public searchFilter: string;
@@ -27,17 +26,28 @@ export class JobofferMainComponent implements OnInit {
     this.joboffers$ = this.jobofferService.getData().pipe(
       map(joboffers => {
         return joboffers.map(joboffer => {
-          return this.enterpriseService.getEnterprise(joboffer.idEnterprise).valueChanges().pipe(
-            map(enterprise => Object.assign({}, {enterpriseLogo: enterprise.logo, enterpriseName: enterprise.comercialName, ...joboffer}))
-          );
+          return this.enterpriseService
+            .getEnterprise(joboffer.idEnterprise)
+            .valueChanges()
+            .pipe(
+              map(enterprise =>
+                Object.assign(
+                  {},
+                  {
+                    enterpriseLogo: enterprise.logo,
+                    enterpriseName: enterprise.comercialName,
+                    ...joboffer
+                  }
+                )
+              )
+            );
         });
       }),
       flatMap(observables => combineLatest(observables))
     );
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   // loadPage(page = 1) {
   //   let joboffersPagination: any;
@@ -74,35 +84,48 @@ export class JobofferMainComponent implements OnInit {
       return true;
     }
   }
-
   filter(joboffers: Joboffer[]): Joboffer[] {
     return this.filterSearch(this.filterBachelor(joboffers));
   }
 
   // Filtro para el input de búsqueda.
   private filterSearch(joboffers: Joboffer[] | null): Joboffer[] | null {
-    if ( joboffers === null) { return null; }
-    if (!this.searchFilter) { return joboffers; }
+    if (joboffers === null) {
+      return null;
+    }
+    if (!this.searchFilter) {
+      return joboffers;
+    }
     const filtered = [];
     joboffers.forEach(joboffer => {
-      if (joboffer.enterpriseName.toLowerCase().includes(this.searchFilter.toLowerCase()) ||
-      joboffer.position.toLowerCase().includes(this.searchFilter.toLowerCase())) {
+      if (
+        joboffer.enterpriseName
+          .toLowerCase()
+          .includes(this.searchFilter.toLowerCase()) ||
+        joboffer.position
+          .toLowerCase()
+          .includes(this.searchFilter.toLowerCase())
+      ) {
         filtered.push(joboffer);
       }
     });
-    return (filtered.length > 0) ? filtered : null;
+    return filtered.length > 0 ? filtered : null;
   }
 
   // Filtro para la carrera de egreso.
   private filterBachelor(joboffers: Joboffer[] | null): Joboffer[] | null {
-    if ( joboffers === null) { return null; }
-    if (!this.selectedBachelor) { return joboffers; }
+    if (joboffers === null) {
+      return null;
+    }
+    if (!this.selectedBachelor) {
+      return joboffers;
+    }
     const filtered = [];
     joboffers.forEach(joboffer => {
       if (joboffer.bachelors.includes(this.selectedBachelor)) {
         filtered.push(joboffer);
       }
     });
-    return (filtered.length > 0) ? filtered : null;
+    return filtered.length > 0 ? filtered : null;
   }
 }

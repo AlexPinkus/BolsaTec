@@ -1,6 +1,6 @@
-<ng-container *ngIf="success===undefined; else alert">
+<ng-container *ngIf="success === false" class="animated fadeIn">
     <ng-container *ngIf="enterprise$ | async as enterprise; else loading">
-        <form [formGroup]="formulario" (ngSubmit)="update(enterprise, registerModal)">
+        <form [formGroup]="formulario" (ngSubmit)="update(enterprise, registerModal)" class="animated fadeIn">
             <h1>Perfil de la empresa</h1>
             <h4>Datos del contacto</h4>
             <div class="borde-tec p-b-4"></div>
@@ -190,7 +190,8 @@
             </div>
             <div class="form-row">
                 <div class="form-group col-md-12">
-                    <label for="logo">Logotipo</label>
+                    <h4 for="logo">Logotipo</h4>
+                    <div class="borde-tec p-b-4"></div>
                     <br>
                     <ng-container *ngIf="!isreadonly; else showLogo">
                         <div class="custom-file">
@@ -210,7 +211,9 @@
                         </div>
                     </ng-container>
                     <ng-template #showLogo>
-                        <img [src]="enterprise.logo" class="img-fluid" alt="Responsive image">
+                        <div class="d-flex justify-content-center">
+                            <img [src]="enterprise.logo" class="img-fluid" style="height: auto;" alt="Responsive image">
+                        </div>
                     </ng-template>
                 </div>
             </div>
@@ -237,18 +240,13 @@
         </form>
     </ng-container>
 </ng-container>
-<ng-template #alert>
-    <ng-container *ngIf="success; else failure">
-        <div class="animated fadeInUp fast">
-            <ngb-alert type="success" [dismissible]="false">¡Actualización exitosa!</ngb-alert>
-        </div>
-    </ng-container>
-    <ng-template #failure>
-        <div class="animated fadeInUp fast">
-            <ngb-alert type="danger" [dismissible]="false">¡Hubo un problema al actualizar sus datos!</ngb-alert>
-        </div>
-    </ng-template>
-</ng-template>
+
+
+<div class="animated fast" [class.fadeIn]="animationSwitch" [class.fadeOut]="!animationSwitch" style="height: 400px;" *ngIf="success">
+    <ngb-alert [dismissible]="false">{{messageAlert}}</ngb-alert>
+</div>
+
+
 
 <!-- Modal para guardar los cambios -->
 <ng-template #registerModal let-c="close()" let-d="dismiss()">

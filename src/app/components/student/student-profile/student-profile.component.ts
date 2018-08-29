@@ -8,6 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { TextsService } from '../../../services/texts.service';
 
+import {NgbAlertConfig} from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { map, take, tap, finalize } from 'rxjs/operators';
 
@@ -20,7 +21,7 @@ import { map, take, tap, finalize } from 'rxjs/operators';
 export class StudentProfileComponent implements OnInit {
 
   public student$: Observable<Student>;
-  public success: boolean;
+  public success = false;
   public modalMessage: string;
   public isreadonly = true;
 
@@ -59,6 +60,8 @@ export class StudentProfileComponent implements OnInit {
   // Download URL
   private downloadURL: Observable<string>;
 
+  public animationSwitch = false;
+  public messageAlert: string;
 
   constructor(
     public texts: TextsService,
@@ -67,7 +70,8 @@ export class StudentProfileComponent implements OnInit {
     private modalService: NgbModal,
     private storage: AngularFireStorage,
     private activatedRoute: ActivatedRoute,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private  alertConfig: NgbAlertConfig) {
       this.formulario = this.formBuilder.group({
         // Datos de usuario
         // password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/),
@@ -115,6 +119,33 @@ export class StudentProfileComponent implements OnInit {
 
   }
 
+  showSuccesAlert() {
+    this.alertConfig.type = 'success';
+    this.messageAlert = '¡Tus cambios se han guardado con éxito!';
+    this.success = true;
+    this.animationSwitch = true;
+    setTimeout(() => {
+      this.animationSwitch = false;
+      setTimeout(() => {
+        this.success = false;
+        this.isreadonly = !this.isreadonly;
+      }, 900);
+    }, 2500);
+  }
+
+  showFailureAlert() {
+    this.alertConfig.type = 'danger';
+    this.messageAlert = '¡Hubo un problema al actualizar tus datos!';
+    this.success = true;
+    this.animationSwitch = true;
+    setTimeout(() => {
+      this.animationSwitch = false;
+      setTimeout(() => {
+        this.success = false;
+        this.isreadonly = !this.isreadonly;
+      }, 900);
+    }, 2500);
+  }
   update(student, registerModal) {
     this.modalMessage = '¿Deseas actualizar sus datos?';
     // El modal se invoca con una promesa que se resuelve si el modal es aceptado o se reachaza si es cerrado
@@ -130,21 +161,21 @@ export class StudentProfileComponent implements OnInit {
           student.logo = url;
           this.studentService.updateStudent(student.uid, student)
           .then((result) => {
-            this.success = true;
+           this.showSuccesAlert();
           }).catch((err) => {
-            this.success = false;
+            this.showFailureAlert();
           });
         }).catch((err) => {
-          this.success = false;
+          this.showFailureAlert();
         });
       } else {
         // Se asignan los valores del formulario al objeto student.
         this.assign(student, this.formulario.value);
         this.studentService.updateStudent(student.uid, student)
         .then((result) => {
-          this.success = true;
+         this.showSuccesAlert();
         }).catch((err) => {
-          this.success = false;
+          this.showFailureAlert();
         });
       }
     }, (reason) => {
