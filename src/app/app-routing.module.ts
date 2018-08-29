@@ -25,26 +25,28 @@ import { JobofferMainComponent } from './components/joboffer/joboffer-main/jobof
 import { NotfoundComponent } from './shared/notfound/notfound.component';
 
 const routes: Routes = [
-     { path: 'index', component: IndexComponent },
-     { path: 'students', component: StudentsComponent },
-     // Rutas de registro (creación en DB).
-     { path: 'register/student',   component: StudentRegisterComponent, canActivate: [NotAuthGuard] },
-     { path: 'register/employeer', component: EnterpriseRegisterComponent, canActivate: [NotAuthGuard] },
-     { path: 'register/joboffer',  component: JobofferRegisterComponent, canActivate: [AuthGuard, NotStudentGuard]  },
-     // Rutas de perfiles
-     { path: 'jobofferView',  component: JobofferViewComponent},
-     { path: 'profile/student/:id', component: StudentProfileComponent, canActivate: [ProfileGuard] },
-     { path: 'profile/enterprise/:id', component: EnterpriseProfileComponent, canActivate: [ProfileGuard] },
-    // Ruta para listar las ofertas de trabajo de la empresa id.
-    // { path: 'list/joboffer/:id', component: JobofferListComponent, canActivate: [ProfileGuard] }
-     { path: 'list/joboffers/:id', component: JobofferListComponent, canActivate: [ProfileGuard]},
-     { path: 'list/joboffers', component: JobofferMainComponent, canActivate: [StudentGuard] },
-     { path: 'joboffer/:id',  component: JobofferViewComponent, canActivate: [AuthGuard]  },
+    { path: 'index', component: IndexComponent },
+    { path: 'students', component: StudentsComponent },
 
-     { path: 'login', component: LoginComponent },
-     { path: 'admin', component: StudentsAdminComponent },
-     { path: 'ofertas', component: JobofferMainComponent },
-     { path: '**', component: NotfoundComponent },
+    { path: 'login', component: LoginComponent, canActivate: [NotAuthGuard] },
+    // Rutas de registro (creación en DB).
+    { path: 'register/student',   component: StudentRegisterComponent, canActivate: [NotAuthGuard] },
+    { path: 'register/employeer', component: EnterpriseRegisterComponent, canActivate: [NotAuthGuard] },
+    { path: 'register/joboffer',  component: JobofferRegisterComponent, canActivate: [NotStudentGuard]  },
+
+    // Rutas de perfiles
+    { path: 'profile/student/:id', component: StudentProfileComponent, canActivate: [ProfileGuard] },
+    { path: 'profile/enterprise/:id', component: EnterpriseProfileComponent, canActivate: [ProfileGuard] },
+
+    // Ruta para listar las ofertas de trabajo de la empresa id.
+    { path: 'list/joboffers/:id', component: JobofferListComponent, canActivate: [ProfileGuard]},
+    // Ruta para listar las todas las ofertas de trabajo.
+    { path: 'list/joboffers', component: JobofferMainComponent, canActivate: [StudentGuard] },
+    // Ruta para ver la oferta de trabajo con el id especificado.
+    { path: 'joboffer/:id',  component: JobofferViewComponent, canActivate: [AuthGuard]  },
+
+    { path: 'admin', component: StudentsAdminComponent },
+    { path: '**', component: NotfoundComponent },
 
     // { path: 'path/:routeParam', component: MyComponent },
     // { path: 'staticPath', component: ... },
