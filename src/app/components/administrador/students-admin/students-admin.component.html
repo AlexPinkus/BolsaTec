@@ -1,13 +1,15 @@
 <div>
     <div>
         <h4>Estudiantes por aprobar</h4>
-        <hr>
+        <div class="borde-tec p-b-4"></div>
+        <br>
 
         <ngb-alert *ngIf="showAlertInactivos" [type]="typeAlert" [dismissible]="false">{{messageAlert}}</ngb-alert>
 
         <form class="" *ngIf="!showAlertInactivos">
             <div class="form-row">
                 <div class="form-group col-md-6">
+                    <span><i class="icon ion-ios-search icon-x-small p-2"> </i></span>
                     <label for="">Búsqueda</label>
                     <input type="text" class="form-control" placeholder="Ingresa tu búsqueda aquí" aria-label="Ingresa tu búsqueda aquí" aria-describedby="basic-addon1" (keyup)='updateFilter($event)'>
                 </div>
@@ -28,7 +30,7 @@
 
         <!-- </div> -->
         <!-- <input type='text' style='padding:8px;margin:15px auto;width:30%;' class="bootstrap-iso" placeholder='Type to filter the name column...' (keyup)='updateFilter($event)' /> -->
-        <ngx-datatable class="bootstrap" [rows]="rows" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5" [selected]="selectedInactivos" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false" [displayCheck]="displayCheck"
+        <ngx-datatable class="material" [rows]="rows" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5" [selected]="selectedInactivos" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false" [displayCheck]="displayCheck"
             (select)='onSelectInactivos($event)'>
             <ngx-datatable-column class="material" [width]="30" [sortable]="true" [canAutoResize]="false" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
             </ngx-datatable-column>
@@ -66,15 +68,16 @@
 
 
 <div>
-    <br>
-
+    <br> <br>
     <h4>Estudiantes aprobados</h4>
-    <hr>
+    <div class="borde-tec p-b-4"></div>
+    <br>
 
     <ngb-alert *ngIf="showAlertActivos" [type]="typeAlert" [dismissible]="false">{{messageAlert}}</ngb-alert>
     <form class="" *ngIf="!showAlertActivos">
         <div class="form-row">
             <div class="form-group col-md-6">
+                <span><i class="icon ion-ios-search icon-x-small p-2"> </i></span>
                 <label for="">Búsqueda</label>
                 <input type="text" class="form-control" placeholder="Ingresa tu búsqueda aquí" aria-label="Ingresa tu búsqueda aquí" aria-describedby="basic-addon1" (keyup)='updateFilter($event)'>
             </div>
