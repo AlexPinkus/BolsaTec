@@ -18,6 +18,7 @@ export class JobofferMainComponent implements OnInit {
   public joboffers$: Observable<Joboffer[]>;
   public selectedBachelor: string;
   public searchFilter: string;
+  p: any;
 
   constructor(
   public texts: TextsService,
@@ -48,12 +49,13 @@ export class JobofferMainComponent implements OnInit {
   //   }
   //   if (page !== this.previousPage) {
   //     this.previousPage = page;
-  //     this.jobOffers$ = joboffersPagination.valueChanges().pipe(
-  //       map(jobOffers => {
-  //        this.latestDoc = jobOffers[jobOffers.length - 1];
-  //         return jobOffers.map(jobOffer => {
-  //           return this.enterpriseService.getEnterprise(jobOffer.idEnterprise).valueChanges().pipe(
-  //             map(enterprise => Object.assign({}, {enterpriseLogo: enterprise.logo, enterpriseName: enterprise.comercialName, ...jobOffer}))
+  //     this.joboffers$ = joboffersPagination.valueChanges().pipe(
+  //       map(joboffers => {
+  //        this.latestDoc = joboffers[joboffers.length - 1];
+  //         return joboffers.map(joboffer => {
+  //           return this.enterpriseService.getEnterprise(joboffer.idEnterprise).valueChanges().pipe(
+  //             map(enterprise => Object.assign({},
+  //  {enterpriseLogo: enterprise.logo, enterpriseName: enterprise.comercialName, ...joboffer}))
   //           );
   //         });
   //       }),
@@ -62,15 +64,17 @@ export class JobofferMainComponent implements OnInit {
   //   }
   // }
 
-  updateFilter(jobOffer) {
+  updateFilter(joboffer) {
     // console.log('event :', event);
     // console.log('searchFilter :', this.searchFilter);
     if (this.searchFilter) {
-      return ( jobOffer.enterpriseName.includes(this.searchFilter) ||
-      jobOffer.position.includes(this.searchFilter));
+      return ( joboffer.enterpriseName.includes(this.searchFilter) ||
+      joboffer.position.includes(this.searchFilter));
     } else {
       return true;
     }
+  }
+
   filter(joboffers: Joboffer[]): Joboffer[] {
     return this.filterSearch(this.filterBachelor(joboffers));
   }

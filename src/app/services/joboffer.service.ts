@@ -24,7 +24,7 @@ export class JobofferService {
 
   pagination(ItemsPerPage: number, first: boolean, latestDoc?: any) {
     console.log(ItemsPerPage);
-    if (first == true) {
+    if (first === true) {
       return this.afs.collection('joboffers', (ref) => ref.limit(ItemsPerPage));
     } else {
       return this.afs.collection('joboffers', (ref) => ref.limit(ItemsPerPage).startAfter(latestDoc));
