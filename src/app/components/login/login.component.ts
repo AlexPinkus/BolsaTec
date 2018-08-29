@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
               this.router.navigate(['/list/joboffers', user.uid]);
               break;
             default:
-              this.router.navigate(['/inicio']);
+              this.router.navigate(['/index']);
               break;
           }
         }
