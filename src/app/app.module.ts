@@ -61,6 +61,7 @@ import { EmailAvailableDirective } from './validators/email-available.directive'
 import { MatchEmailValidatorDirective } from './validators/match-email.directive';
 import { MatchPasswordValidatorDirective } from './validators/match-password.directive';
 import { LoadingComponent } from './components/shared/loading/loading.component';
+import { NotfoundComponent } from './shared/notfound/notfound.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +87,8 @@ import { LoadingComponent } from './components/shared/loading/loading.component'
     EmailAvailableDirective,
     MatchEmailValidatorDirective,
     MatchPasswordValidatorDirective,
-    LoadingComponent
+    LoadingComponent,
+    NotfoundComponent
   ],
   imports: [
     BrowserModule,

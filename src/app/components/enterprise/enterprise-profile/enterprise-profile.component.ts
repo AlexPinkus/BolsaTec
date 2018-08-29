@@ -3,8 +3,9 @@ import { FormBuilder, Validators, FormGroup, FormControl, AbstractControl } from
 import { Enterprise } from '../../../interfaces/enterprise.interface';
 import { EnterpriseService } from '../../../services/enterprise.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
+import {NgbAlertConfig} from '@ng-bootstrap/ng-bootstrap';
 
 import { Observable } from 'rxjs';
 import { map, take, tap, finalize } from 'rxjs/operators';
@@ -17,9 +18,12 @@ import { map, take, tap, finalize } from 'rxjs/operators';
 export class EnterpriseProfileComponent implements OnInit {
 
   public enterprise$: Observable<Enterprise>;
-  public success: boolean;
+  public success = false;
+  public failure = false;
+  public animationSwitch = false;
   public modalMessage: string;
-
+  public messageAlert: string;
+  public typeAlert: string;
   public isreadonly = true;
   public formulario: FormGroup;
 
@@ -40,7 +44,8 @@ export class EnterpriseProfileComponent implements OnInit {
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private rutaURL: Router,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute: ActivatedRoute,
+    private  alertConfig: NgbAlertConfig) {
       this.formulario = this.formBuilder.group({
         // Hay que agregrar verificación si existen usuarios:
 
@@ -85,6 +90,9 @@ export class EnterpriseProfileComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.success = false;
+    this.failure = false;
+    this.animationSwitch = false;
   }
 
   update(enterprise, registerModal) {
@@ -102,21 +110,21 @@ export class EnterpriseProfileComponent implements OnInit {
           enterprise.logo = url;
           this.enterpriseService.updateEnterprise(enterprise.uid, enterprise)
           .then((result) => {
-            this.success = true;
+           this.showSuccesAlert();
           }).catch((err) => {
-            this.success = false;
+            this.showFailureAlert();
           });
         }).catch((err) => {
-          this.success = false;
+          this.showFailureAlert();
         });
       } else {
         // Se asignan los valores del formulario al objeto enterprise.
         this.assign(enterprise, this.formulario.value);
         this.enterpriseService.updateEnterprise(enterprise.uid, enterprise)
         .then((result) => {
-          this.success = true;
+          this.showSuccesAlert();
         }).catch((err) => {
-          this.success = false;
+         this.showFailureAlert();
         });
       }
     }, (reason) => {
@@ -124,6 +132,33 @@ export class EnterpriseProfileComponent implements OnInit {
     });
   }
 
+  showSuccesAlert() {
+    this.alertConfig.type = 'success';
+    this.messageAlert = '¡Tus cambios se han guardado con éxito!';
+    this.success = true;
+    this.animationSwitch = true;
+    setTimeout(() => {
+      this.animationSwitch = false;
+      setTimeout(() => {
+        this.success = false;
+        this.isreadonly = !this.isreadonly;
+      }, 900);
+    }, 2500);
+  }
+
+  showFailureAlert() {
+    this.alertConfig.type = 'danger';
+    this.messageAlert = '¡Hubo un problema al actualizar tus datos!';
+    this.success = true;
+    this.animationSwitch = true;
+    setTimeout(() => {
+      this.animationSwitch = false;
+      setTimeout(() => {
+        this.success = false;
+        this.isreadonly = !this.isreadonly;
+      }, 900);
+    }, 2500);
+  }
   actualizar(enterprise) {
     this.isreadonly = !this.isreadonly;
     // Esto hace que los validators funcionen correctamente.

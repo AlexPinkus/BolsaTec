@@ -18,7 +18,9 @@
     <ng-container *ngIf="joboffers$ | async | paginate: {itemsPerPage: 6, currentPage: p} as joboffers; else loading">
         <ng-container *ngIf="filter(joboffers) as filtered; else noResults">
             <div class="card shadow col-lg-3" *ngFor="let joboffer of filtered">
-                <img class="card-img-top p-2 " [src]="joboffer.enterpriseLogo" alt="Card image cap">
+                <div *ngIf="!!joboffer.enterpriseLogo; else nologo">
+                    <img class="card-img-top p-2 " [src]="joboffer.enterpriseLogo" alt="Card image cap">
+                </div>
                 <div class="card-body">
                     <h5 class="card-title"><strong> {{ joboffer.position }}</strong></h5>
                     <p class="card-text"><strong>{{joboffer.enterpriseName}}</strong></p>
@@ -31,7 +33,10 @@
         </ng-template>
     </ng-container>
     <ng-template #loading>
-        Cargando ...
+        <app-loader></app-loader>
+    </ng-template>
+    <ng-template #nologo>
+        <img src="assets/nologo.png" alt="">
     </ng-template>
 </div>
 <div class="d-flex justify-content-end">
