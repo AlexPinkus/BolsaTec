@@ -52,7 +52,6 @@ export class JobofferRegisterComponent implements OnInit {
       position:     ['', Validators.required],
       description:  ['', Validators.required],
       salary:       ['', Validators.required],
-      economicaid:  ['', Validators.required],
       vacantNumber: ['', Validators.required],
       weeklyHours:  ['', Validators.required],
       // Perfil deseado:
