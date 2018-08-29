@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
 import {NgbAlertConfig} from '@ng-bootstrap/ng-bootstrap';
-
+import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { map, take, tap, finalize } from 'rxjs/operators';
 
@@ -45,7 +45,8 @@ export class EnterpriseProfileComponent implements OnInit {
     private modalService: NgbModal,
     private rutaURL: Router,
     private activatedRoute: ActivatedRoute,
-    private  alertConfig: NgbAlertConfig) {
+    private  alertConfig: NgbAlertConfig,
+    private toastr: ToastrService) {
       this.formulario = this.formBuilder.group({
         // Hay que agregrar verificación si existen usuarios:
 
@@ -110,6 +111,7 @@ export class EnterpriseProfileComponent implements OnInit {
           enterprise.logo = url;
           this.enterpriseService.updateEnterprise(enterprise.uid, enterprise)
           .then((result) => {
+            this.toastr.success('Hello world!', 'Toastr fun!');
            this.showSuccesAlert();
           }).catch((err) => {
             this.showFailureAlert();
@@ -123,6 +125,7 @@ export class EnterpriseProfileComponent implements OnInit {
         this.enterpriseService.updateEnterprise(enterprise.uid, enterprise)
         .then((result) => {
           this.showSuccesAlert();
+          this.toastr.success('Hello world!', 'Toastr fun!');
         }).catch((err) => {
          this.showFailureAlert();
         });

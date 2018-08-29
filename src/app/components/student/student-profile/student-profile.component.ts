@@ -9,7 +9,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {NgbAlertConfig} from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { map, take, tap, finalize } from 'rxjs/operators';
-
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-studentprofile',
@@ -87,7 +87,8 @@ export class StudentProfileComponent implements OnInit {
     private storage: AngularFireStorage,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private  alertConfig: NgbAlertConfig) {
+    private  alertConfig: NgbAlertConfig,
+    private toastr:  ToastrService) {
       this.formulario = this.formBuilder.group({
         // Datos de usuario
         // password: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9_-]{6,18}/),
@@ -177,7 +178,7 @@ export class StudentProfileComponent implements OnInit {
           student.logo = url;
           this.studentService.updateStudent(student.uid, student)
           .then((result) => {
-           this.showSuccesAlert();
+          //  this.showSuccesAlert();
           }).catch((err) => {
             this.showFailureAlert();
           });
@@ -189,9 +190,10 @@ export class StudentProfileComponent implements OnInit {
         this.assign(student, this.formulario.value);
         this.studentService.updateStudent(student.uid, student)
         .then((result) => {
-         this.showSuccesAlert();
+        //  this.showSuccesAlert();
+        this.toastr.success('Hello world!', 'Toastr fun!');
         }).catch((err) => {
-          this.showFailureAlert();
+          // this.showFailureAlert();
         });
       }
     }, (reason) => {

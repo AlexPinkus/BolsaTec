@@ -6,11 +6,11 @@ import { HttpModule } from '@angular/http';
 // Plugins
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatPaginatorModule} from '@angular/material/paginator';
 import {NgxPaginationModule} from 'ngx-pagination';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 // Routing
 import { AppRoutingModule } from './app-routing.module';
 
@@ -105,7 +105,11 @@ import { NotfoundComponent } from './shared/notfound/notfound.component';
     NgxDatatableModule,
     MatFormFieldModule,
     NgxPaginationModule,
-    MatInputModule
+    MatInputModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-top-center',
+    })
   ],
   providers: [
     AuthService,
