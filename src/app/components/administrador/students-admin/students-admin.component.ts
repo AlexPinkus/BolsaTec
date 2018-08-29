@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Student } from '../../../interfaces/student.interface';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-students-admin',
   templateUrl: './students-admin.component.html',
@@ -17,7 +18,8 @@ public messageAlert: string;
 public typeAlert: string;
 public showAlertInactivos = false;
 public showAlertActivos = false;
-  constructor(private modalService: NgbModal) {
+  constructor(private modalService: NgbModal,
+              private  toastr: ToastrService) {
     this.fetch((data) => {
       this.rows = data;
     });
