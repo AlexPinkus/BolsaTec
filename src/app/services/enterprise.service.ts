@@ -46,6 +46,7 @@ export class EnterpriseService {
     //   time: new Date().getTime(),
     // };
     enterprise.role = 'enterprise';
+    enterprise.createdOn = new Date();
     return this.enterprisesCollection.doc(enterprise.uid).set(enterprise);
   }
 

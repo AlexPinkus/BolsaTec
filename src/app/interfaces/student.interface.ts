@@ -3,7 +3,7 @@ export interface Student {
   // Información DB
   uid?:      any;
   role:        string;
-  createdOn?:   number;
+  createdOn?:  Date;
   isActive:    boolean;
 
   // Datos personales

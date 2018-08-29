@@ -174,7 +174,6 @@ export class StudentRegisterComponent implements OnInit {
           this.assign(this.student, this.formulario.value);
 
           // Propiedades adicionales a incluir.
-          this.student.createdOn = Date.now();
           this.student.uid = credential.user.uid;
           this.student.resumeURL = url;
           this.studentService.createStudent(this.student).then(smt => {

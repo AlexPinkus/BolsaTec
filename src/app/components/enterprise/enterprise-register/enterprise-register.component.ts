@@ -138,7 +138,6 @@ export class EnterpriseRegisterComponent implements OnInit {
           this.assign(this.enterprise, this.formulario.value);
 
           // Propiedades adicionales a incluir.
-          this.enterprise.createdOn = Date.now();
           this.enterprise.uid = credential.user.uid;
           this.enterprise.logo = url;
           this.enterpriseService.createEnterprise(this.enterprise).then(smt => {
