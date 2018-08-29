@@ -59,7 +59,7 @@
                         <select class="custom-select select-tec mr-sm-2" formControlName="sex" id="sex">
               <!-- <option value="" selected disabled hidden>Elige una opción...</option> -->
               <option value="" selected disabled hidden>{{student.sex}}</option>
-              <option *ngFor="let gender of genders" [ngValue]="gender">{{gender}}</option>
+              <option *ngFor="let gender of texts.genders" [ngValue]="gender">{{gender}}</option>
             </select>
                     </ng-template>
                 </div>
@@ -79,7 +79,7 @@
                     <ng-template #selectMaritalStatus>
                         <select class="custom-select select-tec mr-sm-2" formControlName="maritalStatus" id="maritalStatus">
             <option value="" selected disabled hidden>{{student.maritalStatus}}</option>
-            <option *ngFor="let maritalStatus of maritalStatuses" [ngValue]="maritalStatus">{{maritalStatus}}</option>
+            <option *ngFor="let maritalStatus of texts.maritalStatuses" [ngValue]="maritalStatus">{{maritalStatus}}</option>
             </select>
                     </ng-template>
                 </div>
@@ -174,7 +174,7 @@
                         <select class="custom-select select-tec mr-sm-2" formControlName="bachelor" id="bachelor">
               <!-- <option selected>Elige una carrera...</option> -->
               <option value="" selected disabled hidden>{{student.degree.bachelor}}</option>
-              <option *ngFor="let bachelor of bachelors" [ngValue]="bachelor">{{bachelor}}</option>
+              <option *ngFor="let bachelor of texts.bachelors" [ngValue]="bachelor.value">{{bachelor.name}}</option>
             </select>
                     </ng-template>
                 </div>

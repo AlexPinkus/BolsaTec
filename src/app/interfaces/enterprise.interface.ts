@@ -1,7 +1,7 @@
 export interface Enterprise {
   // Información DB
   uid?:       any;
-  createdOn?: number;
+  createdOn?: Date;
   isActive:   boolean;
   role:       string;
 

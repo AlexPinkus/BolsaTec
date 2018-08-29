@@ -58,6 +58,8 @@ export class StudentService {
     //   time: new Date().getTime(),
     // };
     // student.role = 'student';
+    student.role = 'student';
+    student.createdOn = new Date();
     return this.studentsCollection.doc(student.uid).set(student);
   }
 

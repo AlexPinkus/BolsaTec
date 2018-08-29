@@ -11,8 +11,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class JobofferListComponent implements OnInit {
   selected = [];
-  joboffers$: Observable<Joboffer[]>;
-
+  public joboffers$: Observable<Joboffer[]>;
+  public emptyMessage = {
+    emptyMessage: 'No hay ofertas para mostrar...'
+  };
   constructor( private jobofferService: JobofferService,
     private activatedRoute: ActivatedRoute,
     private router: Router ) {

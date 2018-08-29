@@ -94,7 +94,7 @@
         <label class="mr-sm-2" for="sex">Sexo</label>
         <select class="custom-select select-tec mr-sm-2" formControlName="sex" id="sex">
           <option value="" selected disabled hidden>Elige una opción...</option>
-          <option *ngFor="let gender of genders" [ngValue]="gender">{{gender}}</option>
+          <option *ngFor="let gender of texts.genders" [ngValue]="gender">{{gender}}</option>
         </select>
       </div>
       <div class="form-group col-md-4">
@@ -109,7 +109,7 @@
         <label class="mr-sm-2" for="maritalStatus">Estado civil</label>
         <select class="custom-select select-tec mr-sm-2" formControlName="maritalStatus" id="maritalStatus">
         <option value="" selected disabled hidden>Elige una opción...</option>
-        <option *ngFor="let maritalStatus of maritalStatuses" [ngValue]="maritalStatus">{{maritalStatus}}</option>
+        <option *ngFor="let maritalStatus of texts.maritalStatuses" [ngValue]="maritalStatus">{{maritalStatus}}</option>
         </select>
       </div>
     </div>
@@ -206,7 +206,7 @@
         <label class="mr-sm-2" for="bachelor">Carrera de egreso</label>
         <select class="custom-select select-tec mr-sm-2" formControlName="bachelor" id="bachelor">
           <option value="" selected disabled hidden>Elige una carrera...</option>
-          <option *ngFor="let bachelor of bachelors" [ngValue]="bachelor">{{bachelor}}</option>
+          <option *ngFor="let bachelor of texts.bachelors" [ngValue]="bachelor.value">{{bachelor.name}}</option>
         </select>
         <div class="invalid-feedback" *ngIf="!formulario.get('bachelor').valid && formulario.get('bachelor').dirty">
           *Campo requerido
@@ -315,8 +315,8 @@
     <!-- Botones -->
     <div class="form-row">
       <div class="col-md-5 p-2">
-        <button type="submit" class="text-center btn btn-rojo col-md-12">Registrarte</button>
-        <!-- <button type="submit" [disabled]="!formulario.valid" class="text-center btn btn-rojo col-md-12">Registrarte</button> -->
+        <!-- <button type="submit" class="text-center btn btn-rojo col-md-12">Registrarte</button> -->
+        <button type="submit" [disabled]="!formulario.valid || !file" class="text-center btn btn-rojo col-md-12">Registrarte</button>
       </div>
       <div class="col-md-2">
       </div>
