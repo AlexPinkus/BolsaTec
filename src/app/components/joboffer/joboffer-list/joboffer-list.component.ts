@@ -13,7 +13,9 @@ export class JobofferListComponent implements OnInit {
   selected = [];
   public joboffers$: Observable<Joboffer[]>;
   public emptyMessage = {
-    emptyMessage: 'No hay ofertas para mostrar...'
+    emptyMessage: 'No hay ofertas para mostrar...',
+    // Footer total message
+    totalMessage: 'total'
   };
   constructor( private jobofferService: JobofferService,
     private activatedRoute: ActivatedRoute,
