@@ -11,13 +11,14 @@ export class StudentsAdminComponent {
   rows = [];
   selectedActivos = [];
   selectedInactivos = [];
-public studentpreview: Student;
-public bachelorpreview: string;
-public graduadopreview: string;
-public messageAlert: string;
-public typeAlert: string;
-public showAlertInactivos = false;
-public showAlertActivos = false;
+  public studentpreview: Student;
+  public bachelorpreview: string;
+  public graduadopreview: string;
+  public messageAlert: string;
+  public typeAlert: string;
+  public showAlertInactivos = false;
+  public showAlertActivos = false;
+
   constructor(private modalService: NgbModal,
               private  toastr: ToastrService) {
     this.fetch((data) => {
@@ -70,43 +71,45 @@ public showAlertActivos = false;
       }
     });
   }
+
   setAlert(action: string, table: string) {
-  switch (action) {
-    case 'aprobar':
-      this.messageAlert = '¡El estudiante ha sido aprobado con éxito!';
-      this.typeAlert = 'success';
-      break;
-    case 'eliminar':
-      this.messageAlert = '¡El estudiante ha sido eliminado con éxito!';
-      this.typeAlert = 'success';
-      break;
-    case 'eliminarBatch':
-      this.messageAlert = '¡Los estudiantes han sido eliminados con éxito!';
-      this.typeAlert = 'success';
-      break;
-    case 'aprobarBatch':
-      this.messageAlert = '¡Los estudiantes han sido aprobados con éxito!';
-      this.typeAlert = 'success';
-      break;
-    case 'fail':
-      this.messageAlert = 'Hubo un error, por favor intentalo nuevamente';
-      this.typeAlert = 'danger';
-      break;
-    default:
-      break;
-  }
-    if (table === 'Inactivos') {
-      this.showAlertInactivos = true;
-      setTimeout(() => {
-        this.showAlertInactivos = false;
-      }, 3500);
-    } else if  (table === 'Activos') {
-      this.showAlertActivos = true;
-      setTimeout(() => {
-        this.showAlertActivos = false;
-      }, 3500);
+    switch (action) {
+      case 'aprobar':
+        this.messageAlert = '¡El estudiante ha sido aprobado con éxito!';
+        this.typeAlert = 'success';
+        break;
+      case 'eliminar':
+        this.messageAlert = '¡El estudiante ha sido eliminado con éxito!';
+        this.typeAlert = 'success';
+        break;
+      case 'eliminarBatch':
+        this.messageAlert = '¡Los estudiantes han sido eliminados con éxito!';
+        this.typeAlert = 'success';
+        break;
+      case 'aprobarBatch':
+        this.messageAlert = '¡Los estudiantes han sido aprobados con éxito!';
+        this.typeAlert = 'success';
+        break;
+      case 'fail':
+        this.messageAlert = 'Hubo un error, por favor intentalo nuevamente';
+        this.typeAlert = 'danger';
+        break;
+      default:
+        break;
     }
+      if (table === 'Inactivos') {
+        this.showAlertInactivos = true;
+        setTimeout(() => {
+          this.showAlertInactivos = false;
+        }, 3500);
+      } else if  (table === 'Activos') {
+        this.showAlertActivos = true;
+        setTimeout(() => {
+          this.showAlertActivos = false;
+        }, 3500);
+      }
   }
+
   verModal(uid, action: string, modal, table) {
     // console.log(this.rows);
     switch (action) {
@@ -157,12 +160,11 @@ public showAlertActivos = false;
       default:
         break;
     }
-}
+  }
 
   updateFilter(event) {
     console.log('updateFilter', event);
   }
-
 
   getCarreraName(key) {
    let result: string;

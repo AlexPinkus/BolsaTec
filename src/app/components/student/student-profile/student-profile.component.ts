@@ -175,7 +175,7 @@ export class StudentProfileComponent implements OnInit {
         this.studentService.updateStudent(student.uid, student)
         .then((result) => {
         //  this.showSuccesAlert();
-        this.toastr.success('Hello world!', 'Toastr fun!');
+        this.toastr.success('Éxito!', 'Su información ha sido actualizada exitosamente!!');
         }).catch((err) => {
           // this.showFailureAlert();
         });

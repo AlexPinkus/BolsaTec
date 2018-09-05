@@ -17,6 +17,7 @@ export class JobofferListComponent implements OnInit {
     // Footer total message
     totalMessage: 'total'
   };
+
   constructor( private jobofferService: JobofferService,
     private activatedRoute: ActivatedRoute,
     private router: Router ) {

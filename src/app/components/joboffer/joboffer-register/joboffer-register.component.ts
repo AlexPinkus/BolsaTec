@@ -45,7 +45,7 @@ export class JobofferRegisterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private rutaURL: Router,
     private activatedRoute: ActivatedRoute,
-  private modalService: NgbModal) {
+    private modalService: NgbModal) {
     this.formulario = this.formBuilder.group({
 
       // Datos del puesto:

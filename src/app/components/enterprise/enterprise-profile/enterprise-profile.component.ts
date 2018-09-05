@@ -5,7 +5,7 @@ import { EnterpriseService } from '../../../services/enterprise.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
-import {NgbAlertConfig} from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlertConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { map, take, tap, finalize } from 'rxjs/operators';
@@ -111,7 +111,7 @@ export class EnterpriseProfileComponent implements OnInit {
           enterprise.logo = url;
           this.enterpriseService.updateEnterprise(enterprise.uid, enterprise)
           .then((result) => {
-            this.toastr.success('Hello world!', 'Toastr fun!');
+            this.toastr.success('Éxito!', 'Su información ha sido actualizada exitosamente!');
            this.showSuccesAlert();
           }).catch((err) => {
             this.showFailureAlert();
@@ -125,7 +125,7 @@ export class EnterpriseProfileComponent implements OnInit {
         this.enterpriseService.updateEnterprise(enterprise.uid, enterprise)
         .then((result) => {
           this.showSuccesAlert();
-          this.toastr.success('Hello world!', 'Toastr fun!');
+          this.toastr.success('Éxito!', 'Su información ha sido actualizada exitosamente!');
         }).catch((err) => {
          this.showFailureAlert();
         });
@@ -162,6 +162,7 @@ export class EnterpriseProfileComponent implements OnInit {
       }, 900);
     }, 2500);
   }
+
   actualizar(enterprise) {
     this.isreadonly = !this.isreadonly;
     // Esto hace que los validators funcionen correctamente.
