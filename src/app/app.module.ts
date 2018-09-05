@@ -4,11 +4,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 // Plugins
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {NgxPaginationModule} from 'ngx-pagination';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 // Routing
@@ -62,6 +62,7 @@ import { MatchEmailValidatorDirective } from './validators/match-email.directive
 import { MatchPasswordValidatorDirective } from './validators/match-password.directive';
 import { LoadingComponent } from './components/shared/loading/loading.component';
 import { NotfoundComponent } from './shared/notfound/notfound.component';
+import { EnterprisesAdminComponent } from './components/administrador/enterprises-admin/enterprises-admin.component';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,8 @@ import { NotfoundComponent } from './shared/notfound/notfound.component';
     MatchEmailValidatorDirective,
     MatchPasswordValidatorDirective,
     LoadingComponent,
-    NotfoundComponent
+    NotfoundComponent,
+    EnterprisesAdminComponent
   ],
   imports: [
     BrowserModule,
