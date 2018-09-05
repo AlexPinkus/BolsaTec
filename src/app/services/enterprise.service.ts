@@ -34,12 +34,40 @@ export class EnterpriseService {
     );
   }
 
+  getActiveEnterprises(): Observable<any[]> {
+    // ['added', 'modified', 'removed']
+    return this.afs.collection('users',
+    (ref) => ref.where('role', '==', 'enterprise').where('isActive', '==', true)).snapshotChanges().pipe(
+      map((actions) => {
+        return actions.map((a) => {
+          // Data es la información de cada uno de los documentos
+          const data = a.payload.doc.data();
+          return { id: a.payload.doc.id, ...data };
+        });
+      })
+    );
+  }
 
-  getEnterprise(id: string) {
+  getInactiveEnterprises(): Observable<any[]> {
+    // ['added', 'modified', 'removed']
+    return this.afs.collection('users',
+    (ref) => ref.where('role', '==', 'enterprise').where('isActive', '==', false)).snapshotChanges().pipe(
+      map((actions) => {
+        return actions.map((a) => {
+          // Data es la información de cada uno de los documentos
+          const data = a.payload.doc.data();
+          return { id: a.payload.doc.id, ...data };
+        });
+      })
+    );
+  }
+
+
+  getEnterprise(id: string): AngularFirestoreDocument<Enterprise> {
     return this.afs.doc<Enterprise>(`users/${id}`);
   }
 
-  createEnterprise(enterprise: Enterprise) {
+  createEnterprise(enterprise: Enterprise): Promise<void> {
     // const enterprise = {
     //   content,
     //   hearts: 0,
@@ -50,11 +78,35 @@ export class EnterpriseService {
     return this.enterprisesCollection.doc(enterprise.uid).set(enterprise);
   }
 
-  updateEnterprise(id: string, data: any) {
+  updateEnterprise(id: string, data: any): Promise<void> {
     return this.getEnterprise(id).update(data);
   }
 
-  deleteEnterprise(id: string) {
+  updateEnterprises(enterprises: Array<Enterprise>): Promise<void> {
+    const batch = this.afs.firestore.batch();
+    enterprises.forEach(enterprise => {
+      batch.update(this.afs.firestore.collection('users').doc(enterprise.uid), enterprise);
+    });
+    return batch.commit();
+  }
+
+  setActiveEnterprises(enterprises: Array<Enterprise>): Promise<void> {
+    const batch = this.afs.firestore.batch();
+    enterprises.forEach(enterprise => {
+      batch.update(this.afs.firestore.collection('users').doc(enterprise.uid), {isActive : true});
+    });
+    return batch.commit();
+  }
+
+  setInactiveEnterprises(enterprises: Array<Enterprise>): Promise<void> {
+    const batch = this.afs.firestore.batch();
+    enterprises.forEach(enterprise => {
+      batch.update(this.afs.firestore.collection('users').doc(enterprise.uid), {isActive : false});
+    });
+    return batch.commit();
+  }
+
+  deleteEnterprise(id: string): Promise<void> {
     return this.getEnterprise(id).delete();
   }
 }
