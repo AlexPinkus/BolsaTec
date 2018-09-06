@@ -63,6 +63,7 @@ import { MatchPasswordValidatorDirective } from './validators/match-password.dir
 import { LoadingComponent } from './components/shared/loading/loading.component';
 import { NotfoundComponent } from './shared/notfound/notfound.component';
 import { EnterprisesAdminComponent } from './components/administrador/enterprises-admin/enterprises-admin.component';
+import { JoboffersAdminComponent } from './components/administrador/joboffers-admin/joboffers-admin.component';
 
 @NgModule({
   declarations: [
@@ -90,7 +91,8 @@ import { EnterprisesAdminComponent } from './components/administrador/enterprise
     MatchPasswordValidatorDirective,
     LoadingComponent,
     NotfoundComponent,
-    EnterprisesAdminComponent
+    EnterprisesAdminComponent,
+    JoboffersAdminComponent
   ],
   imports: [
     BrowserModule,

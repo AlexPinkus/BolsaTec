@@ -21,6 +21,7 @@ import { JobofferListComponent } from './components/joboffer/joboffer-list/jobof
 // Componentes de Admin
 import { StudentsAdminComponent } from './components/administrador/students-admin/students-admin.component';
 import { EnterprisesAdminComponent } from './components/administrador/enterprises-admin/enterprises-admin.component';
+import { JoboffersAdminComponent } from './components/administrador/joboffers-admin/joboffers-admin.component';
 
 
 import { LoginComponent } from './components/login/login.component';
@@ -50,6 +51,7 @@ const routes: Routes = [
 
     { path: 'admin', component: StudentsAdminComponent },
     { path: 'admin/enterprises', component: EnterprisesAdminComponent },
+    { path: 'admin/joboffers', component: JoboffersAdminComponent },
     { path: '**', component: NotfoundComponent },
 
     // { path: 'path/:routeParam', component: MyComponent },

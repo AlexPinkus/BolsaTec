@@ -1,4 +1,3 @@
-<div>
 <ng-container *ngIf="inactiveEnterprises$ | async as iEnterprises; else loading">
   <ng-container *ngIf="activeEnterprises$ | async as aEnterprises; else loading">
     <h4>Empresas por aprobar</h4>
