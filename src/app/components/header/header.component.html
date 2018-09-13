@@ -69,12 +69,12 @@
           <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{user.name}}
+                {{user.firstName}} {{user.middleName}} {{user.lastName}}
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" [routerLink]="['/admin/students']">Estudiantes</a>
-                <a class="dropdown-item" [routerLink]="['/admin/empresas']">Empresas</a>
-                <a class="dropdown-item" [routerLink]="['/admin/joboffer']">Ofertas</a>
+                <a class="dropdown-item" [routerLink]="['/admin/enterprises']">Empresas</a>
+                <a class="dropdown-item" [routerLink]="['/admin/joboffers']">Ofertas</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" [routerLink]="['/index']" (click)="authService.logout()">Cerrar Sesión</a>
               </div>

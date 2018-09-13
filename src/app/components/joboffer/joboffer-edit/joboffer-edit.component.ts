@@ -20,7 +20,7 @@ import { map, take, tap, finalize } from 'rxjs/operators';
 export class JobofferEditComponent implements OnInit {
 
   public formulario: FormGroup;
-  public success = false;
+  public success: boolean;
   public failure = false;
   public animationSwitch = false;
   public modalMessage: string;
@@ -144,7 +144,7 @@ export class JobofferEditComponent implements OnInit {
       if (object.hasOwnProperty(key)) {
         if ( typeof object[key] === 'object' && !Array.isArray(object[key])) {
           this.assign(object[key], objectToCopy);
-        } else if ( objectToCopy[key]) {
+        } else if ( objectToCopy[key] !== undefined) {
           object[key] = objectToCopy[key];
         }
       }

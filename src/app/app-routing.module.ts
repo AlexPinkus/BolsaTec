@@ -18,6 +18,8 @@ import { JobofferRegisterComponent } from './components/joboffer/joboffer-regist
 import { JobofferViewComponent } from './components/joboffer/joboffer-view/joboffer-view.component';
 import { JobofferMainComponent } from './components/joboffer/joboffer-main/joboffer-main.component';
 import { JobofferListComponent } from './components/joboffer/joboffer-list/joboffer-list.component';
+import { JobofferEditComponent } from './components/joboffer/joboffer-edit/joboffer-edit.component';
+
 // Componentes de Admin
 import { StudentsAdminComponent } from './components/administrador/students-admin/students-admin.component';
 import { EnterprisesAdminComponent } from './components/administrador/enterprises-admin/enterprises-admin.component';
@@ -48,6 +50,7 @@ const routes: Routes = [
     { path: 'list/joboffers', component: JobofferMainComponent, canActivate: [StudentGuard] },
     // Ruta para ver la oferta de trabajo con el id especificado.
     { path: 'joboffer/:id',  component: JobofferViewComponent, canActivate: [AuthGuard]  },
+    { path: 'edit/joboffer/:id',  component: JobofferEditComponent, canActivate: [AuthGuard]  },
 
     { path: 'admin', component: StudentsAdminComponent },
     { path: 'admin/enterprises', component: EnterprisesAdminComponent },

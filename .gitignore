@@ -24,6 +24,10 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# Firestore functions
+/functions/node_modules
+/functions/lib
+
 # misc
 /.sass-cache
 /connect.lock

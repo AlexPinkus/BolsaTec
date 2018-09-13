@@ -73,6 +73,16 @@ export class JobofferService {
     // return this.joboffersCollection.doc(joboffer.uid).set(joboffer);
   }
 
+  createSomething(something) {
+    something.createdOn = new Date();
+    return this.afs.collection('testdata').add(something).then(ref => {
+      console.log('Added document with ID: ', ref.id);
+      something.uid = ref.id;
+      return this.afs.doc<Joboffer>(`testdata/${ref.id}`).update(something);
+    });
+    // return this.joboffersCollection.doc(joboffer.uid).set(joboffer);
+  }
+
   updateJoboffer(id: string, data: any) {
     return this.getJoboffer(id).update(data);
   }

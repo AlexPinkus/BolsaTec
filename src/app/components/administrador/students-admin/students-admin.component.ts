@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Student } from '../../../interfaces/student.interface';
+import { StudentService } from '../../../services/student.service';
 import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-students-admin',
@@ -20,6 +21,7 @@ export class StudentsAdminComponent {
   public showAlertActivos = false;
 
   constructor(private modalService: NgbModal,
+    private studentService: StudentService,
               private  toastr: ToastrService) {
     this.fetch((data) => {
       this.rows = data;

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Enterprise } from '../../../interfaces/enterprise.interface';
 import { EnterpriseService } from '../../../services/enterprise.service';
+import { JobofferService } from '../../../services/joboffer.service';
+import { PaginationService } from '../../../services/pagination.service';
 import { ToastrService } from 'ngx-toastr';
 
 import { Observable } from 'rxjs';
@@ -16,6 +18,8 @@ import { map, take, tap, finalize, switchMap, flatMap } from "rxjs/operators";
 })
 export class EnterprisesAdminComponent implements OnInit {
 
+  public index = 0;
+  public pages = 5;
   // Observables de la DB.
   public activeEnterprises$: Observable<Enterprise[]>;
   public inactiveEnterprises$: Observable<Enterprise[]>;
@@ -37,18 +41,54 @@ export class EnterprisesAdminComponent implements OnInit {
 
   constructor(private modalService: NgbModal,
     private  toastr: ToastrService,
-    private enterpriseService: EnterpriseService) {
+    private enterpriseService: EnterpriseService,
+    public page: PaginationService,
+    private jobofferService: JobofferService
+    ) {
+      // hello
       this.inactiveEnterprises$ = this.enterpriseService.getInactiveEnterprises().pipe(
         tap(inactiveEnterprises => { this.inactiveEnterprises = inactiveEnterprises; })
       );
+      // this.inactiveEnterprises$ = this.enterpriseService.getInactiveEnterprises().pipe(
+      //   tap(inactiveEnterprises => { this.inactiveEnterprises = inactiveEnterprises; })
+      // );
       this.activeEnterprises$ = this.enterpriseService.getActiveEnterprises().pipe(
         tap(activeEnterprises => { this.activeEnterprises = activeEnterprises; })
       );
   }
 
   ngOnInit() {
+    this.page.reset();
+    this.page.init('testdata', 'createdOn', { reverse: true, prepend: false });
   }
 
+  populateCollection (index) {
+
+    if (index === (this.index + 5)) {
+      this.index = index;
+      return;
+    }
+    setTimeout(() => {
+      return this.jobofferService.createSomething({'index': index})
+      .then((result) => {
+        return this.populateCollection(++index);
+      }).catch((err) => {
+        console.log('err :', err);
+      });
+    }, 1000);
+  }
+
+  setPage( pageInfo ) {
+    if ((pageInfo.offset === this.pages - 1) || (pageInfo.offset === this.pages - 2)) {
+      this.page.more();
+      this.pages += 5;
+    }
+  }
+
+  getMore() {
+    console.log('paginacion');
+    this.page.more();
+  }
 
   onSelect({ selected }, table: string) {
     console.log('Select Event', selected);
