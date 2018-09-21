@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
-
+interface Bachelor {
+  value: string; //  Valor a guardar de la carrera.
+  name: string; // Nombre completo de la carrera.
+  shortName: string; // Nombre corto de la carrera.
+}
 @Injectable({
   providedIn: 'root'
 })
 export class TextsService {
 
-  private _bachelors: any[] = [
+  private _bachelors: Bachelor[] = [
     { value: 'industrial', name: 'Licenciatura en Ingeniería Industrial', shortName: 'Ingeniería Industrial'},
     { value: 'bioquimica', name: 'Licenciatura en Ingeniería Bioquímica', shortName: 'Ingeniería Bioquímica'},
     { value: 'ambiental', name: 'Licenciatura en Ingeniería Ambiental', shortName: 'Ingeniería Ambiental'},
@@ -27,20 +31,26 @@ export class TextsService {
 
   constructor() { }
 
-  get bachelors(): any[] {
+  get bachelors(): Bachelor[] {
     return this._bachelors;
   }
 
-  get values(): any[] {
+  get values(): string[] {
     return this._bachelors.map(bachelor => bachelor.value);
   }
 
-  get names(): any[] {
+  get names(): string[] {
     return this._bachelors.map(bachelor => bachelor.name);
   }
 
-  get shortNames(): any[] {
+  get shortNames(): string[] {
     return this._bachelors.map(bachelor => bachelor.shortName);
+  }
+
+  getBachelorFromValue(value: string): Bachelor {
+    return this._bachelors.find(bachelor => {
+      return bachelor.value === value;
+    });
   }
 
   get genders(): string[] {

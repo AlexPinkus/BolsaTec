@@ -12,6 +12,7 @@ import { NgbAlertConfig } from '@ng-bootstrap/ng-bootstrap';
 
 import { Observable } from 'rxjs';
 import { map, take, tap, finalize } from 'rxjs/operators';
+import { text } from '@angular/core/src/render3/instructions';
 @Component({
   selector: 'app-joboffer-edit',
   templateUrl: './joboffer-edit.component.html',
@@ -20,39 +21,35 @@ import { map, take, tap, finalize } from 'rxjs/operators';
 export class JobofferEditComponent implements OnInit {
 
   public formulario: FormGroup;
-  public success: boolean;
-  public failure = false;
-  public animationSwitch = false;
   public modalMessage: string;
   public messageAlert: string;
   public typeAlert: string;
   public isreadonly = true;
   public joboffer$: Observable<Joboffer>;
-  mensaje_modal: string;
 
   constructor(
-    private  alertConfig: NgbAlertConfig,
     private jobofferService: JobofferService,
     public texts: TextsService,
     public authService: AuthService,
     private formBuilder: FormBuilder,
-    private rutaURL: Router,
+    private router: Router,
     private activatedRoute: ActivatedRoute,
     private modalService: NgbModal,
     private toastr: ToastrService) {
       this.formulario = this.formBuilder.group({
         // Datos del puesto:
-        position:     ['', Validators.required],
-        description:  ['', Validators.required],
-        salary:       ['', Validators.required],
-        vacantNumber: ['', Validators.required],
-        weeklyHours:  ['', Validators.required],
+        position:       ['', Validators.required],
+        description:    ['', Validators.required],
+        economicType:   ['', Validators.required],
+        economicAmount: ['', Validators.required],
+        vacantNumber:   ['', Validators.required],
+        weeklyHours:    ['', Validators.required],
         // Perfil deseado:
         aptitudes:    new FormArray([
           new FormControl('', Validators.required)
         ]),
         bachelors:  new FormArray([
-          new FormControl('', Validators.required)
+          // new FormControl('', Validators.required)
         ]),
         experience:   ['', Validators.required],
         written:      [''],
@@ -82,10 +79,9 @@ export class JobofferEditComponent implements OnInit {
       this.assign(joboffer, this.formulario.value);
       this.jobofferService.updateJoboffer(joboffer.uid, joboffer)
       .then((result) => {
-        this.showSuccesAlert();
-        this.toastr.success('Éxito!', 'Su información ha sido actualizada exitosamente!');
+        this.toastr.success('Su información ha sido actualizada exitosamente!', '¡Éxito!');
       }).catch((err) => {
-        this.showFailureAlert();
+        this.toastr.error('¡Hubo un error al actualizar su información!', '¡Error!');
       });
 
     }, (reason) => {
@@ -93,41 +89,50 @@ export class JobofferEditComponent implements OnInit {
     });
   }
 
-  actualizar(joboffer) {
-    this.isreadonly = !this.isreadonly;
+  actualizar(joboffer: Joboffer) {
     // Esto hace que los validators funcionen correctamente.
     // Además de actualizar resetear los valores del formulario al momento de cancelar.
     // Esto resetea el valor del formulario
+    this.isreadonly = !this.isreadonly;
+    while (this.formulario.controls['bachelors'].value.length !== joboffer.bachelors.length) {
+      if (this.formulario.controls['bachelors'].value.length < joboffer.bachelors.length) {
+        this.agregarcarrera();
+      } else {
+        this.eliminarcarrera(0);
+      }
+    }
+    while (this.formulario.controls['aptitudes'].value.length !== joboffer.aptitudes.length) {
+      if (this.formulario.controls['aptitudes'].value.length < joboffer.aptitudes.length) {
+        this.agregaraptitud();
+      } else {
+        this.eliminaraptitud(0);
+      }
+    }
+    this.formulario.controls['bachelors'].setValue(joboffer.bachelors);
+    this.formulario.controls['aptitudes'].setValue(joboffer.aptitudes);
     this.assign(this.formulario.value, joboffer);
     this.formulario.reset(this.formulario.value);
   }
 
-  showSuccesAlert() {
-    this.alertConfig.type = 'success';
-    this.messageAlert = '¡Tus cambios se han guardado con éxito!';
-    this.success = true;
-    this.animationSwitch = true;
-    setTimeout(() => {
-      this.animationSwitch = false;
-      setTimeout(() => {
-        this.success = false;
-        this.isreadonly = !this.isreadonly;
-      }, 900);
-    }, 2500);
+  agregarcarrera(name?: string) {
+    const value = name ? name : '';
+    (<FormArray>this.formulario.controls['bachelors']).push(
+      new FormControl(value, Validators.required)
+    );
   }
 
-  showFailureAlert() {
-    this.alertConfig.type = 'danger';
-    this.messageAlert = '¡Hubo un problema al actualizar tus datos!';
-    this.success = true;
-    this.animationSwitch = true;
-    setTimeout(() => {
-      this.animationSwitch = false;
-      setTimeout(() => {
-        this.success = false;
-        this.isreadonly = !this.isreadonly;
-      }, 900);
-    }, 2500);
+  eliminarcarrera(index: number) {
+    (<FormArray>this.formulario.controls['bachelors']).removeAt(index);
+  }
+
+  agregaraptitud() {
+    (<FormArray>this.formulario.controls['aptitudes']).push(
+      new FormControl('', Validators.required)
+    );
+  }
+
+  eliminaraptitud(index: number) {
+    (<FormArray>this.formulario.controls['aptitudes']).removeAt(index);
   }
 
   private assign(object: any, objectToCopy: any) {

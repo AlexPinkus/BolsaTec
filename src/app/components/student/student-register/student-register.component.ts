@@ -9,6 +9,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { EmailAvailableValidator } from "../../../validators/email-available.directive";
 import { matchEmailValidator } from "../../../validators/match-email.directive";
 import { matchPasswordValidator } from "../../../validators/match-password.directive";
+import { ToastrService } from 'ngx-toastr';
 import { TextsService } from '../../../services/texts.service';
 
 import { Observable } from 'rxjs';
@@ -21,7 +22,6 @@ declare var $: any;
   styleUrls: ['./student-register.component.scss']
 })
 export class StudentRegisterComponent implements OnInit {
-  public success: boolean;
   public modalMessage: string;
 
   public formulario: FormGroup;
@@ -113,7 +113,8 @@ export class StudentRegisterComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
-    private emailAvailable: EmailAvailableValidator) {
+    private emailAvailable: EmailAvailableValidator,
+    private toastr:  ToastrService) {
       // Aquí se colocan todos los elementos del formulario
       this.formulario = this.formBuilder.group({
         // Datos de usuario
@@ -177,19 +178,19 @@ export class StudentRegisterComponent implements OnInit {
           this.student.uid = credential.user.uid;
           this.student.resumeURL = url;
           this.studentService.createStudent(this.student).then(smt => {
-            this.success = true;
+            this.toastr.success('¡Su registro se realizó exitosamente!', '¡Éxito!');
             setTimeout(() => {
               this.router.navigate(['/index']);
             }, 3000);
           }).catch((err) => {
-            this.success = false;
+            this.toastr.error('¡Hubo un error con su registro!', '¡Error!');
           });
         }).catch((err) => {
-          this.success = false;
+          this.toastr.error('¡Hubo un error con su registro!', '¡Error!');
         });
       })
       .catch((err) => {
-        this.success = false;
+        this.toastr.error('¡Hubo un error con su registro!', '¡Error!');
       });
     }, (reason) => {
       // Si el usuario oprime cancelar

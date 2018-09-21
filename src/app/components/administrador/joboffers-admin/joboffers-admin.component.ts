@@ -30,6 +30,7 @@ export class JoboffersAdminComponent implements OnInit {
   public messageAlert: string;
   public typeAlert: string;
   public showAlert = false;
+  fecha: Date;
 
   constructor(
     private modalService: NgbModal,
@@ -58,6 +59,7 @@ export class JoboffersAdminComponent implements OnInit {
   onSelect({ selected }) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
+    this.fecha = new Date();
   }
 
   // Acciones:
@@ -76,7 +78,7 @@ export class JoboffersAdminComponent implements OnInit {
   }
 
   editOffer(id: string) {
-    this.router.navigate(['/joboffer', id]);
+    this.router.navigate(['edit/joboffer', id]);
   }
 
   removeOffer(id: string, modal) {

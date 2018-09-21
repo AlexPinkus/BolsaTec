@@ -34,9 +34,10 @@
       </ngx-datatable-column>
       <ngx-datatable-column name="Puesto" prop="position"></ngx-datatable-column>
       <ngx-datatable-column name="Empresa" prop="enterpriseName"></ngx-datatable-column>
-      <ngx-datatable-column name="Sueldo" prop="salary">
+      <ngx-datatable-column name="Fecha de publicación" prop="createdOn.seconds">
         <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value">
-          {{value | currency}}
+          {{value | date:'fullDate'}}
+          {{value | json}}
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column name="Acciones" prop="uid">

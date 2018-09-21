@@ -6,6 +6,7 @@ import { AuthService } from '../../../services/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TextsService } from '../../../services/texts.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-joboffer-register',
@@ -13,13 +14,12 @@ import { TextsService } from '../../../services/texts.service';
   styleUrls: ['./joboffer-register.component.scss']
 })
 export class JobofferRegisterComponent implements OnInit {
-  public success: boolean;
   public formulario: FormGroup;
   public joboffer: Joboffer = {
     // Datos del puesto
     position:     '',
     description:  '',
-    salary:       0,
+    economicAmount: 0,
     vacantNumber: 0,
     weeklyHours:  0,
 
@@ -45,15 +45,17 @@ export class JobofferRegisterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private rutaURL: Router,
     private activatedRoute: ActivatedRoute,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    private toastr:  ToastrService) {
     this.formulario = this.formBuilder.group({
 
       // Datos del puesto:
-      position:     ['', Validators.required],
-      description:  ['', Validators.required],
-      salary:       ['', Validators.required],
-      vacantNumber: ['', Validators.required],
-      weeklyHours:  ['', Validators.required],
+      position:       ['', Validators.required],
+      description:    ['', Validators.required],
+      economicType:   ['', Validators.required],
+      economicAmount: ['', Validators.required],
+      vacantNumber:   ['', Validators.required],
+      weeklyHours:    ['', Validators.required],
       // Perfil deseado:
       aptitudes:    new FormArray([
         new FormControl('', Validators.required)
@@ -82,9 +84,9 @@ export class JobofferRegisterComponent implements OnInit {
       this.joboffer.idEnterprise = userId;
       this.joboffer.state = 'active';
       this.jobofferService.createJoboffer(this.joboffer).then(result => {
-        this.success = true;
+        this.toastr.success('¡Su información ha sido actualizada exitosamente!', '¡Éxito!');
       }).catch(err => {
-        this.success = false;
+        this.toastr.error('¡Hubo un error al actualizar su información!', '¡Error!');
       });
     }, (reason) => {
       // Si el usuario oprime cancelar

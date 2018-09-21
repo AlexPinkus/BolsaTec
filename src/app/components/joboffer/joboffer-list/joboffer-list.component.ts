@@ -63,6 +63,10 @@ export class JobofferListComponent implements OnInit {
     this.router.navigate(['/joboffer', id]);
   }
 
+  editOffer(id: string) {
+    this.router.navigate(['/edit/joboffer', id]);
+  }
+
   updateFilter(event) {
     console.log('updateFilter', event);
   }

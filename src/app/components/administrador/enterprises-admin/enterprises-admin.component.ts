@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Enterprise } from '../../../interfaces/enterprise.interface';
 import { EnterpriseService } from '../../../services/enterprise.service';
@@ -14,7 +14,11 @@ import { map, take, tap, finalize, switchMap, flatMap } from "rxjs/operators";
 @Component({
   selector: 'app-enterprises-admin',
   templateUrl: './enterprises-admin.component.html',
-  styleUrls: ['./enterprises-admin.component.scss']
+  styleUrls: ['./enterprises-admin.component.scss'],
+  providers: [
+    { provide: 'instance1', useClass: PaginationService },
+    { provide: 'instance2', useClass: PaginationService }
+  ]
 })
 export class EnterprisesAdminComponent implements OnInit {
 
@@ -39,10 +43,15 @@ export class EnterprisesAdminComponent implements OnInit {
   public showAlertActive = false;
   public enterprisePreview: Enterprise;
 
-  constructor(private modalService: NgbModal,
+  constructor(
+
+    @Inject('instance1') private page: PaginationService,
+    @Inject('instance2') private page2: PaginationService,
+    private modalService: NgbModal,
     private  toastr: ToastrService,
     private enterpriseService: EnterpriseService,
-    public page: PaginationService,
+    // public page: PaginationService,
+    // public page2: PaginationService,
     private jobofferService: JobofferService
     ) {
       // hello
@@ -60,6 +69,8 @@ export class EnterprisesAdminComponent implements OnInit {
   ngOnInit() {
     this.page.reset();
     this.page.init('testdata', 'createdOn', { reverse: true, prepend: false });
+    this.page2.reset();
+    this.page2.init('testdata', 'createdOn', { reverse: true, prepend: false, limit: 6 });
   }
 
   populateCollection (index) {
@@ -83,6 +94,14 @@ export class EnterprisesAdminComponent implements OnInit {
       this.page.more();
       this.pages += 5;
     }
+  }
+
+  setPage2( pageInfo ) {
+    // if ((pageInfo.offset === this.pages - 1) || (pageInfo.offset === this.pages - 2)) {
+    //   this.page.more();
+    //   this.pages += 5;
+    // }
+    this.page2.more();
   }
 
   getMore() {

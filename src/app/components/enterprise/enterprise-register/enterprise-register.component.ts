@@ -9,6 +9,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { EmailAvailableValidator } from "../../../validators/email-available.directive";
 import { matchEmailValidator } from "../../../validators/match-email.directive";
 import { matchPasswordValidator } from "../../../validators/match-password.directive";
+import { ToastrService } from 'ngx-toastr';
 
 import { Observable } from 'rxjs';
 import { map, take, tap, finalize } from 'rxjs/operators';
@@ -19,7 +20,6 @@ import { map, take, tap, finalize } from 'rxjs/operators';
   styleUrls: ['./enterprise-register.component.scss']
 })
 export class EnterpriseRegisterComponent implements OnInit {
-  public success: boolean;
   public modalMessage: string;
 
   public formulario: FormGroup;
@@ -80,7 +80,8 @@ export class EnterpriseRegisterComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private modalService: NgbModal,
-    private emailAvailable: EmailAvailableValidator) {
+    private emailAvailable: EmailAvailableValidator,
+    private toastr:  ToastrService) {
       this.formulario = this.formBuilder.group({
         // Hay que agregrar verificación si existen usuarios:
         email: ['', {
@@ -141,18 +142,18 @@ export class EnterpriseRegisterComponent implements OnInit {
           this.enterprise.uid = credential.user.uid;
           this.enterprise.logo = url;
           this.enterpriseService.createEnterprise(this.enterprise).then(smt => {
-            this.success = true;
+            this.toastr.success('¡Su registro se realizó exitosamente!', '¡Éxito!');
             setTimeout(() => {
               this.router.navigate(['/index']);
             }, 3000);
           }).catch((err) => {
-            this.success = false;
+            this.toastr.error('¡Hubo un error con su registro!', '¡Error!');
           });
         }).catch((err) => {
-          this.success = false;
+          this.toastr.error('¡Hubo un error con su registro!', '¡Error!');
         });
       }).catch((err) => {
-        this.success = false;
+        this.toastr.error('¡Hubo un error con su registro!', '¡Error!');
       });
     }, (reason) => {
       // Si el usuario oprime cancelar

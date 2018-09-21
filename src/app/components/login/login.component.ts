@@ -17,6 +17,9 @@ export class LoginComponent implements OnInit {
     password:  ''
   };
 
+  public errorMessage: string;
+
+
   constructor(private router: Router,
     private route: ActivatedRoute,
     public authService: AuthService) { }
@@ -27,6 +30,7 @@ export class LoginComponent implements OnInit {
   logIn() {
     // console.log( 'Usuario a logear:', this.user );
     this.authService.login(this.user.email, this.user.password).then((credential) => {
+      console.log('credential :', credential);
       // Logeo Exitoso:
       // Obtenemos los datos del usuario para redirigirlo.
       this.authService.user.pipe(
@@ -50,9 +54,34 @@ export class LoginComponent implements OnInit {
       }).catch((err) => {
         console.log('err :', err);
       });
-    }).catch((err) => {
-      console.log('Error al Logearse');
+    }).catch((error) => {
+      // Handle Errors here.
+      console.log('error :', error);
+      this.handleLoginError(error.code);
     });
+  }
+
+  handleLoginError(errorCode: string) {
+    switch (errorCode) {
+      case 'auth/invalid-email':
+        // Thrown if the email address is not valid.
+        this.errorMessage = '* El correo electrónico ingresado no es válido';
+        break;
+      case 'auth/user-disabled':
+        // Thrown if the user corresponding to the given email has been disabled.
+        break;
+      case 'auth/user-not-found':
+        // Thrown if there is no user corresponding to the given email.
+        this.errorMessage = '* El correo electrónico aún no ha sido registrado';
+        break;
+      case 'auth/wrong-password':
+        // Thrown if the password is invalid for the given email, or the account corresponding to the email does not have a password set.
+        this.errorMessage = '* La contraseña no es válida';
+        console.log('errorMessage :', this.errorMessage);
+        break;
+      default:
+        break;
+    }
   }
 
   resetPassword() {

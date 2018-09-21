@@ -14,8 +14,8 @@ export interface Joboffer {
   // Datos del puesto
   position:     string;
   description:  string;
-  salary?:      number;
-  economicaid?: number;
+  economicType?: string;
+  economicAmount?: number;
   vacantNumber: number;
   // # de horas a trabajar a la semana
   weeklyHours:     number;

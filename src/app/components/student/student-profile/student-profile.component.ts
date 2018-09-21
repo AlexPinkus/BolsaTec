@@ -21,7 +21,6 @@ import { ToastrService } from 'ngx-toastr';
 export class StudentProfileComponent implements OnInit {
 
   public student$: Observable<Student>;
-  public success = false;
   public modalMessage: string;
   public isreadonly = true;
 
@@ -120,37 +119,11 @@ export class StudentProfileComponent implements OnInit {
 
   }
 
-  showSuccesAlert() {
-    this.alertConfig.type = 'success';
-    this.messageAlert = '¡Tus cambios se han guardado con éxito!';
-    this.success = true;
-    this.animationSwitch = true;
-    setTimeout(() => {
-      this.animationSwitch = false;
-      setTimeout(() => {
-        this.success = false;
-        this.isreadonly = !this.isreadonly;
-      }, 900);
-    }, 2500);
-  }
 
-  showFailureAlert() {
-    this.alertConfig.type = 'danger';
-    this.messageAlert = '¡Hubo un problema al actualizar tus datos!';
-    this.success = true;
-    this.animationSwitch = true;
-    setTimeout(() => {
-      this.animationSwitch = false;
-      setTimeout(() => {
-        this.success = false;
-        this.isreadonly = !this.isreadonly;
-      }, 900);
-    }, 2500);
-  }
+
   update(student, registerModal) {
     this.modalMessage = '¿Deseas actualizar sus datos?';
     // El modal se invoca con una promesa que se resuelve si el modal es aceptado o se reachaza si es cerrado
-    console.log('this.formulario.value :', this.formulario.value);
     this.modalService.open(registerModal).result.then(() => {
       // Aquí se incluye la lógica cuando el modal ha sido aceptado
 
@@ -162,22 +135,21 @@ export class StudentProfileComponent implements OnInit {
           student.logo = url;
           this.studentService.updateStudent(student.uid, student)
           .then((result) => {
-          //  this.showSuccesAlert();
+            this.toastr.success('Su información ha sido actualizada exitosamente!', '¡Éxito!');
           }).catch((err) => {
-            this.showFailureAlert();
+            this.toastr.error('¡Hubo un error al actualizar su información!', '¡Error!');
           });
         }).catch((err) => {
-          this.showFailureAlert();
+          this.toastr.error('¡Hubo un error al actualizar su información!', '¡Error!');
         });
       } else {
         // Se asignan los valores del formulario al objeto student.
         this.assign(student, this.formulario.value);
         this.studentService.updateStudent(student.uid, student)
         .then((result) => {
-        //  this.showSuccesAlert();
-        this.toastr.success('Éxito!', 'Su información ha sido actualizada exitosamente!!');
+          this.toastr.success('Su información ha sido actualizada exitosamente!', '¡Éxito!');
         }).catch((err) => {
-          // this.showFailureAlert();
+          this.toastr.error('¡Hubo un error al actualizar su información!', '¡Error!');
         });
       }
     }, (reason) => {

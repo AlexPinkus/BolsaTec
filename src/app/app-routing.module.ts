@@ -35,6 +35,7 @@ const routes: Routes = [
     { path: 'students', component: StudentsComponent },
 
     { path: 'login', component: LoginComponent, canActivate: [NotAuthGuard] },
+
     // Rutas de registro (creación en DB).
     { path: 'register/student',   component: StudentRegisterComponent, canActivate: [NotAuthGuard] },
     { path: 'register/employeer', component: EnterpriseRegisterComponent, canActivate: [NotAuthGuard] },
@@ -52,9 +53,12 @@ const routes: Routes = [
     { path: 'joboffer/:id',  component: JobofferViewComponent, canActivate: [AuthGuard]  },
     { path: 'edit/joboffer/:id',  component: JobofferEditComponent, canActivate: [AuthGuard]  },
 
-    { path: 'admin', component: StudentsAdminComponent },
+    // Rutas del administrador.
+    { path: 'admin/students', component: StudentsAdminComponent },
     { path: 'admin/enterprises', component: EnterprisesAdminComponent },
     { path: 'admin/joboffers', component: JoboffersAdminComponent },
+
+    // Página 404
     { path: '**', component: NotfoundComponent },
 
     // { path: 'path/:routeParam', component: MyComponent },

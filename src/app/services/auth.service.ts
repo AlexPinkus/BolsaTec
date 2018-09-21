@@ -111,45 +111,47 @@ export class AuthService {
 
   login(email: string, password: string) {
     // Hacemos el login con correo y contraseña
-    return this.afAuth.auth.signInWithEmailAndPassword(email, password).then(credential => {
-      if (!credential.user.emailVerified) {
-        credential.user.sendEmailVerification();
-      } else {
-        // alert('Bienvenido' + credential.user.displayName);
-        return credential;
-      }
-      // return this.updateUserData(credential.user);
-    })
-    .catch(function(error) {
-      // Handle Errors here.
-      console.log('error :', error);
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      switch (errorCode) {
-        case 'auth/invalid-email':
-        // Thrown if the email address is not valid.
-          break;
-        case 'auth/user-disabled':
-        // Thrown if the user corresponding to the given email has been disabled.
-          break;
-        case 'auth/user-not-found':
-        // Thrown if there is no user corresponding to the given email.
-        // alert('El usuario no exise');
-          break;
-        case 'auth/wrong-password':
-        // Thrown if the password is invalid for the given email, or the account corresponding to the email does not have a password set.
-          break;
-        default:
-          break;
-      }
-      // Cambiar la alerta por un manejo más amigable de error para el usuario.
-      // alert(errorMessage);
+    return this.afAuth.auth.signInWithEmailAndPassword(email, password);
+    // .then(credential => {
+    //   if (!credential.user.emailVerified) {
+    //     credential.user.sendEmailVerification();
+    //   } else {
+    //     // alert('Bienvenido' + credential.user.displayName);
+    //     return credential;
+    //   }
+    //   // return this.updateUserData(credential.user);
+    // })
+    // .catch(function(error) {
+    //   // Handle Errors here.
+    //   console.log('error :', error);
+    //   const errorCode = error.code;
+    //   const errorMessage = error.message;
+    //   switch (errorCode) {
+    //     case 'auth/invalid-email':
+    //     // Thrown if the email address is not valid.
+    //       break;
+    //     case 'auth/user-disabled':
+    //     // Thrown if the user corresponding to the given email has been disabled.
+    //       break;
+    //     case 'auth/user-not-found':
+    //     // Thrown if there is no user corresponding to the given email.
+    //     // alert('El usuario no exise');
+    //       break;
+    //     case 'auth/wrong-password':
+    //     // Thrown if the password is invalid for the given email, or the account corresponding to the email does not have a password set.
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    //   // Cambiar la alerta por un manejo más amigable de error para el usuario.
+    //   // alert(errorMessage);
 
-      // Para debuggear...
-      console.log('errorCode :', errorCode);
-      console.log('errorMessage :', errorMessage);
-      // ...
-    });
+    //   // Para debuggear...
+    //   console.log('errorCode :', errorCode);
+    //   console.log('errorMessage :', errorMessage);
+    //   return error;
+    //   // ...
+    // });
   }
 
   logout() {

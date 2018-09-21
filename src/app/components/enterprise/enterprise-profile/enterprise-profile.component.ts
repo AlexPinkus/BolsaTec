@@ -5,7 +5,6 @@ import { EnterpriseService } from '../../../services/enterprise.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
-import { NgbAlertConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { map, take, tap, finalize } from 'rxjs/operators';
@@ -18,9 +17,6 @@ import { map, take, tap, finalize } from 'rxjs/operators';
 export class EnterpriseProfileComponent implements OnInit {
 
   public enterprise$: Observable<Enterprise>;
-  public success = false;
-  public failure = false;
-  public animationSwitch = false;
   public modalMessage: string;
   public messageAlert: string;
   public typeAlert: string;
@@ -45,7 +41,6 @@ export class EnterpriseProfileComponent implements OnInit {
     private modalService: NgbModal,
     private rutaURL: Router,
     private activatedRoute: ActivatedRoute,
-    private  alertConfig: NgbAlertConfig,
     private toastr: ToastrService) {
       this.formulario = this.formBuilder.group({
         // Hay que agregrar verificación si existen usuarios:
@@ -91,9 +86,7 @@ export class EnterpriseProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.success = false;
-    this.failure = false;
-    this.animationSwitch = false;
+
   }
 
   update(enterprise, registerModal) {
@@ -111,23 +104,21 @@ export class EnterpriseProfileComponent implements OnInit {
           enterprise.logo = url;
           this.enterpriseService.updateEnterprise(enterprise.uid, enterprise)
           .then((result) => {
-            this.toastr.success('Éxito!', 'Su información ha sido actualizada exitosamente!');
-           this.showSuccesAlert();
+            this.toastr.success('Su información ha sido actualizada exitosamente!', '¡Éxito!');
           }).catch((err) => {
-            this.showFailureAlert();
+            this.toastr.error('¡Hubo un error al actualizar su información!', '¡Error!');
           });
         }).catch((err) => {
-          this.showFailureAlert();
+          this.toastr.error('¡Hubo un error al actualizar su información!', '¡Error!');
         });
       } else {
         // Se asignan los valores del formulario al objeto enterprise.
         this.assign(enterprise, this.formulario.value);
         this.enterpriseService.updateEnterprise(enterprise.uid, enterprise)
         .then((result) => {
-          this.showSuccesAlert();
-          this.toastr.success('Éxito!', 'Su información ha sido actualizada exitosamente!');
+          this.toastr.success('Su información ha sido actualizada exitosamente!', '¡Éxito!');
         }).catch((err) => {
-         this.showFailureAlert();
+          this.toastr.error('¡Hubo un error al actualizar su información!', '¡Error!');
         });
       }
     }, (reason) => {
@@ -135,33 +126,6 @@ export class EnterpriseProfileComponent implements OnInit {
     });
   }
 
-  showSuccesAlert() {
-    this.alertConfig.type = 'success';
-    this.messageAlert = '¡Tus cambios se han guardado con éxito!';
-    this.success = true;
-    this.animationSwitch = true;
-    setTimeout(() => {
-      this.animationSwitch = false;
-      setTimeout(() => {
-        this.success = false;
-        this.isreadonly = !this.isreadonly;
-      }, 900);
-    }, 2500);
-  }
-
-  showFailureAlert() {
-    this.alertConfig.type = 'danger';
-    this.messageAlert = '¡Hubo un problema al actualizar tus datos!';
-    this.success = true;
-    this.animationSwitch = true;
-    setTimeout(() => {
-      this.animationSwitch = false;
-      setTimeout(() => {
-        this.success = false;
-        this.isreadonly = !this.isreadonly;
-      }, 900);
-    }, 2500);
-  }
 
   actualizar(enterprise) {
     this.isreadonly = !this.isreadonly;
@@ -191,7 +155,6 @@ export class EnterpriseProfileComponent implements OnInit {
     this.file = event.item(0);
     console.log('this.file :', this.file);
   }
-
 
   private uploadFile(file: File, id: string) {
 
@@ -233,7 +196,6 @@ export class EnterpriseProfileComponent implements OnInit {
 
 
   }
-
 
   private assign(object: any, objectToCopy: any) {
     // Si el objeto a copiar tiene subobjetos, regresamos a la función..
