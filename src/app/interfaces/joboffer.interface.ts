@@ -33,5 +33,5 @@ export interface Joboffer {
       translation: string;
     }
   };
-  state?:    string;
+  status?:    string;
 }

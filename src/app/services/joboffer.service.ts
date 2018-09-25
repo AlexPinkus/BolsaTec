@@ -13,29 +13,18 @@ export class JobofferService {
   // Esta es la colección con todos los documentos...
   joboffersCollection: AngularFirestoreCollection<any>;
   jobofferDocument:   AngularFirestoreDocument<any>;
-  count_offers: AngularFirestoreDocument<number>;
+
   constructor( private afs: AngularFirestore ) {
         // Obten la colección con todos los joboffers
-    this.joboffersCollection = this.afs.collection('joboffers');
-    this.count_offers = this.afs.doc('variables/count_joboffer');
-    // (ref) => ref.where('state', '==', 'inactive'));
-    // , (ref) => ref.orderBy('time', 'desc')
-  }
-
-  pagination(ItemsPerPage: number, first: boolean, latestDoc?: any) {
-    console.log(ItemsPerPage);
-    if (first === true) {
-      return this.afs.collection('joboffers', (ref) => ref.limit(ItemsPerPage));
-    } else {
-      return this.afs.collection('joboffers', (ref) => ref.limit(ItemsPerPage).startAfter(latestDoc));
-    }
+    this.joboffersCollection = this.afs.collection('joboffers',
+    (ref) => ref.where('status', '==', 'active').orderBy('createdOn', 'desc'));
   }
 
   getData(idEnterprise?: string): Observable<any[]> {
     // ['added', 'modified', 'removed']
     if (idEnterprise) {
       return this.afs.collection('joboffers',
-      (ref) => ref.where('state', '==', 'active').where('idEnterprise', '==', idEnterprise))
+      (ref) => ref.where('status', '==', 'active').where('idEnterprise', '==', idEnterprise).orderBy('createdOn', 'desc'))
       .snapshotChanges()
       .pipe(
         map((actions) => {
@@ -65,8 +54,8 @@ export class JobofferService {
 
   createJoboffer(joboffer: Joboffer) {
     joboffer.createdOn = new Date();
+    joboffer.status = 'active';
     return this.joboffersCollection.add(joboffer).then(ref => {
-      console.log('Added document with ID: ', ref.id);
       joboffer.uid = ref.id;
       return this.updateJoboffer(ref.id, joboffer);
     });
@@ -85,6 +74,14 @@ export class JobofferService {
 
   updateJoboffer(id: string, data: any) {
     return this.getJoboffer(id).update(data);
+  }
+
+  deleteJoboffers(joboffers: Array<Joboffer>): Promise<void> {
+    const batch = this.afs.firestore.batch();
+    joboffers.forEach(joboffer => {
+      batch.update(this.afs.firestore.collection('joboffers').doc(joboffer.uid), {status : 'deleted'});
+    });
+    return batch.commit();
   }
 
   deleteJoboffer(id: string) {

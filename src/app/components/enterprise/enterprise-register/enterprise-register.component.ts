@@ -27,7 +27,7 @@ export class EnterpriseRegisterComponent implements OnInit {
   public enterprise: Enterprise = {
     // Información DB
     role: 'enterprise',
-    isActive: true,
+    status: 'pending',
     // Datos de contacto
     firstName:  '',
     lastName:   '',

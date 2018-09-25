@@ -3,8 +3,9 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IndexComponent } from './components/index/index.component';
 // Guards
-import { AuthGuard, NotAuthGuard } from './services/auth.guard';
 import { ProfileGuard } from './services/profile.guard';
+import { AdminGuard } from './services/admin.guard';
+import { AuthGuard, NotAuthGuard } from './services/auth.guard';
 import { StudentGuard, NotStudentGuard } from './services/student.guard';
 // Componentes de Students
 import { StudentRegisterComponent } from './components/student/student-register/student-register.component';
@@ -54,9 +55,9 @@ const routes: Routes = [
     { path: 'edit/joboffer/:id',  component: JobofferEditComponent, canActivate: [AuthGuard]  },
 
     // Rutas del administrador.
-    { path: 'admin/students', component: StudentsAdminComponent },
-    { path: 'admin/enterprises', component: EnterprisesAdminComponent },
-    { path: 'admin/joboffers', component: JoboffersAdminComponent },
+    { path: 'admin/students', component: StudentsAdminComponent, canActivate: [AdminGuard] },
+    { path: 'admin/enterprises', component: EnterprisesAdminComponent, canActivate: [AdminGuard] },
+    { path: 'admin/joboffers', component: JoboffersAdminComponent, canActivate: [AdminGuard] },
 
     // Página 404
     { path: '**', component: NotfoundComponent },

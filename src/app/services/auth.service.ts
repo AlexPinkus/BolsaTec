@@ -4,7 +4,6 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { auth } from 'firebase';
 import { Observable, of } from 'rxjs';
 import { map, switchMap, startWith, tap, filter } from 'rxjs/operators';
-import { Student } from '../interfaces/student.interface';
 
 interface User {
   uid: string;
@@ -32,7 +31,17 @@ export class AuthService {
           if (user && user.emailVerified) {
             // Si el usuario está logeado devolvemos su documento en la base de datos.
             this.isLogged = true;
-            return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
+            return this.afs.doc<User>(`users/${user.uid}`).valueChanges().pipe(
+              switchMap (myuser => {
+                console.log('myuser :', myuser);
+                if (myuser['status'] === 'active') {
+                  return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
+                } else {
+                  this.logout();
+                  return of(null);
+                }
+              })
+            );
           } else {
             // Si el usuario no está logeado ...
             this.isLogged = false;
@@ -54,14 +63,12 @@ export class AuthService {
     // Esta promesa regresa la credencial de usuario, esto se necesita al momento
     // de guardar el usuario en la base de datos
     return new Promise <auth.UserCredential> ((resolve, reject) => {
-
       // Se crea un usuario a partir de un email y contraseña
       this.afAuth.auth.createUserWithEmailAndPassword(email, password).then(credential => {
         // Se envía el correo de verificación antes de continuar
         credential.user.sendEmailVerification().then(() => {
           // El correo de verificación se envió correctamente
           console.log('correo enviado');
-
           // Sacamos al usuario (el create lo logea automáticamente)
           this.logout().then(() => {
             resolve (credential);
@@ -111,47 +118,8 @@ export class AuthService {
 
   login(email: string, password: string) {
     // Hacemos el login con correo y contraseña
+    // this.afAuth.auth.app.
     return this.afAuth.auth.signInWithEmailAndPassword(email, password);
-    // .then(credential => {
-    //   if (!credential.user.emailVerified) {
-    //     credential.user.sendEmailVerification();
-    //   } else {
-    //     // alert('Bienvenido' + credential.user.displayName);
-    //     return credential;
-    //   }
-    //   // return this.updateUserData(credential.user);
-    // })
-    // .catch(function(error) {
-    //   // Handle Errors here.
-    //   console.log('error :', error);
-    //   const errorCode = error.code;
-    //   const errorMessage = error.message;
-    //   switch (errorCode) {
-    //     case 'auth/invalid-email':
-    //     // Thrown if the email address is not valid.
-    //       break;
-    //     case 'auth/user-disabled':
-    //     // Thrown if the user corresponding to the given email has been disabled.
-    //       break;
-    //     case 'auth/user-not-found':
-    //     // Thrown if there is no user corresponding to the given email.
-    //     // alert('El usuario no exise');
-    //       break;
-    //     case 'auth/wrong-password':
-    //     // Thrown if the password is invalid for the given email, or the account corresponding to the email does not have a password set.
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    //   // Cambiar la alerta por un manejo más amigable de error para el usuario.
-    //   // alert(errorMessage);
-
-    //   // Para debuggear...
-    //   console.log('errorCode :', errorCode);
-    //   console.log('errorMessage :', errorMessage);
-    //   return error;
-    //   // ...
-    // });
   }
 
   logout() {
@@ -159,7 +127,7 @@ export class AuthService {
     return this.afAuth.auth.signOut().then(function() {
       // Sign-out successful.
       // alert('Adios');
-      console.log('deslogeo exitoso');
+      // console.log('deslogeo exitoso');
     }).catch(function(error) {
       // An error happened.
       const errorCode = error.code;
@@ -213,7 +181,20 @@ export class AuthService {
   verifyEmail(email: string) {
     return this.afAuth.auth.fetchSignInMethodsForEmail(email);
   }
-    // Sets user data to firestore after succesful login
+
+  disableUser(user: User) {
+    const userRef: AngularFirestoreDocument<User> = this.afs.doc(
+      `users/${user.uid}`
+    );
+    return userRef.valueChanges().toPromise()
+    .then((result) => {
+      console.log('%%%%%%%%%%%%%%result :', result);
+    }).catch((err) => {
+
+    });
+  }
+
+  // Sets user data to firestore after succesful login
   private updateUserData(user: User) {
     console.log('Actualizando usuario...');
     console.log('user :', user);

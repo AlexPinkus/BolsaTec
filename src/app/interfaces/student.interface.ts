@@ -4,7 +4,7 @@ export interface Student {
   uid?:      any;
   role:        string;
   createdOn?:  Date;
-  isActive:    boolean;
+  status:      string;
 
   // Datos personales
   firstName:  string;

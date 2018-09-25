@@ -5,6 +5,7 @@ import { JobofferService } from "../../../services/joboffer.service";
 import { EnterpriseService } from "../../../services/enterprise.service";
 import { StudentService } from "../../../services/student.service";
 import { AuthService } from "../../../services/auth.service";
+import { TextsService } from "../../../services/texts.service";
 
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
 import { FormBuilder, Validators, FormGroup, FormArrayName } from "@angular/forms";
@@ -26,7 +27,6 @@ export class JobofferViewComponent {
   public success: boolean;
   public postMessage: string;
   mensaje_modal: string;
-  licenciaturas: string[] = [];
 
   public joboffer$: Observable<Joboffer>;
   public enterprise$: Observable<Enterprise>;
@@ -42,7 +42,8 @@ export class JobofferViewComponent {
     private enterpriseService: EnterpriseService,
     private studentService: StudentService,
     private authService: AuthService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    public txts: TextsService
   ) {
     // Primero se crea el formulario
     this.createform();
@@ -59,7 +60,6 @@ export class JobofferViewComponent {
               })
             );
             this.students$ = this.studentService.getStudentsInArray(joboffer.applicants.map(applicant => applicant.uid));
-            this.licenciaturas = this.getCarreraName(joboffer.bachelors);
             this.enterprise$ = this.enterpriseService.getEnterprise(joboffer.idEnterprise).valueChanges();
           } else {
             // Regresa página 404 not found
@@ -74,56 +74,6 @@ export class JobofferViewComponent {
     this.formulario = this.formBuilder.group({
       postulación: ["", Validators.required]
     });
-  }
-
-  getCarreraName(array) {
-    const result: string[] = [];
-    for (let index = 0; index < array.length; index++) {
-      switch (array[index]) {
-        case "industrial":
-          result[index] = "Ingeniería Industrial";
-          break;
-        case "bioquimica":
-          result[index] = "Ingeniería Bioquímica";
-          break;
-        case "ambiental":
-          result[index] = "Ingeniería Ambiental";
-          break;
-        case "biomedica":
-          result[index] = "Ingeniería Biomédica";
-          break;
-        case "gestion":
-          result[index] = "Ingeniería en Gestión Empresarial";
-          break;
-        case "quimica":
-          result[index] = "Ingeniería Química";
-          break;
-        case "electrica":
-          result[index] = "Ingeniería Eléctrica";
-          break;
-        case "electronica":
-          result[index] = "Ingeniería Electrónica";
-          break;
-        case "mecanica":
-          result[index] = "Ingeniería Mecánica";
-          break;
-        case "civil":
-          result[index] = "Ingeniería Civil";
-          break;
-        case "sistemas":
-          result[index] = "Sistemas Computacionales";
-          break;
-        case "administracion":
-          result[index] = "Administración";
-          break;
-        case "administracion_distancia":
-          result[index] = "Administración en Educación a Distancia";
-          break;
-        default:
-          break;
-      }
-    }
-    return result;
   }
 
   postulate(joboffer: Joboffer, studentId, modalConfirmacion) {

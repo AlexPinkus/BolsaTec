@@ -2,7 +2,7 @@ export interface Enterprise {
   // Información DB
   uid?:       any;
   createdOn?: Date;
-  isActive:   boolean;
+  status:     string;
   role:       string;
 
   // Datos contacto

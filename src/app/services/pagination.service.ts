@@ -10,6 +10,8 @@ import 'rxjs/add/operator/take';
 interface QueryConfig {
   path: string; //  path to collection
   field: string; // field to orderBy
+  equalTo: {field: string, value, string}; // field to where
+  status: string; // status searched
   limit: number; // limit per query
   reverse: boolean; // reverse order?
   prepend: boolean; // prepend to source?
@@ -42,6 +44,8 @@ export class PaginationService {
     this.query = {
       path,
       field,
+      status: 'active',
+      equalTo: null,
       limit: 25,
       reverse: false,
       prepend: false,
@@ -55,7 +59,15 @@ export class PaginationService {
     // this.mapAndUpdate(first);
 
     const first = this.afs.collection(this.query.path, ref => {
+      if (this.query.equalTo) {
+        return ref
+              .where(this.query.equalTo.field, '==', this.query.equalTo.value)
+              .where('status', '==', this.query.status)
+              .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc')
+              .limit(this.query.limit);
+      }
       return ref
+              .where('status', '==', this.query.status)
               .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc')
               .limit(this.query.limit);
     });
@@ -83,10 +95,19 @@ export class PaginationService {
     // this.mapAndUpdateQuery(more);
 
     const more = this.afs.collection(this.query.path, ref => {
-      return ref
+      if (this.query.equalTo) {
+        return ref
+              .where(this.query.equalTo.field, '==', this.query.equalTo.value)
+              .where('status', '==', this.query.status)
               .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc')
-              .startAfter(cursor)
-              .limit(this.query.limit);
+              .limit(this.query.limit)
+              .startAfter(cursor);
+      }
+      return ref
+              .where('status', '==', this.query.status)
+              .orderBy(this.query.field, this.query.reverse ? 'desc' : 'asc')
+              .limit(this.query.limit)
+              .startAfter(cursor);
     });
     this.mapAndUpdate(more);
   }

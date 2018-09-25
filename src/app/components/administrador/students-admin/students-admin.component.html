@@ -1,193 +1,270 @@
-<div>
-  <div>
-    <h4>Estudiantes por aprobar</h4>
-    <div class="borde-tec p-b-4"></div>
-    <br>
-
-    <ngb-alert *ngIf="showAlertInactivos" [type]="typeAlert" [dismissible]="false">{{messageAlert}}</ngb-alert>
-
-    <form class="" *ngIf="!showAlertInactivos">
-      <div class="form-row">
+<ng-container *ngIf="suspendedStudents$ | async as sStudents; else loading">
+  <ng-container *ngIf="inactiveStudents$ | async as iStudents; else loading">
+    <ng-container *ngIf="activeStudents$ | async as aStudents; else loading">
+      <h4>Estudiantes por aprobar</h4>
+      <div class="borde-tec p-b-4"></div>
+      <br>
+      <form>
+        <div class="form-row">
           <div class="form-group col-md-6">
-              <span><i class="icon ion-ios-search icon-x-small p-2"> </i></span>
-              <label for="">Búsqueda</label>
-              <input type="text" class="form-control" placeholder="Ingresa tu búsqueda aquí" aria-label="Ingresa tu búsqueda aquí" aria-describedby="basic-addon1" (keyup)='updateFilter($event)'>
+            <span><i class="icon ion-ios-search icon-x-small p-2"> </i></span>
+            <label for="search">Búsqueda</label>
+            <input type="text" id="search" class="form-control" placeholder="Ingresa tu búsqueda aquí" aria-label="Ingresa tu búsqueda aquí" aria-describedby="basic-addon1"
+            (keyup)="onSearch($event, 'Inactive', iStudents)">
           </div>
-          <div class="form-group col-md-6" *ngIf="selectedInactivos.length > 1">
-              <label for="">Acciones para selección</label>
-              <div class="actions" style="margin-bottom: 0px;">
-                  <button type="button" (click)="verModal(selectedInactivos,'aprobarBatch', AprobarEstudiantesBatch, 'Inactivos')" class="btn btn-success">
-                                  <i class="icon ion-ios-checkmark-circle p-2"> </i> Aprobar estudiantes
-                              </button>
-                  <button type="button" (click)="verModal(selectedInactivos,'eliminarBatch', EliminarEstudiantesBatch, 'Inactivos')" class="btn btn-danger">
-                                  <i class="icon ion-ios-trash p-2"> </i> Eliminar estudiantes
-                              </button>
-              </div>
-          </div>
-      </div>
-    </form>
-
-    <!-- </div> -->
-    <!-- <input type='text' style='padding:8px;margin:15px auto;width:30%;' class="bootstrap-iso" placeholder='Type to filter the name column...' (keyup)='updateFilter($event)' /> -->
-    <ngx-datatable class="material" [rows]="rows" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5" [selected]="selectedInactivos" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false" [displayCheck]="displayCheck"
-      (select)='onSelectInactivos($event)'>
-      <ngx-datatable-column class="material" [width]="30" [sortable]="true" [canAutoResize]="false" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
-      </ngx-datatable-column>
-      <ngx-datatable-column name="Nombre" prop="firstName"></ngx-datatable-column>
-      <ngx-datatable-column name="Apellido" prop="lastName"></ngx-datatable-column>
-      <ngx-datatable-column name="Matrícula" prop="idStudent"></ngx-datatable-column>
-      <ngx-datatable-column name="Acciones" prop="uid">
-        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row" let-group="group" let-rowHeight="rowHeight">
-            <div class="actions" *ngIf="selectedInactivos.length < 2">
-                <button type="button" (click)="verModal(value,'ver', VerEstudiante, 'Inactivos')" ngbTooltip="Ver estudiante" class="btn btn-info">
-                            <i class="icon ion-ios-eye p-2"> </i>
-                        </button>
-                <button type="button" (click)="verModal(value,'aprobar', AprobarEstudiante, 'Inactivos')" ngbTooltip="Aprobar estudiante" class="btn btn-success">
-                            <i class="icon ion-ios-checkmark-circle p-2"> </i>
-                        </button>
-                <button type="button" (click)="verModal(value,'eliminar', EliminarEstudiante, 'Inactivos')" ngbTooltip="Eliminar estudiante" class="btn btn-danger">
-                            <i class="icon ion-ios-trash p-2"> </i>
-                        </button>
+          <div class="form-group col-md-6" *ngIf="selectedInactive.length">
+            <label for="">Acciones para selección</label>
+            <div class="actions" style="margin-bottom: 0px;">
+                <button type="button" (click)="onAction(selectedInactive,'approveBatch', 'Inactive', ApproveStudentsBatch)" class="btn btn-success">
+                  <i class="icon ion-ios-checkmark-circle p-2"> </i> Aprobar estudiantes
+                </button>
+                <button type="button" (click)="onAction(selectedInactive,'deleteBatch', 'Inactive', DeleteStudentsBatch)" class="btn btn-danger">
+                  <i class="icon ion-ios-trash p-2"> </i> Eliminar estudiantes
+                </button>
             </div>
-        </ng-template>
-      </ngx-datatable-column>
-    </ngx-datatable>
-  </div>
-  <div class='selected-column' *ngIf="selectedInactivos.length > 1">
-    <h4> Alumnos Inactivos seleccionados <small>({{selectedInactivos?.length}})</small></h4>
-    <hr>
-    <ul>
-      <li *ngFor='let sel of selectedInactivos'>
-        {{sel.firstName}} {{sel.lastName}} {{sel.idStudent}}
-      </li>
-      <!-- <li *ngIf="!selected?.length">Ningún alumno seleccionado</li> -->
-    </ul>
-  </div>
-</div>
-
-<div>
-  <br> <br>
-  <h4>Estudiantes aprobados</h4>
-  <div class="borde-tec p-b-4"></div>
-  <br>
-
-  <ngb-alert *ngIf="showAlertActivos" [type]="typeAlert" [dismissible]="false">{{messageAlert}}</ngb-alert>
-  <form class="" *ngIf="!showAlertActivos">
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <span><i class="icon ion-ios-search icon-x-small p-2"> </i></span>
-        <label for="">Búsqueda</label>
-        <input type="text" class="form-control" placeholder="Ingresa tu búsqueda aquí" aria-label="Ingresa tu búsqueda aquí" aria-describedby="basic-addon1" (keyup)='updateFilter($event)'>
-      </div>
-      <div class="form-group col-md-6" *ngIf="selectedActivos.length > 1">
-        <label for="">Acciones para selección</label>
-        <div class="actions" style="margin-bottom: 0px;">
-          <button type="button" (click)="verModal(selectedActivos,'aprobarBatch', AprobarEstudiantesBatch,'Activos')" class="btn btn-success">
-            <i class="icon ion-ios-alert  p-2"> </i> Aprobar estudiantes
-          </button>
-          <button type="button" (click)="verModal(selectedActivos,'eliminarBatch', EliminarEstudiantesBatch,'Activos')" class="btn btn-danger">
-            <i class="icon ion-ios-trash p-2"> </i> Eliminar estudiantes
-          </button>
+          </div>
         </div>
-      </div>
-    </div>
-  </form>
-  <!-- <input type='text' style='padding:8px;margin:15px auto;width:30%;' class="bootstrap-iso" placeholder='Type to filter the name column...' (keyup)='updateFilter($event)' /> -->
-  <ngx-datatable class="material" [rows]="rows" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5" [selected]="selectedActivos" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false" [displayCheck]="displayCheck"
-    (select)='onSelectActivos($event)'>
-    <ngx-datatable-column class="material" [width]="30" [sortable]="true" [canAutoResize]="false" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
-    </ngx-datatable-column>
-    <ngx-datatable-column name="Nombre" prop="firstName"></ngx-datatable-column>
-    <ngx-datatable-column name="Apellido" prop="lastName"></ngx-datatable-column>
-    <ngx-datatable-column name="Matrícula" prop="idStudent"></ngx-datatable-column>
-    <ngx-datatable-column name="Acciones" prop="uid">
-      <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row" let-group="group" let-rowHeight="rowHeight">
-          <!-- <a class="" (click)="verModal(value, estudianteModal)" ngbTooltip="Ver estudiante">
-          </a> -->
-        <div class="actions" *ngIf="selectedActivos.length < 2">
-          <button type="button" (click)="verModal(value,'ver', VerEstudiante, 'Activos')" ngbTooltip="Ver estudiante" class="btn btn-info">
-            <i class="icon ion-ios-eye p-2"> </i>
-          </button>
-          <button type="button" (click)="verModal(value,'aprobar', AprobarEstudiante, 'Activos')" ngbTooltip="Suspender estudiante" class="btn btn-warning">
-            <i class="icon ion-ios-alert p-2"> </i>
-          </button>
-          <button type="button" (click)="verModal(value,'eliminar', EliminarEstudiante, 'Activos')" ngbTooltip="Eliminar estudiante" class="btn btn-danger">
-            <i class="icon ion-ios-trash p-2"> </i>
-          </button>
-        </div>
-      </ng-template>
-    </ngx-datatable-column>
-  </ngx-datatable>
-  <br>
-  <div class='selected-column' *ngIf="selectedActivos.length > 1">
-    <h4> Alumnos Activos seleccionados <small>({{selectedActivos?.length}})</small></h4>
-    <ul>
-      <li *ngFor='let sel of selectedActivos'>
-        {{sel.firstName}} {{sel.lastName}} {{sel.idStudent}}
-      </li>
-      <!-- <li *ngIf="!selected?.length">Ningún alumno seleccionado</li> -->
-    </ul>
-  </div>
-</div>
+      </form>
 
-<ng-template #VerEstudiante let-c="close()" let-d="dismiss()">
+      <!-- Tabla que muestra a las estudiantes inactivas. -->
+      <ngx-datatable class="material" [rows]="inactiveStudents" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5"
+        [selected]="selectedInactive" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false"
+        (select)="onSelect($event, 'Inactive')">
+        <ngx-datatable-column class="material" [width]="30" [sortable]="true" [canAutoResize]="false" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Nombre" prop="firstName">
+          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row">
+              {{row.firstName}} {{row.middleName}} {{row.lastName}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Correo" prop="email"></ngx-datatable-column>
+        <ngx-datatable-column name="Matrícula" prop="idStudent"></ngx-datatable-column>
+        <ngx-datatable-column name="Acciones" prop="uid">
+          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row" let-group="group" let-rowHeight="rowHeight">
+            <div class="actions" *ngIf="!selectedInactive.length">
+                <button type="button" (click)="onAction(row, 'inspect', 'Inactive', InspectStudent)" ngbTooltip="Ver estudiante" class="btn btn-info">
+                  <i class="icon ion-ios-eye p-2"> </i>
+                </button>
+                <button type="button" (click)="onAction(row,'approve', 'Inactive', ApproveStudent)" ngbTooltip="Aprobar estudiante" class="btn btn-success">
+                  <i class="icon ion-ios-checkmark-circle p-2"> </i>
+                </button>
+                <button type="button" (click)="onAction(row,'delete', 'Inactive', DeleteStudent)" ngbTooltip="Eliminar estudiante" class="btn btn-danger">
+                  <i class="icon ion-ios-trash p-2"> </i>
+                </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+
+      <!-- Aquí empieza la sección de las estudiantes activas. -->
+      <br><br>
+      <h4>Estudiantes aprobados</h4>
+      <div class="borde-tec p-b-4"></div>
+      <br>
+      <form>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <span><i class="icon ion-ios-search icon-x-small p-2"> </i></span>
+            <label for="search">Búsqueda</label>
+            <input type="text" id="search" class="form-control" placeholder="Ingresa tu búsqueda aquí" aria-label="Ingresa tu búsqueda aquí" aria-describedby="basic-addon1"
+            (keyup)="onSearch($event, 'Active', aStudents)">
+          </div>
+          <div class="form-group col-md-6" *ngIf="selectedActive.length">
+            <label for="">Acciones para selección</label>
+            <div class="actions" style="margin-bottom: 0px;">
+                <button type="button" (click)="onAction(selectedActive,'deleteBatch', 'Active', DeleteStudentsBatch)" class="btn btn-danger">
+                  <i class="icon ion-ios-trash p-2"> </i> Eliminar estudiantes
+                </button>
+            </div>
+          </div>
+        </div>
+      </form>
+      <ngx-datatable class="material" [rows]="activeStudents" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5"
+        [selected]="selectedActive" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false"
+        (select)="onSelect($event, 'Active')">
+        <ngx-datatable-column class="material" [width]="30" [sortable]="true" [canAutoResize]="false" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Nombre" prop="firstName">
+          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row">
+            {{row.firstName}} {{row.middleName}} {{row.lastName}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Correo" prop="email"></ngx-datatable-column>
+        <ngx-datatable-column name="Matrícula" prop="idStudent"></ngx-datatable-column>
+        <ngx-datatable-column name="Acciones" prop="uid">
+          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row" let-group="group" let-rowHeight="rowHeight">
+            <div class="actions" *ngIf="!selectedActive.length">
+              <button type="button" (click)="onAction(row, 'inspect', 'Active', InspectStudent)" ngbTooltip="Ver estudiante" class="btn btn-info">
+                <i class="icon ion-ios-eye p-2"> </i>
+              </button>
+              <button type="button" (click)="onAction(row, 'suspend', 'Active', SuspendStudent)" ngbTooltip="Suspender estudiante" class="btn btn-warning">
+                <i class="icon ion-ios-alert p-2"> </i>
+              </button>
+              <button type="button" (click)="onAction(row, 'delete', 'Active', DeleteStudent)" ngbTooltip="Eliminar estudiante" class="btn btn-danger">
+                <i class="icon ion-ios-trash p-2"> </i>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+      <br>
+
+
+      <!-- Aquí empieza la sección de las estudiantes suspendidas. -->
+      <br><br>
+      <h4>Estudiantes Suspendidos</h4>
+      <div class="borde-tec p-b-4"></div>
+      <br>
+      <form>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <span><i class="icon ion-ios-search icon-x-small p-2"> </i></span>
+            <label for="search">Búsqueda</label>
+            <input type="text" id="search" class="form-control" placeholder="Ingresa tu búsqueda aquí" aria-label="Ingresa tu búsqueda aquí" aria-describedby="basic-addon1"
+            (keyup)="onSearch($event, 'Suspended', sStudents)">
+          </div>
+          <div class="form-group col-md-6" *ngIf="selectedSuspended.length">
+            <label for="">Acciones para selección</label>
+            <div class="actions" style="margin-bottom: 0px;">
+                <button type="button" (click)="onAction(selectedSuspended,'activateBatch', 'Suspended', ActivateStudentsBatch)" class="btn btn-success">
+                  <i class="icon ion-ios-checkmark-circle p-2"> </i> Activar estudiantes
+                </button>
+                <button type="button" (click)="onAction(selectedSuspended,'deleteBatch', 'Suspended', DeleteStudentsBatch)" class="btn btn-danger">
+                  <i class="icon ion-ios-trash p-2"> </i> Eliminar estudiantes
+                </button>
+            </div>
+          </div>
+        </div>
+      </form>
+      <ngx-datatable class="material" [rows]="suspendedStudents" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="5"
+        [selected]="selectedSuspended" [selectionType]="'checkbox'" [selectAllRowsOnPage]="false"
+        (select)="onSelect($event, 'Suspended')">
+        <ngx-datatable-column class="material" [width]="30" [sortable]="true" [canAutoResize]="false" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Nombre" prop="firstName">
+          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row">
+            {{row.firstName}} {{row.middleName}} {{row.lastName}}
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Correo" prop="email"></ngx-datatable-column>
+        <ngx-datatable-column name="Matrícula" prop="idStudent"></ngx-datatable-column>
+        <ngx-datatable-column name="Acciones" prop="uid">
+          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row" let-group="group" let-rowHeight="rowHeight">
+            <div class="actions" *ngIf="!selectedSuspended.length">
+              <button type="button" (click)="onAction(row, 'inspect', 'Suspended', InspectStudent)" ngbTooltip="Ver estudiante" class="btn btn-info">
+                <i class="icon ion-ios-eye p-2"> </i>
+              </button>
+              <button type="button" (click)="onAction(row, 'activate', 'Suspended', ActivateStudent)" ngbTooltip="Activar estudiante" class="btn btn-success">
+                <i class="icon ion-ios-alert p-2"> </i>
+              </button>
+              <button type="button" (click)="onAction(row, 'delete', 'Suspended', DeleteStudent)" ngbTooltip="Eliminar estudiante" class="btn btn-danger">
+                <i class="icon ion-ios-trash p-2"> </i>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+      <br>
+
+    </ng-container>
+  </ng-container>
+</ng-container>
+
+
+<ng-template #loading>
+  <app-loader></app-loader>
+</ng-template>
+
+<ng-template #InspectStudent let-c="close()" let-d="dismiss()">
   <div class="modal-header">
     <h4 class="modal-title">Vista previa estudiante</h4>
     <button type="button" class="close" (click)="d" aria-hidden="true">&times;</button>
   </div>
   <div class="modal-body">
     <h3>Contacto</h3>
-    <p><strong>Nombre:</strong> {{studentpreview.firstName}} {{studentpreview.middleName}} {{studentpreview.lastName}} <span class="badge" [class.badge-success]="studentpreview.isGraduated" [class.badge-secondary]="!studentpreview.isGraduated">{{graduadopreview}}</span></p>
-    <p><strong>Fecha de nacimiento:</strong> {{studentpreview.age | date}}</p>
-    <p><strong>Sexo:</strong> {{studentpreview.sex}}</p>
-    <p><strong>Correo electrónico:</strong> {{studentpreview.email}}</p>
-    <p><strong>Télefono:</strong> {{studentpreview.phone}}</p>
+    <p><strong>Nombre:</strong> {{studentPreview.firstName}} {{studentPreview.middleName}} {{studentPreview.lastName}}
+      <span class="badge" [class.badge-success]="studentPreview.isGraduated" [class.badge-secondary]="!studentPreview.isGraduated">{{graduadoPreview}}</span></p>
+    <p><strong>Fecha de nacimiento:</strong> {{studentPreview.age | date}}</p>
+    <p><strong>Sexo:</strong> {{studentPreview.sex}}</p>
+    <p><strong>Correo electrónico:</strong> {{studentPreview.email}}</p>
+    <p><strong>Télefono:</strong> {{studentPreview.phone}}</p>
     <h3>Dirección</h3>
-    <p><strong>Calle:</strong> {{studentpreview.address.mainStreet}} #86 {{studentpreview.address.crossings}} {{studentpreview.address.neighborhood}}</p>
-    <p><strong>Código postal:</strong> {{studentpreview.address.postalCode}}</p>
-    <p><strong>Ciudad:</strong> {{studentpreview.address.city}}</p>
-    <p><strong>Municipio:</strong> {{studentpreview.address.municipality}}</p>
-    <p><strong>Estado:</strong> {{studentpreview.address.state}}</p>
+    <p><strong>Calle:</strong> {{studentPreview.address.mainStreet}} #86 {{studentPreview.address.crossings}} {{studentPreview.address.neighborhood}}</p>
+    <p><strong>Código postal:</strong> {{studentPreview.address.postalCode}}</p>
+    <p><strong>Ciudad:</strong> {{studentPreview.address.city}}</p>
+    <p><strong>Municipio:</strong> {{studentPreview.address.municipality}}</p>
+    <p><strong>Estado:</strong> {{studentPreview.address.state}}</p>
     <h3>Inglés</h3>
-    <p><strong>Escrito: </strong> <span class="badge badge-secondary">{{studentpreview.languages.english.written}} %</span></p>
-    <p><strong>Hablado: </strong> <span class="badge badge-secondary">{{studentpreview.languages.english.spoken}} %</span></p>
-    <p><strong>Traducción: </strong> <span class="badge badge-secondary">{{studentpreview.languages.english.translation}} %</span></p>
+    <p><strong>Escrito: </strong> <span class="badge badge-secondary">{{studentPreview.languages.english.written}} %</span></p>
+    <p><strong>Hablado: </strong> <span class="badge badge-secondary">{{studentPreview.languages.english.spoken}} %</span></p>
+    <p><strong>Traducción: </strong> <span class="badge badge-secondary">{{studentPreview.languages.english.translation}} %</span></p>
     <h3>Formación</h3>
-    <p><strong>Licenciatura: </strong> {{bachelorpreview}}</p>
-    <p *ngIf="studentpreview.degree.speciality"><strong>Especialidad: </strong> {{studentpreview.degree.speciality}}</p>
-    <p *ngIf="studentpreview.degree.master"><strong>Maestría: </strong> {{studentpreview.degree.master}}</p>
-    <p *ngIf="studentpreview.degree.phd"><strong>Doctorado:  </strong> {{studentpreview.degree.phd}}</p>
-    <h3>Experiencia</h3>
-    <p>{{studentpreview.experience}}</p>
+    <p><strong>Licenciatura: </strong> {{ txts.getBachelorFromValue(studentPreview.degree.bachelor).shortName}}</p>
+    <p *ngIf="studentPreview.degree.speciality"><strong>Especialidad: </strong> {{studentPreview.degree.speciality}}</p>
+    <p *ngIf="studentPreview.degree.master"><strong>Maestría: </strong> {{studentPreview.degree.master}}</p>
+    <p *ngIf="studentPreview.degree.phd"><strong>Doctorado:  </strong> {{studentPreview.degree.phd}}</p>
+    <!-- <h3>Experiencia</h3>
+    <p>{{studentPreview.experience}}</p> -->
+
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-info btn-block" (click)="d">Ok</button>
   </div>
 </ng-template>
 
-<ng-template #AprobarEstudiante let-c="close()" let-d="dismiss()">
+<ng-template #ApproveStudent let-c="close()" let-d="dismiss()">
   <div class="modal-header">
     <h4 class="modal-title">Aprobar estudiante</h4>
     <button type="button" class="close" (click)="d" aria-hidden="true">&times;</button>
   </div>
   <div class="modal-body">
     <p>¿Deseas aprobar la solicitud de este estudiante?</p>
-    <p>Esta acción dará acceso al estudiante {{studentpreview.idStudent}} a la página</p>
+    <p>Esta acción dará acceso a la estudiante con matrícula "{{studentPreview.idStudent}}" a la página</p>
   </div>
-  <div class="modal-footer modal-confirm">
+  <div class="modal-footer">
     <button type="button" class="btn btn-morado" (click)="d">Cancelar</button>
-    <button type="button" class="btn btn-success" (click)="c">Guardar</button>
+    <button type="button" class="btn btn-success" (click)="c">Aprobar</button>
   </div>
 </ng-template>
 
-<ng-template #EliminarEstudiante let-c="close()" let-d="dismiss()">
+<ng-template #ActivateStudent let-c="close()" let-d="dismiss()">
+  <div class="modal-header">
+    <h4 class="modal-title">Activar estudiante</h4>
+    <button type="button" class="close" (click)="d" aria-hidden="true">&times;</button>
+  </div>
+  <div class="modal-body">
+    <p>¿Deseas reactivar esta estudiante?</p>
+    <p>Esta acción le volverá a dar acceso al estudiante con matrícula "{{studentPreview.idStudent}}" a la página</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-morado" (click)="d">Cancelar</button>
+    <button type="button" class="btn btn-success" (click)="c">Activar</button>
+  </div>
+</ng-template>
+
+<ng-template #SuspendStudent let-c="close()" let-d="dismiss()">
+  <div class="modal-header">
+    <h4 class="modal-title">Suspender estudiante</h4>
+    <button type="button" class="close" (click)="d" aria-hidden="true">&times;</button>
+  </div>
+  <div class="modal-body">
+    <p>¿Deseas suspender a este estudiante?</p>
+    <p>Esta acción bloqueará el acceso del estudiante con matrícula "{{studentPreview.idStudent}}" a la página</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-morado" (click)="d">Cancelar</button>
+    <button type="button" class="btn btn-warning" (click)="c">Suspender</button>
+  </div>
+</ng-template>
+
+<ng-template #DeleteStudent let-c="close()" let-d="dismiss()">
   <div class="modal-header">
     <h4 class="modal-title">Eliminar estudiante</h4>
     <button type="button" class="close" (click)="d" aria-hidden="true">&times;</button>
   </div>
   <div class="modal-body">
-    <p>¿Deseas eliminar la solicitud de este estudiante?</p>
-    Esta acción eliminará la cuenta del estudiante {{studentpreview.idStudent}}, así cómo todos sus datos
+    <p>¿Deseas elimnar la solicitud de este estudiante?</p>
+    Esta acción elimnará la cuenta del estudiante con matrícula "{{studentPreview.idStudent}}", así cómo todos sus datos.
   </div>
   <div class="modal-footer modal-confirm">
     <button type="button" class="btn btn-morado" (click)="d">Cancelar</button>
@@ -195,9 +272,24 @@
   </div>
 </ng-template>
 
-<ng-template #AprobarEstudiantesBatch let-c="close()" let-d="dismiss()">
+<ng-template #ActivateStudentsBatch let-c="close()" let-d="dismiss()">
   <div class="modal-header">
-    <h4 class="modal-title">Aprobar estudiante</h4>
+    <h4 class="modal-title">Activar estudiantes</h4>
+    <button type="button" class="close" (click)="d" aria-hidden="true">&times;</button>
+  </div>
+  <div class="modal-body">
+    <p>¿Deseas reactivar las estudiantes seleccionadas?</p>
+    <p>Esta acción le volverá a dar acceso a todos los estudiantes seleccionados a la página</p>
+  </div>
+  <div class="modal-footer modal-confirm">
+    <button type="button" class="btn btn-morado" (click)="d">Cancelar</button>
+    <button type="button" class="btn btn-success" (click)="c">Activar</button>
+  </div>
+</ng-template>
+
+<ng-template #ApproveStudentsBatch let-c="close()" let-d="dismiss()">
+  <div class="modal-header">
+    <h4 class="modal-title">Aprobar estudiantes</h4>
     <button type="button" class="close" (click)="d" aria-hidden="true">&times;</button>
   </div>
   <div class="modal-body">
@@ -206,12 +298,11 @@
   </div>
   <div class="modal-footer modal-confirm">
     <button type="button" class="btn btn-morado" (click)="d">Cancelar</button>
-    <button type="button" class="btn btn-success" (click)="c">Guardar</button>
+    <button type="button" class="btn btn-success" (click)="c">Aprobar</button>
   </div>
 </ng-template>
 
-
-<ng-template #EliminarEstudiantesBatch let-c="close()" let-d="dismiss()">
+<ng-template #DeleteStudentsBatch let-c="close()" let-d="dismiss()">
   <div class="modal-header">
     <h4 class="modal-title">Eliminar estudiantes</h4>
     <button type="button" class="close" (click)="d" aria-hidden="true">&times;</button>

@@ -2,218 +2,186 @@ import { Component } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Student } from '../../../interfaces/student.interface';
 import { StudentService } from '../../../services/student.service';
+import { TextsService } from '../../../services/texts.service';
 import { ToastrService } from 'ngx-toastr';
+
+import { Observable } from 'rxjs';
+import { map, take, tap, finalize, switchMap, flatMap } from "rxjs/operators";
 @Component({
   selector: 'app-students-admin',
   templateUrl: './students-admin.component.html',
   styleUrls: ['./students-admin.component.scss']
 })
 export class StudentsAdminComponent {
-  rows = [];
-  selectedActivos = [];
-  selectedInactivos = [];
-  public studentpreview: Student;
-  public bachelorpreview: string;
-  public graduadopreview: string;
-  public messageAlert: string;
-  public typeAlert: string;
-  public showAlertInactivos = false;
-  public showAlertActivos = false;
 
-  constructor(private modalService: NgbModal,
+  // Observables de la DB.
+  public activeStudents$: Observable<Student[]>;
+  public inactiveStudents$: Observable<Student[]>;
+  public suspendedStudents$: Observable<Student[]>;
+
+  // Elementos a mostrar como resultado del filtro de búsqueda.
+  public activeStudents: Student[];
+  public inactiveStudents: Student[];
+  public suspendedStudents: Student[];
+
+  // Elementos Seleccionados
+  public selectedActive = [];
+  public selectedInactive = [];
+  public selectedSuspended = [];
+
+  // Variables de las alertas
+  public studentPreview: Student;
+  public graduadoPreview: string;
+
+  constructor(
+    private modalService: NgbModal,
     private studentService: StudentService,
-              private  toastr: ToastrService) {
-    this.fetch((data) => {
-      this.rows = data;
+    private toastr: ToastrService,
+    public txts: TextsService
+    ) {
+      this.inactiveStudents$ = this.studentService.getInactiveStudents().pipe(
+        tap(inactiveStudents => { this.inactiveStudents = inactiveStudents; })
+      );
+      this.activeStudents$ = this.studentService.getActiveStudents().pipe(
+        tap(activeStudents => { this.activeStudents = activeStudents; })
+      );
+      this.suspendedStudents$ = this.studentService.getSuspendedStudents().pipe(
+        tap(suspendedStudents => { this.suspendedStudents = suspendedStudents; })
+      );
+  }
+
+  onSelect({ selected }, table: string) {
+    if (table === 'Active') {
+      this.selectedActive.splice(0, this.selectedActive.length);
+      this.selectedActive.push(...selected);
+    } else if (table === 'Inactive') {
+      this.selectedInactive.splice(0, this.selectedInactive.length);
+      this.selectedInactive.push(...selected);
+    } else if (table === 'Suspended') {
+      this.selectedSuspended.splice(0, this.selectedSuspended.length);
+      this.selectedSuspended.push(...selected);
+    }
+  }
+
+  onAction(selectedItem: any, action: string, table: string, modal: any) {
+    // Desplegamos el modal correspondiente...
+    if (!Array.isArray(selectedItem)) {
+      this.studentPreview = selectedItem;
+      this.graduadoPreview = this.studentPreview.isGraduated ? 'Graduado' : 'No graduado';
+    }
+
+    // Se abre el modal correspondiente ...
+    this.modalService.open(modal).result.then(() => {
+      // Si lo aceptan entonces procedemos según la acción.
+
+      // Reiniciamos los valores seleccionados ...
+      if (table === 'Active' && this.selectedActive.length) { this.selectedActive = [];
+      } else if (table === 'Inactive' && this.selectedInactive.length) { this.selectedInactive = [];
+      } else if (table === 'Suspended' && this.selectedSuspended.length) { this.selectedSuspended = []; }
+
+      this.switchAction(selectedItem, action).then(() => {
+        this.setToastr(action);
+      }).catch((err) => {
+        this.setToastr('fail');
+      });
+    }, (reason) => {
+      // Si el usuario oprime cancelar
+      if (table === 'Active' && this.selectedActive.length) { this.selectedActive = [];
+      } else if (table === 'Inactive' && this.selectedInactive.length) { this.selectedInactive = [];
+      } else if (table === 'Suspended' && this.selectedSuspended.length) { this.selectedSuspended = []; }
     });
   }
 
-  fetch(cb) {
-    const req = new XMLHttpRequest();
-    req.open('GET', `assets/estudiantes.json`);
-
-    req.onload = () => {
-      cb(JSON.parse(req.response));
-    };
-
-    req.send();
-  }
-
-  onSelectActivos({ selected }) {
-    console.log('Select Event', selected);
-
-    this.selectedActivos.splice(0, this.selectedActivos.length);
-    this.selectedActivos.push(...selected);
-    // console.log('Selected length', this.selected.length);
-  }
-
-  onSelectInactivos({ selected }) {
-    console.log('Select Event', selected);
-
-    this.selectedInactivos.splice(0, this.selectedInactivos.length);
-    this.selectedInactivos.push(...selected);
-    // console.log('Selected length', this.selected.length);
-  }
-
-
-  displayCheck(row) {
-    return row.name !== 'Ethel Price';
-  }
-
-  emulacionServicio(action: string) {
-    return new Promise ((resolve, reject) => {
-      if (action === 'success') {
-        setTimeout(() => {
-          resolve('Succeded!');
-        }, 1000);
-      } else if (action === 'fail') {
-        setTimeout(() => {
-          reject('Failed!');
-        }, 1000);
-      }
-    });
-  }
-
-  setAlert(action: string, table: string) {
+  private switchAction(selectedItem: any, action: string): Promise<void> {
     switch (action) {
-      case 'aprobar':
-        this.messageAlert = '¡El estudiante ha sido aprobado con éxito!';
-        this.typeAlert = 'success';
+      case 'approve':
+        return this.studentService.updateStudent(selectedItem.uid, {status : 'active'});
+      case 'activate':
+        return this.studentService.updateStudent(selectedItem.uid, {status : 'active'});
+      case 'suspend':
+        return this.studentService.updateStudent(selectedItem.uid, {status : 'suspended'});
+      case 'delete':
+        return this.studentService.updateStudent(selectedItem.uid, {status : 'deleted'});
+      case 'activateBatch':
+        return this.studentService.setActiveStudents(selectedItem);
+      case 'approveBatch':
+        return this.studentService.setActiveStudents(selectedItem);
+      case 'deleteBatch':
+        return this.studentService.deleteStudents(selectedItem);
+      default:
+        return new Promise((resolve, reject) => {
+          resolve();
+        });
+    }
+  }
+
+  private setToastr(action: string) {
+    switch (action) {
+      case 'approve':
+        this.toastr.success('¡El estudiante ha sido aprobado exitosamente!', '¡Éxito!');
         break;
-      case 'eliminar':
-        this.messageAlert = '¡El estudiante ha sido eliminado con éxito!';
-        this.typeAlert = 'success';
+      case 'activate':
+        this.toastr.success('¡El estudiante ha sido activado exitosamente!', '¡Éxito!');
         break;
-      case 'eliminarBatch':
-        this.messageAlert = '¡Los estudiantes han sido eliminados con éxito!';
-        this.typeAlert = 'success';
+      case 'suspend':
+        this.toastr.success('¡El estudiante ha sido suspendido exitosamente!', '¡Éxito!');
         break;
-      case 'aprobarBatch':
-        this.messageAlert = '¡Los estudiantes han sido aprobados con éxito!';
-        this.typeAlert = 'success';
+      case 'delete':
+        this.toastr.success('¡El estudiante ha sido eliminado exitosamente!', '¡Éxito!');
+        break;
+      case 'deleteBatch':
+        this.toastr.success('¡Los estudiantes han sido eliminados exitosamente!', '¡Éxito!');
+        break;
+      case 'approveBatch':
+        this.toastr.success('¡Los estudiantes han sido aprobados exitosamente!', '¡Éxito!');
+        break;
+      case 'activateBatch':
+        this.toastr.success('¡Los estudiantes han sido activados exitosamente!', '¡Éxito!');
         break;
       case 'fail':
-        this.messageAlert = 'Hubo un error, por favor intentalo nuevamente';
-        this.typeAlert = 'danger';
-        break;
-      default:
-        break;
-    }
-      if (table === 'Inactivos') {
-        this.showAlertInactivos = true;
-        setTimeout(() => {
-          this.showAlertInactivos = false;
-        }, 3500);
-      } else if  (table === 'Activos') {
-        this.showAlertActivos = true;
-        setTimeout(() => {
-          this.showAlertActivos = false;
-        }, 3500);
-      }
-  }
-
-  verModal(uid, action: string, modal, table) {
-    // console.log(this.rows);
-    switch (action) {
-      case 'aprobar':
-        this.modalService.open(modal).result.then(() => {
-          this.emulacionServicio('success').then((data) => {
-            this.setAlert(action, table);
-          }).catch((err) => {
-            this.setAlert('fail', table);
-          });
-        });
-        break;
-      case 'eliminar':
-        this.modalService.open(modal).result.then(() => {
-          console.log('Eliminado');
-          this.emulacionServicio('fail').then((data) => {
-            this.setAlert(action, table);
-          }).catch((err) => {
-            this.setAlert('fail', table);
-          });
-        });
-        break;
-      case 'aprobarBatch':
-        this.modalService.open(modal).result.then(() => {
-          console.log('Aprobado múltiple');
-          this.emulacionServicio('success').then((data) => {
-            this.setAlert(action, table);
-          }).catch((err) => {
-            this.setAlert('fail', table);
-          });
-        });
-        break;
-      case 'eliminarBatch':
-        this.modalService.open(modal).result.then(() => {
-          console.log('Eliminado múltiple');
-        });
-        break;
-      case 'ver':
-        const student = this.rows.filter((row) => {
-            return row.uid === uid;
-        });
-        this.studentpreview = student[0];
-        console.log(this.studentpreview);
-        this.bachelorpreview = this.getCarreraName(this.studentpreview.degree.bachelor);
-        this.studentpreview.isGraduated === true ? this.graduadopreview = 'Graduado' : this.graduadopreview = 'No graduado';
-        this.modalService.open(modal);
+        this.toastr.error('Hubo un error, por favor intentelo nuevamente', '¡Error!');
         break;
       default:
         break;
     }
   }
 
-  updateFilter(event) {
-    console.log('updateFilter', event);
+  onSearch(event, table, students: Student[] | null) {
+    const searchFilter = event.target.value;
+    if (table === 'Active') {
+      this.activeStudents =  this.filterSearch(searchFilter, students);
+    } else if (table === 'Inactive') {
+      this.inactiveStudents =  this.filterSearch(searchFilter, students);
+    } else if (table === 'Suspended') {
+      this.suspendedStudents =  this.filterSearch(searchFilter, students);
+    }
   }
 
-  getCarreraName(key) {
-   let result: string;
-      switch (key) {
-        case "industrial":
-          result = "Ingeniería Industrial";
-          break;
-        case "bioquimica":
-          result = "Ingeniería Bioquímica";
-          break;
-        case "ambiental":
-          result = "Ingeniería Ambiental";
-          break;
-        case "biomedica":
-          result = "Ingeniería Biomédica";
-          break;
-        case "gestion":
-          result = "Ingeniería en Gestión Empresarial";
-          break;
-        case "quimica":
-          result = "Ingeniería Química";
-          break;
-        case "electrica":
-          result = "Ingeniería Eléctrica";
-          break;
-        case "electronica":
-          result = "Ingeniería Electrónica";
-          break;
-        case "mecanica":
-          result = "Ingeniería Mecánica";
-          break;
-        case "civil":
-          result = "Ingeniería Civil";
-          break;
-        case "sistemas":
-          result = "Sistemas Computacionales";
-          break;
-        case "administracion":
-          result = "Administración";
-          break;
-        case "administracion_distancia":
-          result = "Administración en Educación a Distancia";
-          break;
-        default:
-          break;
+  // Filtro para el input de búsqueda.
+  private filterSearch(searchFilter, students: Student[] | null): Student[] | null {
+    if (students === null || students[0] === null) {
+      return [];
+    }
+    if (!searchFilter) {
+      return students;
+    }
+    const filtered = [];
+    students.forEach(student => {
+      if (
+        student.firstName.concat(student.middleName.concat(student.lastName))
+          .toLowerCase()
+          .includes(searchFilter.toLowerCase()) ||
+        student.email
+          .toLowerCase()
+          .includes(searchFilter.toLowerCase()) ||
+        student.idStudent
+          .toLowerCase()
+          .includes(searchFilter.toLowerCase())
+      ) {
+        filtered.push(student);
       }
-    return result;
+    });
+    return filtered.length > 0 ? filtered : [];
   }
 }
 

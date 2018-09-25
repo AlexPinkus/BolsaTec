@@ -15,20 +15,20 @@
         </div>
       </div>
       <div class="form-group col-md-4">
-        <label for="lastName">Apellido paterno</label>
-        <input type="text" class="form-control" [readonly]="isreadonly" formControlName="lastName" id="lastName" value={{student.middleName}}
-        [class.is-invalid]="!formulario.get( 'lastName').valid && formulario.get( 'lastName').dirty"
-        [class.is-valid]="formulario.get( 'lastName').valid && formulario.get( 'lastName').dirty">
-        <div class="invalid-feedback" *ngIf="!formulario.get( 'lastName').valid && formulario.get( 'lastName').dirty">
+        <label for="middleName">Apellido paterno</label>
+        <input type="text" class="form-control" [readonly]="isreadonly" formControlName="middleName" id="middleName" value={{student.middleName}}
+        [class.is-invalid]="!formulario.get( 'middleName').valid && formulario.get( 'middleName').dirty"
+        [class.is-valid]="formulario.get( 'middleName').valid && formulario.get( 'middleName').dirty">
+        <div class="invalid-feedback" *ngIf="!formulario.get( 'middleName').valid && formulario.get( 'middleName').dirty">
           *Campo requerido
         </div>
       </div>
       <div class="form-group col-md-4">
-          <label for="middleName">Apellido materno</label>
-          <input type="text" class="form-control" [readonly]="isreadonly" formControlName="middleName" id="middleName" value={{student.lastName}}
-          [class.is-invalid]="!formulario.get( 'middleName').valid && formulario.get( 'middleName').dirty"
-          [class.is-valid]="formulario.get( 'middleName').valid && formulario.get( 'middleName').dirty">
-          <div class="invalid-feedback" *ngIf="!formulario.get( 'middleName').valid && formulario.get( 'middleName').dirty">
+          <label for="lastName">Apellido materno</label>
+          <input type="text" class="form-control" [readonly]="isreadonly" formControlName="lastName" id="lastName" value={{student.lastName}}
+          [class.is-invalid]="!formulario.get( 'lastName').valid && formulario.get( 'lastName').dirty"
+          [class.is-valid]="formulario.get( 'lastName').valid && formulario.get( 'lastName').dirty">
+          <div class="invalid-feedback" *ngIf="!formulario.get( 'lastName').valid && formulario.get( 'lastName').dirty">
             *Campo requerido
           </div>
       </div>

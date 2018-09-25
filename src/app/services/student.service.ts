@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Http, Headers } from '@angular/http';
 import { Student } from '../interfaces/student.interface';
+
 import { Observable, of } from 'rxjs';
 import { map, switchMap, startWith, tap, filter } from 'rxjs/operators';
 import { combineLatest } from 'rxjs/observable/combineLatest';
@@ -21,8 +22,7 @@ export class StudentService {
     // Obten la colección con todos los estudiantes:
     // Hay que obtener esto a partir del rol.
     this.studentsCollection = this.afs.collection('users',
-    (ref) => ref.where('role', '==', 'student'));
-    // , (ref) => ref.orderBy('time', 'desc')
+    (ref) => ref.where('role', '==', 'student').where('status', '==', 'active').orderBy('createdOn', 'desc'));
   }
 
   getData(): Observable<any[]> {
@@ -38,10 +38,51 @@ export class StudentService {
     );
   }
 
+  getActiveStudents(): Observable<any[]> {
+    // ['added', 'modified', 'removed']
+    return this.afs.collection('users',
+    (ref) => ref.where('role', '==', 'student').where('status', '==', 'active').orderBy('createdOn', 'desc')).snapshotChanges().pipe(
+      map((actions) => {
+        return actions.map((a) => {
+          // Data es la información de cada uno de los documentos
+          const data = a.payload.doc.data();
+          return { id: a.payload.doc.id, ...data };
+        });
+      })
+    );
+  }
+
+  getInactiveStudents(): Observable<any[]> {
+    // ['added', 'modified', 'removed']
+    return this.afs.collection('users',
+    (ref) => ref.where('role', '==', 'student').where('status', '==', 'pending').orderBy('createdOn', 'desc')).snapshotChanges().pipe(
+      map((actions) => {
+        return actions.map((a) => {
+          // Data es la información de cada uno de los documentos
+          const data = a.payload.doc.data();
+          return { id: a.payload.doc.id, ...data };
+        });
+      })
+    );
+  }
+
+  getSuspendedStudents(): Observable<any[]> {
+    // ['added', 'modified', 'removed']
+    return this.afs.collection('users',
+    (ref) => ref.where('role', '==', 'student').where('status', '==', 'suspended').orderBy('createdOn', 'desc')).snapshotChanges().pipe(
+      map((actions) => {
+        return actions.map((a) => {
+          // Data es la información de cada uno de los documentos
+          const data = a.payload.doc.data();
+          return { id: a.payload.doc.id, ...data };
+        });
+      })
+    );
+  }
+
   getStudent(id: string) {
     return this.afs.doc<Student>(`users/${id}`);
   }
-
 
   getStudentsInArray(studentIds: Array<string>) {
     if (studentIds.length === 0) { return of([]); }
@@ -52,19 +93,30 @@ export class StudentService {
   }
 
   createStudent(student: Student) {
-    // const student = {
-    //   content,
-    //   hearts: 0,
-    //   time: new Date().getTime(),
-    // };
-    // student.role = 'student';
     student.role = 'student';
+    student.status = 'pending';
     student.createdOn = new Date();
     return this.studentsCollection.doc(student.uid).set(student);
   }
 
   updateStudent(id: string, data: any) {
     return this.getStudent(id).update(data);
+  }
+
+  setActiveStudents(students: Array<Student>): Promise<void> {
+    const batch = this.afs.firestore.batch();
+    students.forEach(student => {
+      batch.update(this.afs.firestore.collection('users').doc(student.uid), {status : 'active'});
+    });
+    return batch.commit();
+  }
+
+  deleteStudents(students: Array<Student>): Promise<void> {
+    const batch = this.afs.firestore.batch();
+    students.forEach(student => {
+      batch.update(this.afs.firestore.collection('users').doc(student.uid), {status : 'deleted'});
+    });
+    return batch.commit();
   }
 
   deleteStudent(id: string) {

@@ -27,54 +27,56 @@ export class EnterprisesAdminComponent implements OnInit {
   // Observables de la DB.
   public activeEnterprises$: Observable<Enterprise[]>;
   public inactiveEnterprises$: Observable<Enterprise[]>;
+  public suspendedEnterprises$: Observable<Enterprise[]>;
 
   // Elementos a mostrar como resultado del filtro de búsqueda.
   public activeEnterprises: Enterprise[];
   public inactiveEnterprises: Enterprise[];
+  public suspendedEnterprises: Enterprise[];
 
   // Elementos Seleccionados
   public selectedActive = [];
   public selectedInactive = [];
+  public selectedSuspended = [];
 
   // Variables de las alertas
-  public messageAlert: string;
-  public typeAlert: string;
-  public showAlertInactive = false;
-  public showAlertActive = false;
   public enterprisePreview: Enterprise;
 
   constructor(
-
-    @Inject('instance1') private page: PaginationService,
-    @Inject('instance2') private page2: PaginationService,
+    @Inject('instance1') public page: PaginationService,
+    @Inject('instance2') public page2: PaginationService,
     private modalService: NgbModal,
     private  toastr: ToastrService,
     private enterpriseService: EnterpriseService,
-    // public page: PaginationService,
-    // public page2: PaginationService,
     private jobofferService: JobofferService
     ) {
-      // hello
+      // this.page.reset();
+      // this.page.init('users', 'createdOn', { reverse: true, equalTo : {field: 'role', value: 'enterprise'} });
+      // this.page2.reset();
+      // this.page2.init('users', 'createdOn', { reverse: true, status: 'pending', equalTo : {field: 'role', value: 'enterprise'} });
       this.inactiveEnterprises$ = this.enterpriseService.getInactiveEnterprises().pipe(
         tap(inactiveEnterprises => { this.inactiveEnterprises = inactiveEnterprises; })
       );
-      // this.inactiveEnterprises$ = this.enterpriseService.getInactiveEnterprises().pipe(
-      //   tap(inactiveEnterprises => { this.inactiveEnterprises = inactiveEnterprises; })
-      // );
       this.activeEnterprises$ = this.enterpriseService.getActiveEnterprises().pipe(
         tap(activeEnterprises => { this.activeEnterprises = activeEnterprises; })
       );
+      this.suspendedEnterprises$ = this.enterpriseService.getSuspendedEnterprises().pipe(
+        tap(suspendedEnterprises => { this.suspendedEnterprises = suspendedEnterprises; })
+      );
+
   }
 
   ngOnInit() {
-    this.page.reset();
-    this.page.init('testdata', 'createdOn', { reverse: true, prepend: false });
-    this.page2.reset();
-    this.page2.init('testdata', 'createdOn', { reverse: true, prepend: false, limit: 6 });
+    // this.activeEnterprises$ = this.page.data.pipe(
+    //   tap(activeEnterprises => { this.activeEnterprises = activeEnterprises; })
+    // );
+    // this.inactiveEnterprises$ = this.page2.data.pipe(
+    //   tap(inactiveEnterprises => { this.inactiveEnterprises = inactiveEnterprises; })
+    // );
+
   }
 
   populateCollection (index) {
-
     if (index === (this.index + 5)) {
       this.index = index;
       return;
@@ -105,18 +107,19 @@ export class EnterprisesAdminComponent implements OnInit {
   }
 
   getMore() {
-    console.log('paginacion');
     this.page.more();
   }
 
   onSelect({ selected }, table: string) {
-    console.log('Select Event', selected);
     if (table === 'Active') {
       this.selectedActive.splice(0, this.selectedActive.length);
       this.selectedActive.push(...selected);
     } else if (table === 'Inactive') {
       this.selectedInactive.splice(0, this.selectedInactive.length);
       this.selectedInactive.push(...selected);
+    } else if (table === 'Suspended') {
+      this.selectedSuspended.splice(0, this.selectedSuspended.length);
+      this.selectedSuspended.push(...selected);
     }
   }
 
@@ -130,31 +133,38 @@ export class EnterprisesAdminComponent implements OnInit {
 
       // Reiniciamos los valores seleccionados ...
       if (table === 'Active' && this.selectedActive.length) { this.selectedActive = [];
-      } else if (table === 'Inactive' && this.selectedInactive.length) { this.selectedInactive = []; }
+      } else if (table === 'Inactive' && this.selectedInactive.length) { this.selectedInactive = [];
+      } else if (table === 'Suspended' && this.selectedSuspended.length) { this.selectedSuspended = []; }
 
       this.switchAction(selectedItem, action).then(() => {
-        this.setAlert(action, table);
+        this.setToastr(action);
       }).catch((err) => {
-        this.setAlert('fail', table);
+        this.setToastr('fail');
       });
     }, (reason) => {
       // Si el usuario oprime cancelar
       if (table === 'Active' && this.selectedActive.length) { this.selectedActive = [];
-      } else if (table === 'Inactive' && this.selectedInactive.length) { this.selectedInactive = []; }
+      } else if (table === 'Inactive' && this.selectedInactive.length) { this.selectedInactive = [];
+      } else if (table === 'Suspended' && this.selectedSuspended.length) { this.selectedSuspended = []; }
     });
   }
 
   private switchAction(selectedItem: any, action: string): Promise<void> {
     switch (action) {
       case 'approve':
-        return this.enterpriseService.updateEnterprise(selectedItem.uid, {isActive : true});
+        return this.enterpriseService.updateEnterprise(selectedItem.uid, {status : 'active'});
+      case 'activate':
+        return this.enterpriseService.updateEnterprise(selectedItem.uid, {status : 'active'});
       case 'suspend':
+        return this.enterpriseService.updateEnterprise(selectedItem.uid, {status : 'suspended'});
       case 'delete':
-        return this.enterpriseService.updateEnterprise(selectedItem.uid, {isActive : false});
+        return this.enterpriseService.updateEnterprise(selectedItem.uid, {status : 'deleted'});
+      case 'activateBatch':
+        return this.enterpriseService.setActiveEnterprises(selectedItem);
       case 'approveBatch':
         return this.enterpriseService.setActiveEnterprises(selectedItem);
       case 'deleteBatch':
-        return this.enterpriseService.setInactiveEnterprises(selectedItem);
+        return this.enterpriseService.deleteEnterprises(selectedItem);
       default:
         return new Promise((resolve, reject) => {
           resolve();
@@ -162,41 +172,34 @@ export class EnterprisesAdminComponent implements OnInit {
     }
   }
 
-  private setAlert(action: string, table: string) {
+  private setToastr(action: string) {
     switch (action) {
       case 'approve':
-        this.messageAlert = '¡La empresa ha sido aprobada con éxito!';
-        this.typeAlert = 'success';
+        this.toastr.success('¡La empresa ha sido aprobada exitosamente!', '¡Éxito!');
+        break;
+      case 'activate':
+        this.toastr.success('¡La empresa ha sido activada exitosamente!', '¡Éxito!');
+        break;
+      case 'suspend':
+        this.toastr.success('¡La empresa ha sido suspendida exitosamente!', '¡Éxito!');
         break;
       case 'delete':
-        this.messageAlert = '¡La empresa ha sido eliminada con éxito!';
-        this.typeAlert = 'success';
+        this.toastr.success('¡La empresa ha sido eliminada exitosamente!', '¡Éxito!');
         break;
       case 'deleteBatch':
-        this.messageAlert = '¡Las empresas han sido eliminadas con éxito!';
-        this.typeAlert = 'success';
+        this.toastr.success('¡Las empresas han sido eliminadas exitosamente!', '¡Éxito!');
         break;
       case 'approveBatch':
-        this.messageAlert = '¡Las empresas han sido aprobadas con éxito!';
-        this.typeAlert = 'success';
+        this.toastr.success('¡Las empresas han sido aprobadas exitosamente!', '¡Éxito!');
+        break;
+      case 'activateBatch':
+        this.toastr.success('¡Las empresas han sido activadas exitosamente!', '¡Éxito!');
         break;
       case 'fail':
-        this.messageAlert = 'Hubo un error, por favor intentelo nuevamente';
-        this.typeAlert = 'danger';
+        this.toastr.error('Hubo un error, por favor intentelo nuevamente', '¡Error!');
         break;
       default:
         break;
-    }
-    if (table === 'Inactive') {
-      this.showAlertInactive = true;
-      setTimeout(() => {
-        this.showAlertInactive = false;
-      }, 3500);
-    } else if  (table === 'Active') {
-      this.showAlertActive = true;
-      setTimeout(() => {
-        this.showAlertActive = false;
-      }, 3500);
     }
   }
 
@@ -206,6 +209,8 @@ export class EnterprisesAdminComponent implements OnInit {
       this.activeEnterprises =  this.filterSearch(searchFilter, enterprises);
     } else if (table === 'Inactive') {
       this.inactiveEnterprises =  this.filterSearch(searchFilter, enterprises);
+    } else if (table === 'Suspended') {
+      this.suspendedEnterprises =  this.filterSearch(searchFilter, enterprises);
     }
   }
 

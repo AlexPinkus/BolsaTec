@@ -6,14 +6,14 @@
     <ngx-datatable-column class="material" [width]="30" [sortable]="true" [canAutoResize]="false" [draggable]="false" [resizeable]="false" [headerCheckboxable]="true" [checkboxable]="true">
     </ngx-datatable-column>
     <ngx-datatable-column name="Puesto" prop="position"></ngx-datatable-column>
-    <ngx-datatable-column name="Sueldo" prop="salary">
+    <ngx-datatable-column name="Sueldo" prop="economicAmount">
       <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value">
-        {{value | currency}}
+        {{value | currency:'MXN':'symbol'}}
       </ng-template>
     </ngx-datatable-column>
-    <ngx-datatable-column name="Fecha" prop="createdOn.seconds">
+    <ngx-datatable-column name="Fecha" prop="createdOn">
       <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value">
-        {{value | date:'fullDate'}}
+        {{value.toDate() | date:'fullDate'}}
       </ng-template>
     </ngx-datatable-column>
     <ngx-datatable-column name="Aplicantes" prop="applicants.length"></ngx-datatable-column>

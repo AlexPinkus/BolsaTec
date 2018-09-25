@@ -82,7 +82,7 @@ export class StudentRegisterComponent implements OnInit {
     resumeURL:  '',
     isGraduated: true,
 
-    isActive: true,
+    status: 'pending',
     role: 'student'
   };
 

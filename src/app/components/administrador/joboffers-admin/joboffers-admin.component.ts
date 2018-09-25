@@ -30,14 +30,14 @@ export class JoboffersAdminComponent implements OnInit {
   public messageAlert: string;
   public typeAlert: string;
   public showAlert = false;
-  fecha: Date;
 
   constructor(
     private modalService: NgbModal,
-    private  toastr: ToastrService,
+    private toastr: ToastrService,
     private router: Router,
     private jobofferService: JobofferService,
-    private enterpriseService: EnterpriseService) {
+    private enterpriseService: EnterpriseService
+    ) {
       this.joboffers$ = this.jobofferService.getData().pipe(
         map(joboffers => {
           if (joboffers.length !== 0) {
@@ -59,7 +59,6 @@ export class JoboffersAdminComponent implements OnInit {
   onSelect({ selected }) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
-    this.fecha = new Date();
   }
 
   // Acciones:
@@ -73,7 +72,6 @@ export class JoboffersAdminComponent implements OnInit {
   }
 
   viewEnterprise(id: string) {
-    console.log('vamos a la página de la empresa');
     this.router.navigate(['/joboffer', id]);
   }
 
@@ -85,10 +83,10 @@ export class JoboffersAdminComponent implements OnInit {
     // Se abre el modal correspondiente ...
     this.modalService.open(modal).result.then(() => {
       // Si lo aceptan entonces procedemos según la acción.
-      this.jobofferService.deleteJoboffer(id).then(() => {
-        this.setAlert('delete');
+      this.jobofferService.updateJoboffer(id, {status : 'deleted'}).then(() => {
+        this.toastr.success('¡La oferta ha sido eliminada exitosamente!', '¡Éxito!');
       }).catch((err) => {
-        this.setAlert('fail');
+        this.toastr.error('Hubo un error, por favor intentelo nuevamente', '¡Error!');
       });
     }, (reason) => {
       // Si el usuario oprime cancelar
@@ -102,41 +100,15 @@ export class JoboffersAdminComponent implements OnInit {
 
       // Reiniciamos los valores seleccionados ...
       this.selected = [];
-
-      // this.jobofferService.deleteJoboffer(id).then(() => {
-      //   this.setAlert('delete');
-      // }).catch((err) => {
-      //   this.setAlert('fail');
-      // });
+      this.jobofferService.deleteJoboffers(joboffers).then(() => {
+        this.toastr.success('¡Las ofertas han sido eliminadas exitosamente!', '¡Éxito!');
+      }).catch((err) => {
+        this.toastr.error('Hubo un error, por favor intentelo nuevamente', '¡Error!');
+      });
     }, (reason) => {
       // Si el usuario oprime cancelar
       this.selected = [];
     });
-  }
-
-  private setAlert(action: string) {
-    switch (action) {
-      case 'delete':
-        this.messageAlert = '¡La oferta ha sido eliminada con éxito!';
-        this.typeAlert = 'success';
-        break;
-      case 'deleteBatch':
-        this.messageAlert = '¡Las ofertas han sido eliminadas con éxito!';
-        this.typeAlert = 'success';
-        break;
-      case 'fail':
-        this.messageAlert = 'Hubo un error, por favor intentelo nuevamente';
-        this.typeAlert = 'danger';
-        break;
-      default:
-        break;
-    }
-
-    this.showAlert = true;
-    setTimeout(() => {
-      this.showAlert = false;
-    }, 3500);
-
   }
 
   onSearch(event, joboffers: Joboffer[] | null) {

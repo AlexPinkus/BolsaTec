@@ -1,7 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { registerLocaleData } from '@angular/common';
+import localeMx from '@angular/common/locales/es-MX';
+registerLocaleData(localeMx, 'mx');
 
 // Plugins
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -118,7 +121,8 @@ import { JoboffersAdminComponent } from './components/administrador/joboffers-ad
   providers: [
     AuthService,
     AuthGuard,
-    StudentService
+    StudentService,
+    { provide: LOCALE_ID, useValue: 'mx' }
   ],
   bootstrap: [AppComponent]
 })

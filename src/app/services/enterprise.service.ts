@@ -17,8 +17,7 @@ export class EnterpriseService {
   constructor( private http: Http, private afs: AngularFirestore ) {
     // Obten la colección con todas las empresas:
     this.enterprisesCollection = this.afs.collection('users',
-    (ref) => ref.where('role', '==', 'enterprise'));
-    // , (ref) => ref.orderBy('time', 'desc')
+    (ref) => ref.where('role', '==', 'enterprise').where('status', '==', 'active').orderBy('createdOn', 'desc'));
   }
 
   getData(): Observable<any[]> {
@@ -37,7 +36,7 @@ export class EnterpriseService {
   getActiveEnterprises(): Observable<any[]> {
     // ['added', 'modified', 'removed']
     return this.afs.collection('users',
-    (ref) => ref.where('role', '==', 'enterprise').where('isActive', '==', true)).snapshotChanges().pipe(
+    (ref) => ref.where('role', '==', 'enterprise').where('status', '==', 'active').orderBy('createdOn', 'desc')).snapshotChanges().pipe(
       map((actions) => {
         return actions.map((a) => {
           // Data es la información de cada uno de los documentos
@@ -51,7 +50,7 @@ export class EnterpriseService {
   getInactiveEnterprises(): Observable<any[]> {
     // ['added', 'modified', 'removed']
     return this.afs.collection('users',
-    (ref) => ref.where('role', '==', 'enterprise').where('isActive', '==', false)).snapshotChanges().pipe(
+    (ref) => ref.where('role', '==', 'enterprise').where('status', '==', 'pending').orderBy('createdOn', 'desc')).snapshotChanges().pipe(
       map((actions) => {
         return actions.map((a) => {
           // Data es la información de cada uno de los documentos
@@ -62,18 +61,27 @@ export class EnterpriseService {
     );
   }
 
+  getSuspendedEnterprises(): Observable<any[]> {
+    // ['added', 'modified', 'removed']
+    return this.afs.collection('users',
+    (ref) => ref.where('role', '==', 'enterprise').where('status', '==', 'suspended').orderBy('createdOn', 'desc')).snapshotChanges().pipe(
+      map((actions) => {
+        return actions.map((a) => {
+          // Data es la información de cada uno de los documentos
+          const data = a.payload.doc.data();
+          return { id: a.payload.doc.id, ...data };
+        });
+      })
+    );
+  }
 
   getEnterprise(id: string): AngularFirestoreDocument<Enterprise> {
     return this.afs.doc<Enterprise>(`users/${id}`);
   }
 
   createEnterprise(enterprise: Enterprise): Promise<void> {
-    // const enterprise = {
-    //   content,
-    //   hearts: 0,
-    //   time: new Date().getTime(),
-    // };
     enterprise.role = 'enterprise';
+    enterprise.status = 'pending';
     enterprise.createdOn = new Date();
     return this.enterprisesCollection.doc(enterprise.uid).set(enterprise);
   }
@@ -93,15 +101,15 @@ export class EnterpriseService {
   setActiveEnterprises(enterprises: Array<Enterprise>): Promise<void> {
     const batch = this.afs.firestore.batch();
     enterprises.forEach(enterprise => {
-      batch.update(this.afs.firestore.collection('users').doc(enterprise.uid), {isActive : true});
+      batch.update(this.afs.firestore.collection('users').doc(enterprise.uid), {status : 'active'});
     });
     return batch.commit();
   }
 
-  setInactiveEnterprises(enterprises: Array<Enterprise>): Promise<void> {
+  deleteEnterprises(enterprises: Array<Enterprise>): Promise<void> {
     const batch = this.afs.firestore.batch();
     enterprises.forEach(enterprise => {
-      batch.update(this.afs.firestore.collection('users').doc(enterprise.uid), {isActive : false});
+      batch.update(this.afs.firestore.collection('users').doc(enterprise.uid), {status : 'deleted'});
     });
     return batch.commit();
   }

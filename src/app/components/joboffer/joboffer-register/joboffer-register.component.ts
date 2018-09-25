@@ -19,10 +19,11 @@ export class JobofferRegisterComponent implements OnInit {
     // Datos del puesto
     position:     '',
     description:  '',
+    economicType: '',
     economicAmount: 0,
     vacantNumber: 0,
     weeklyHours:  0,
-
+    status: 'active',
     applicants: [],
 
     // Perfil deseado
@@ -78,11 +79,12 @@ export class JobofferRegisterComponent implements OnInit {
     // insertando
     this.mensaje_modal = '¿Deseas publicar esta oferta de trabajo?';
     // El modal se invoca con una promesa que se resuelve si el modal es aceptado o se reachaza si es cerrado
+    this.assign(this.joboffer, this.formulario.value);
+    console.log('this.joboffer :', this.joboffer);
     this.modalService.open(modalConfirmacion).result.then(() => {
       // Aquí se incluye la lógica cuando el modal ha sido aceptado
       this.assign(this.joboffer, this.formulario.value);
       this.joboffer.idEnterprise = userId;
-      this.joboffer.state = 'active';
       this.jobofferService.createJoboffer(this.joboffer).then(result => {
         this.toastr.success('¡Su información ha sido actualizada exitosamente!', '¡Éxito!');
       }).catch(err => {
