@@ -4,7 +4,7 @@ import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage'
 import { Student } from '../../../interfaces/student.interface';
 import { StudentService } from '../../../services/student.service';
 import { AuthService } from '../../../services/auth.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { EmailAvailableValidator } from "../../../validators/email-available.directive";
 import { matchEmailValidator } from "../../../validators/match-email.directive";
@@ -179,9 +179,13 @@ export class StudentRegisterComponent implements OnInit {
           this.student.resumeURL = url;
           this.studentService.createStudent(this.student).then(smt => {
             this.toastr.success('¡Su registro se realizó exitosamente!', '¡Éxito!');
-            setTimeout(() => {
-              this.router.navigate(['/index']);
-            }, 3000);
+            this.toastr.info('Por favor revise en su bandeja de entrada o spam el correo de verifiación de cuenta', '¡Importante!', {
+              timeOut: 10000
+            });
+            this.router.navigate(['/index']);
+            // setTimeout(() => {
+            //   this.router.navigate(['/index']);
+            // }, 3000);
           }).catch((err) => {
             this.toastr.error('¡Hubo un error con su registro!', '¡Error!');
           });

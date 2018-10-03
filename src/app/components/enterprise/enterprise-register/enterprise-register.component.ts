@@ -142,10 +142,14 @@ export class EnterpriseRegisterComponent implements OnInit {
           this.enterprise.uid = credential.user.uid;
           this.enterprise.logo = url;
           this.enterpriseService.createEnterprise(this.enterprise).then(smt => {
-            this.toastr.success('¡Su registro se realizó exitosamente!', '¡Éxito!');
-            setTimeout(() => {
-              this.router.navigate(['/index']);
-            }, 3000);
+          this.toastr.success('¡Su registro se realizó exitosamente!', '¡Éxito!');
+          this.toastr.info('Por favor revise en su bandeja de entrada o spam el correo de verifiación de cuenta', '¡Importante!', {
+            timeOut: 10000
+          });
+          this.router.navigate(['/index']);
+          // setTimeout(() => {
+          //   this.router.navigate(['/index']);
+          // }, 3000);
           }).catch((err) => {
             this.toastr.error('¡Hubo un error con su registro!', '¡Error!');
           });
