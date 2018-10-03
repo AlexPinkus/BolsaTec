@@ -10,7 +10,7 @@ import { StudentGuard, NotStudentGuard } from './services/student.guard';
 // Componentes de Students
 import { StudentRegisterComponent } from './components/student/student-register/student-register.component';
 import { StudentProfileComponent } from './components/student/student-profile/student-profile.component';
-import { StudentsComponent } from './components/students/students.component';
+
 // Componentes de Enterprises
 import { EnterpriseRegisterComponent } from './components/enterprise/enterprise-register/enterprise-register.component';
 import { EnterpriseProfileComponent } from './components/enterprise/enterprise-profile/enterprise-profile.component';
@@ -33,8 +33,6 @@ import { NotfoundComponent } from './shared/notfound/notfound.component';
 
 const routes: Routes = [
     { path: 'index', component: IndexComponent },
-    { path: 'students', component: StudentsComponent },
-
     { path: 'login', component: LoginComponent, canActivate: [NotAuthGuard] },
 
     // Rutas de registro (creación en DB).
