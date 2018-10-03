@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Observable } from "rxjs";
+import { ToastrService } from 'ngx-toastr';
 
 import { map, take, tap, finalize } from 'rxjs/operators';
 
@@ -21,8 +22,8 @@ export class LoginComponent implements OnInit {
 
 
   constructor(private router: Router,
-    private route: ActivatedRoute,
-    public authService: AuthService) { }
+    public authService: AuthService,
+    private toastr:  ToastrService) { }
 
   ngOnInit() {
   }
@@ -30,7 +31,6 @@ export class LoginComponent implements OnInit {
   logIn() {
     // console.log( 'Usuario a logear:', this.user );
     this.authService.login(this.user.email, this.user.password).then((credential) => {
-      console.log('credential :', credential);
       // Logeo Exitoso:
       // Obtenemos los datos del usuario para redirigirlo.
       this.authService.user.pipe(
@@ -47,9 +47,39 @@ export class LoginComponent implements OnInit {
               this.router.navigate(['/list/joboffers', user.uid]);
               break;
             default:
+              console.log('hello');
               this.router.navigate(['/index']);
               break;
           }
+        } else {
+          if (this.authService.emailNotVerified) {
+            this.authService.emailNotVerified = false;
+            this.toastr.warning(
+            'Por favor revise en su bandeja de entrada o spam el correo de verifiación de cuenta',
+            '¡Cuenta no verificada!', {
+              timeOut: 10000
+            });
+          } else if (this.authService.lastStatus) {
+            switch (this.authService.lastStatus) {
+              case 'pending':
+                this.toastr.info(
+                  'Lo sentimos, el administrador aún no le ha dado acceso a la página',
+                  '¡Cuenta no activada!', {
+                    timeOut: 10000
+                  });
+
+                break;
+              case 'suspended':
+              this.toastr.error(
+                'Lo sentimos su cuenta ha sido suspendida',
+                '¡Cuenta suspendida!', {
+                  timeOut: 10000
+                });
+                break;
+            }
+            this.authService.lastStatus = '';
+          }
+
         }
       }).catch((err) => {
         console.log('err :', err);

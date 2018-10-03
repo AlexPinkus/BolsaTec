@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject} from 'rxjs/Subject';
@@ -23,7 +23,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authService.user.pipe(takeUntil(this.ngUnsubscribe)).subscribe((user) => {
       this.loading = false;
       this.user = user;
-      console.log('user :', user);
+      // if (!user && this.router.url !== '/login') { this.router.navigate(['/index']); }
       if (!user) { this.router.navigate(['/index']); }
     });
   }

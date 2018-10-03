@@ -19,7 +19,10 @@ interface User {
 export class AuthService {
   public user: Observable<User | null>;
   public userDoc: any;
-  public isLogged: boolean;
+
+  // Información del último intento de logeo.
+  public lastStatus: string;
+  public emailNotVerified: boolean;
 
   constructor(
     private afs: AngularFirestore,
@@ -30,21 +33,20 @@ export class AuthService {
         switchMap(user => {
           if (user && user.emailVerified) {
             // Si el usuario está logeado devolvemos su documento en la base de datos.
-            this.isLogged = true;
             return this.afs.doc<User>(`users/${user.uid}`).valueChanges().pipe(
               switchMap (myuser => {
-                console.log('myuser :', myuser);
                 if (myuser['status'] === 'active') {
                   return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
                 } else {
+                  this.lastStatus = myuser['status'];
                   this.logout();
                   return of(null);
                 }
               })
             );
           } else {
+            if (user) { this.emailNotVerified = true; }
             // Si el usuario no está logeado ...
-            this.isLogged = false;
             return of(null);
           }
         }),
@@ -52,7 +54,7 @@ export class AuthService {
         tap(user => {
           this.userDoc = user;
           // if (!user) { this.userStatus = 'loaded'; }
-          console.log('llamada a la db');
+          // console.log('llamada a la db');
           // console.log('this.userDoc :', this.userDoc);
         }),
         // startWith(JSON.parse(localStorage.getItem('user')))
@@ -123,7 +125,6 @@ export class AuthService {
   }
 
   logout() {
-    // this.fsuser = {};
     return this.afAuth.auth.signOut().then(function() {
       // Sign-out successful.
       // alert('Adios');
