@@ -48,7 +48,6 @@ import { StudentsAdminComponent } from './components/administrador/students-admi
 // Students:
 import { StudentProfileComponent } from './components/student/student-profile/student-profile.component';
 import { StudentRegisterComponent } from './components/student/student-register/student-register.component';
-import { StudentsComponent } from './components/students/students.component';
 
 // Enterprises:
 import { EnterpriseProfileComponent } from './components/enterprise/enterprise-profile/enterprise-profile.component';
@@ -72,7 +71,6 @@ import { JoboffersAdminComponent } from './components/administrador/joboffers-ad
   declarations: [
     KeysPipe,
     AppComponent,
-    StudentsComponent,
     IndexComponent,
     HeaderComponent,
     LoginComponent,
