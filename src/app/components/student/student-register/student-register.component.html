@@ -61,13 +61,13 @@
   <br>
   <div class="form-row">
     <div class="form-group col-md-4">
-        <label for="firstName">Nombre(s)</label>
-        <input type="text" class="form-control" id="firstName" formControlName="firstName" placeholder="Nombres"
-        [class.is-invalid]="!formulario.get('firstName').valid && formulario.get('firstName').dirty"
-        [class.is-valid]="formulario.get('firstName').valid">
-        <div class="invalid-feedback" *ngIf="!formulario.get('firstName').valid && formulario.get('firstName').dirty">
-          *Campo requerido
-        </div>
+      <label for="firstName">Nombre(s)</label>
+      <input type="text" class="form-control" id="firstName" formControlName="firstName" placeholder="Nombres"
+      [class.is-invalid]="!formulario.get('firstName').valid && formulario.get('firstName').dirty"
+      [class.is-valid]="formulario.get('firstName').valid">
+      <div class="invalid-feedback" *ngIf="!formulario.get('firstName').valid && formulario.get('firstName').dirty">
+        *Campo requerido
+      </div>
     </div>
     <div class="form-group col-md-4">
       <label for="middleName">Apellido paterno</label>
@@ -79,13 +79,13 @@
       </div>
     </div>
     <div class="form-group col-md-4">
-        <label for="lastName">Apellido materno</label>
-        <input type="text" class="form-control" id="lastName" formControlName="lastName" placeholder="Apellido Materno"
-        [class.is-invalid]="!formulario.get('lastName').valid && formulario.get('lastName').dirty"
-        [class.is-valid]="formulario.get('lastName').valid">
-        <div class="invalid-feedback" *ngIf="!formulario.get('lastName').valid && formulario.get('lastName').dirty">
-          *Campo requerido
-        </div>
+      <label for="lastName">Apellido materno</label>
+      <input type="text" class="form-control" id="lastName" formControlName="lastName" placeholder="Apellido Materno"
+      [class.is-invalid]="!formulario.get('lastName').valid && formulario.get('lastName').dirty"
+      [class.is-valid]="formulario.get('lastName').valid">
+      <div class="invalid-feedback" *ngIf="!formulario.get('lastName').valid && formulario.get('lastName').dirty">
+        *Campo requerido
+      </div>
     </div>
   </div>
   <div class="form-row">
@@ -213,30 +213,33 @@
     </div>
     <div class="form-group col-md-5">
       <label for="speciality">Especialidad</label>
-      <input type="text" class="form-control" formControlName="speciality" id="speciality" placeholder="Especialidad"
+      <input type="text" class="form-control" formControlName="speciality" id="speciality" placeholder="Especialidad">
+      <!-- <input type="text" class="form-control" formControlName="speciality" id="speciality" placeholder="Especialidad"
       [class.is-invalid]="!formulario.get('speciality').valid && formulario.get('speciality').dirty"
       [class.is-valid]="formulario.get('speciality').valid">
       <div class="invalid-feedback" *ngIf="!formulario.get('speciality').valid && formulario.get('speciality').dirty">
         *Campo requerido
-      </div>
+      </div> -->
     </div>
     <div class="form-group col-md-6">
       <label for="master">Maestría</label>
-      <input type="text" class="form-control" formControlName="master" id="master" placeholder="Maestría"
+      <input type="text" class="form-control" formControlName="master" id="master" placeholder="Maestría">
+      <!-- <input type="text" class="form-control" formControlName="master" id="master" placeholder="Maestría"
       [class.is-invalid]="!formulario.get('master').valid && formulario.get('master').dirty"
       [class.is-valid]="formulario.get('master').valid">
       <div class="invalid-feedback" *ngIf="!formulario.get('master').valid && formulario.get('master').dirty">
         *Campo requerido
-      </div>
+      </div> -->
     </div>
     <div class="form-group col-md-6">
       <label for="phd">Doctorado</label>
-      <input type="text" class="form-control" formControlName="phd" id="phd" placeholder="Doctorado"
+      <input type="text" class="form-control" formControlName="phd" id="phd" placeholder="Doctorado">
+      <!-- <input type="text" class="form-control" formControlName="phd" id="phd" placeholder="Doctorado"
       [class.is-invalid]="!formulario.get('phd').valid && formulario.get('phd').dirty"
       [class.is-valid]="formulario.get('phd').valid">
       <div class="invalid-feedback" *ngIf="!formulario.get('phd').valid && formulario.get('phd').dirty">
         *Campo requerido
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="form-row">

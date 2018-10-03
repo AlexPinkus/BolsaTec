@@ -147,9 +147,9 @@ export class StudentRegisterComponent implements OnInit {
         // Información académica
         idStudent:  ['', Validators.compose([Validators.required, Validators.pattern(/^E{1}[0-9]{7}/), Validators.maxLength(9)])],
         bachelor:   ['', Validators.required],
-        speciality: ['', Validators.required],
-        master:     ['', Validators.required],
-        phd:        ['', Validators.required],
+        speciality: [''],
+        master:     [''],
+        phd:        [''],
 
         // Inglés
         spoken:      ['', Validators.compose([Validators.required, Validators.max(100), Validators.min(0)])],
