@@ -77,7 +77,7 @@ export class JobofferRegisterComponent implements OnInit {
 
   register(userId, modalConfirmacion) {
     // insertando
-    this.mensaje_modal = '¿Deseas publicar esta oferta de trabajo?';
+    this.mensaje_modal = '¿Desea publicar esta oferta de trabajo?';
     // El modal se invoca con una promesa que se resuelve si el modal es aceptado o se reachaza si es cerrado
     this.assign(this.joboffer, this.formulario.value);
     console.log('this.joboffer :', this.joboffer);
@@ -86,7 +86,7 @@ export class JobofferRegisterComponent implements OnInit {
       this.assign(this.joboffer, this.formulario.value);
       this.joboffer.idEnterprise = userId;
       this.jobofferService.createJoboffer(this.joboffer).then(result => {
-        this.toastr.success('¡Su información ha sido actualizada exitosamente!', '¡Éxito!');
+        this.toastr.success('¡Su oferta ha sido publicada exitosamente!', '¡Éxito!');
       }).catch(err => {
         this.toastr.error('¡Hubo un error al actualizar su información!', '¡Error!');
       });
