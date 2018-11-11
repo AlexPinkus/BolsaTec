@@ -28,6 +28,9 @@
 /functions/node_modules
 /functions/lib
 
+# Firestore environments
+/src/environments
+
 # misc
 /.sass-cache
 /connect.lock
