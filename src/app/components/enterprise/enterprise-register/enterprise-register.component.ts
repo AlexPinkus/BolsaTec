@@ -110,7 +110,7 @@ export class EnterpriseRegisterComponent implements OnInit {
         bussinessTurn:  ['', Validators.required],
         logo:           [''],
         // tslint:disable-next-line:max-line-length
-        RFC: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z]{4}[0-9]{6}[a-zA-Z0-9]{3}/)])],
+        RFC: ['', Validators.compose([Validators.required, Validators.pattern(/^[a-zA-Z0-9]{12,13}/)])],
         webURL: ['', Validators.compose([
           Validators.pattern(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)])],
 
